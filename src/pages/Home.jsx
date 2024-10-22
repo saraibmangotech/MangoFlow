@@ -41,6 +41,7 @@ const Home = () => {
           padding: "10px",
           boxSizing: "border-box",
           width: { xs: "100%", sm: "calc(100% - 200px)" }, // Adjust width based on screen size
+        backgroundColor:"rgba(139, 61, 255,.1)"
         }}
       >
         {/* Bordered Box that contains content */}
@@ -51,7 +52,6 @@ const Home = () => {
             padding: "20px",
             border: "2px solid #ddd", // Light gray border
             borderRadius: "16px", // Rounded corners
-            margin: "8px", // Spacing around the box
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Subtle shadow
             backgroundColor: "#fff", // White background for better visibility
             boxSizing: "border-box",
@@ -59,8 +59,7 @@ const Home = () => {
             minHeight: {
               xs: "800px",
               sm: "1000px",
-              md: "1950px",
-      
+              md: "1950px",      
               xl:"2000px"
             }, // Responsive minimum height
             overflow: "hidden", // Scroll if content exceeds the card height
