@@ -8,7 +8,7 @@ import {
 import { Box, Typography, IconButton } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 
-const CircleIcons = () => {
+const CircleIcons = ({ itemsToShow }) => { // Accept itemsToShow as a prop
   const iconsData = [
     { icon: <Description />, label: "Doc", color: "#13a3b5" },
     { icon: <Fullscreen />, label: "Presentation", color: "#0ba84a" },
@@ -16,30 +16,14 @@ const CircleIcons = () => {
     { icon: <LiveTv />, label: "Social Media", color: "#ff3b4b" },
     { icon: <Description />, label: "Doc", color: "#e950f7" },
     { icon: <VideoLibrary />, label: "Video", color: "#ff3b4b" },
-    { icon: <VideoLibrary />, label: "Video", color: "#13a3b5" },
-    { icon: <VideoLibrary />, label: "Video", color: "#ff3b4b" },
-    { icon: <VideoLibrary />, label: "Video", color: "#13a3b5" },
+    { icon: <Fullscreen />, label: "Video", color: "#13a3b5" },
+    { icon: <Description />, label: "Video", color: "#ff3b4b" },
+    { icon: <LiveTv />, label: "Video", color: "#13a3b5" },
+    { icon: <Fullscreen />, label: "Video", color: "#ff6105" },
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [itemsToShow, setItemsToShow] = useState(5);
   const [isMoving, setIsMoving] = useState(false);
-
-  // Update itemsToShow based on screen width
-  useEffect(() => {
-    const updateItemsToShow = () => {
-      const width = window.innerWidth;
-      if (width >= 1200) setItemsToShow(8);
-      else if (width >= 900) setItemsToShow(5);
-      else if (width >= 600) setItemsToShow(4);
-      else if (width >= 400) setItemsToShow(4);
-      else setItemsToShow(3); // For screens smaller than 400px
-    };
-
-    updateItemsToShow();
-    window.addEventListener("resize", updateItemsToShow);
-    return () => window.removeEventListener("resize", updateItemsToShow);
-  }, []);
 
   const handleForward = () => {
     if (!isMoving && currentIndex + itemsToShow < iconsData.length) {
@@ -62,81 +46,72 @@ const CircleIcons = () => {
       <Box
         display="flex"
         justifyContent="space-between"
+        alignItems="center"
         width="100%"
-        paddingX={2}
+        px={2}
       >
-        {/* Backward button */}
         {currentIndex > 0 && (
           <IconButton onClick={handleBackward} disabled={isMoving}>
             <ArrowBack />
           </IconButton>
         )}
 
-        {/* Render icons and labels based on currentIndex */}
-        {iconsData
-          .slice(currentIndex, currentIndex + itemsToShow)
-          .map(({ icon, color, label }, index) => (
-            <Box
-              key={index}
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              mx={0.5}
-            >
+        <Box display="flex" justifyContent="center" width="100%">
+          {iconsData
+            .slice(currentIndex, currentIndex + itemsToShow)
+            .map(({ icon, color, label }, index) => (
               <Box
+                key={index}
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
-                position="relative"
-                onMouseEnter={(e) => {
-                  e.currentTarget.querySelector(
-                    ".create-new"
-                  ).style.opacity = 1;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.querySelector(
-                    ".create-new"
-                  ).style.opacity = 0;
-                }}
+                justifyContent="center"
+                mx={1.5}
+                sx={{ position: "relative", cursor: "pointer" }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.querySelector(".create-new").style.opacity =
+                    1)
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.querySelector(".create-new").style.opacity =
+                    0)
+                }
               >
+                {/* Circle Icon */}
                 <Box
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  width={50}
-                  height={50}
+                  width={60}
+                  height={60}
                   borderRadius="50%"
                   bgcolor={color}
-                  position="relative"
                   sx={{
                     transition: "transform 0.3s",
-                    mb: 0.5,
                     "&:hover": {
                       transform: "scale(1.1) translateY(-5px)",
                     },
                   }}
                 >
-                  <Box
-                    component="span"
-                    sx={{
-                      fontSize: 24,
-                      transition: "transform 0.3s",
-                    }}
-                  >
+                  <Box component="span" sx={{ fontSize: 30, color: "white" }}>
                     {icon}
                   </Box>
                 </Box>
+
+                {/* Label */}
                 <Typography
                   variant="body2"
                   textAlign="center"
                   sx={{
-                    fontSize: { xs: "0.65rem", sm: "0.75rem" },
-                    whiteSpace: "nowrap",
+                    fontSize: { xs: "0.7rem", sm: "0.85rem" },
                     color: "grey",
+                    mt: 0.5,
                   }}
                 >
                   {label}
                 </Typography>
+
+                {/* "Create New" Label */}
                 <Typography
                   className="create-new"
                   variant="caption"
@@ -144,9 +119,9 @@ const CircleIcons = () => {
                   sx={{
                     opacity: 0,
                     transition: "opacity 0.3s",
-                    mt: 1,
                     position: "absolute",
-                    top: 60,
+                    top: "100%", // Position below the label
+                    margin: "1px 0 ",
                     whiteSpace: "nowrap",
                     color: "grey",
                   }}
@@ -154,10 +129,9 @@ const CircleIcons = () => {
                   Create New
                 </Typography>
               </Box>
-            </Box>
-          ))}
+            ))}
+        </Box>
 
-        {/* Forward button */}
         {currentIndex + itemsToShow < iconsData.length && (
           <IconButton onClick={handleForward} disabled={isMoving}>
             <ArrowForward />

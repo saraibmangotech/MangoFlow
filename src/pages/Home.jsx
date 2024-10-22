@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import IconCircle from "../Components/iconCircle/IconCircle";
 import RecentDesign from "../Components/recentDesigns/RecentDesign";
@@ -6,9 +6,11 @@ import AddIcon from "@mui/icons-material/Add";
 import NewDesignPopup from "../Components/newDesign/NewDesignPopup";
 import SideBar from "../Components/sideBar";
 import ProfileAvatar from "../Components/profileAvatar/ProfileAvatar";
+import CircleIcons from "../Components/iconCircle/IconCircle"; // Import CircleIcons
 
 const Home = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [itemsToShow, setItemsToShow] = useState(5); // Default number of icons to show
 
   const handleOpenPopup = () => {
     setIsPopupOpen(true);
@@ -17,6 +19,34 @@ const Home = () => {
   const handleClosePopup = () => {
     setIsPopupOpen(false);
   };
+
+  // Effect to adjust itemsToShow based on window width
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1200) {
+        setItemsToShow(10); // Show 10 items if screen width > 1200px
+      } else if(window.innerWidth > 900) {
+        setItemsToShow(6); // Default for smaller screens
+      }
+      else if(window.innerWidth > 800) {
+        setItemsToShow(4); 
+    }else if(window.innerWidth > 500) {
+      setItemsToShow(3); 
+    }
+    else if(window.innerWidth > 350) {
+      setItemsToShow(2); 
+    }
+  };
+
+    // Initial check
+    handleResize();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <Box
@@ -40,8 +70,8 @@ const Home = () => {
           overflowX: "hidden",
           padding: "10px",
           boxSizing: "border-box",
-          width: { xs: "100%", sm: "calc(100% - 200px)" }, // Adjust width based on screen size
-        backgroundColor:"rgba(139, 61, 255,.1)"
+          width: { xs: "100%", sm: "calc(100% - 200px)" },
+          backgroundColor: "rgba(139, 61, 255, .1)",
         }}
       >
         {/* Bordered Box that contains content */}
@@ -59,8 +89,8 @@ const Home = () => {
             minHeight: {
               xs: "800px",
               sm: "1000px",
-              md: "1950px",      
-              xl:"2000px"
+              md: "1950px",
+              xl: "2000px",
             }, // Responsive minimum height
             overflow: "hidden", // Scroll if content exceeds the card height
           }}
@@ -104,9 +134,9 @@ const Home = () => {
             </Typography>
           </Box>
 
-          {/* Other Components */}
+          {/* IconCircle Component */}
           <Box>
-            <IconCircle />
+            <CircleIcons itemsToShow={itemsToShow} /> {/* Pass itemsToShow */}
           </Box>
 
           {/* Create New Button */}
