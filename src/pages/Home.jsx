@@ -1,51 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Button } from "@mui/material";
-import IconCircle from "../Components/iconCircle/IconCircle";
 import RecentDesign from "../Components/recentDesigns/RecentDesign";
 import AddIcon from "@mui/icons-material/Add";
 import NewDesignPopup from "../Components/newDesign/NewDesignPopup";
 import SideBar from "../Components/sideBar";
 import ProfileAvatar from "../Components/profileAvatar/ProfileAvatar";
-import CircleIcons from "../Components/iconCircle/IconCircle"; // Import CircleIcons
+import CircleIcons from "../Components/iconCircle/IconCircle";
 
 const Home = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [itemsToShow, setItemsToShow] = useState(5); // Default number of icons to show
+  const [itemsToShow, setItemsToShow] = useState(5);
 
-  const handleOpenPopup = () => {
-    setIsPopupOpen(true);
-  };
-
-  const handleClosePopup = () => {
-    setIsPopupOpen(false);
-  };
+  const handleOpenPopup = () => setIsPopupOpen(true);
+  const handleClosePopup = () => setIsPopupOpen(false);
 
   // Effect to adjust itemsToShow based on window width
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 1200) {
-        setItemsToShow(10); // Show 10 items if screen width > 1200px
-      } else if(window.innerWidth > 900) {
-        setItemsToShow(6); // Default for smaller screens
-      }
-      else if(window.innerWidth > 800) {
-        setItemsToShow(4); 
-    }else if(window.innerWidth > 500) {
-      setItemsToShow(3); 
-    }
-    else if(window.innerWidth > 350) {
-      setItemsToShow(2); 
-    }
-  };
-
-    // Initial check
-    handleResize();
-
-    // Add event listener for window resize
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
+      if (window.innerWidth > 1200) setItemsToShow(10);
+      else if (window.innerWidth > 900) setItemsToShow(6);
+      else if (window.innerWidth > 800) setItemsToShow(4);
+      else if (window.innerWidth > 500) setItemsToShow(3);
+      else if (window.innerWidth > 350) setItemsToShow(2);
     };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -57,7 +38,7 @@ const Home = () => {
         overflow: "hidden",
       }}
     >
-      {/* Left Sidebar (only visible on larger screens) */}
+      {/* Sidebar on the left side */}
       <Box sx={{ display: { xs: "none", sm: "block" }, width: "200px" }}>
         <SideBar />
       </Box>
@@ -67,32 +48,33 @@ const Home = () => {
         sx={{
           flexGrow: 1,
           overflowY: "auto",
-          overflowX: "hidden",
           padding: "10px",
           boxSizing: "border-box",
-          width: { xs: "100%", sm: "calc(100% - 200px)" },
-          backgroundColor: "rgba(139, 61, 255, .1)",
+          backgroundColor: "rgba(139, 61, 255, 0.1)",
+          display: "flex",
+          justifyContent: "flex-end", // Align to the right
         }}
       >
-        {/* Bordered Box that contains content */}
+        {/* Bordered Box with Margin from the Right */}
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             padding: "20px",
-            border: "2px solid #ddd", // Light gray border
-            borderRadius: "16px", // Rounded corners
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Subtle shadow
-            backgroundColor: "#fff", // White background for better visibility
+            border: "2px solid #ddd",
+            borderRadius: "16px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            backgroundColor: "#fff",
             boxSizing: "border-box",
-            width: "100%", // Full width of the main container
+            width: { xs: "90%", sm: "81%", md: "84%", lg: "88%", xl: "90%" }, // Set width based on screen size
             minHeight: {
               xs: "800px",
               sm: "1000px",
               md: "1950px",
               xl: "2000px",
-            }, // Responsive minimum height
-            overflow: "hidden", // Scroll if content exceeds the card height
+            },
+            margin: "5px",
+            overflow: "hidden",
           }}
         >
           <ProfileAvatar />
@@ -136,7 +118,7 @@ const Home = () => {
 
           {/* IconCircle Component */}
           <Box>
-            <CircleIcons itemsToShow={itemsToShow} /> {/* Pass itemsToShow */}
+            <CircleIcons itemsToShow={itemsToShow} />
           </Box>
 
           {/* Create New Button */}
@@ -180,7 +162,7 @@ const Home = () => {
         </Box>
       </Box>
 
-      {/* Left Sidebar (now below the main content on small screens) */}
+      {/* Sidebar for small screens */}
       <Box sx={{ display: { xs: "block", sm: "none" }, width: "100%" }}>
         <SideBar />
       </Box>
