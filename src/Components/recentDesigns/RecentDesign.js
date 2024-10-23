@@ -6,57 +6,75 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { useNavigate } from "react-router-dom";
 
-const RecentDesign = ({ height, top, left }) => {
+const RecentDesign = ({ height }) => {
   const [viewMode, setViewMode] = useState("grid");
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const navigate = useNavigate();
 
-  // Define the document names array here
-  const documentNames = [
-    "Document Name 1",
-    "Document Name 2",
-    "Document Name 3",
-    "Document Name 4",
-    "Document Name 5",
-    "Document Name 6",
-    "Document Name 7",
-    "Document Name 8",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 9",
-    "Document Name 15",
-
+  const documents = [
+    {
+      title: "Document Name 1",
+      description: "Description for Document 1",
+      imageUrl: "https://via.placeholder.com/100",
+    },
+    {
+      title: "Document Name 2",
+      description: "Description for Document 2",
+      imageUrl: "https://via.placeholder.com/100",
+    },
+    {
+      title: "Document Name 3",
+      description: "Description for Document 3",
+      imageUrl: "https://via.placeholder.com/100",
+    },
+    {
+      title: "Document Name 4",
+      description: "Description for Document 4",
+      imageUrl: "https://via.placeholder.com/100",
+    },
+    {
+      title: "Document Name 5",
+      description: "Description for Document 5",
+      imageUrl: "https://via.placeholder.com/100",
+    },
+    {
+      title: "Document Name 5",
+      description: "Description for Document 5",
+      imageUrl: "https://via.placeholder.com/100",
+    }, {
+      title: "Document Name 5",
+      description: "Description for Document 5",
+      imageUrl: "https://via.placeholder.com/100",
+    }, {
+      title: "Document Name 5",
+      description: "Description for Document 5",
+      imageUrl: "https://via.placeholder.com/100",
+    }, {
+      title: "Document Name 5",
+      description: "Description for Document 5",
+      imageUrl: "https://via.placeholder.com/100",
+    }, {
+      title: "Document Name 5",
+      description: "Description for Document 5",
+      imageUrl: "https://via.placeholder.com/100",
+    }, {
+      title: "Document Name 5",
+      description: "Description for Document 5",
+      imageUrl: "https://via.placeholder.com/100",
+    }, {
+      title: "Document Name 5",
+      description: "Description for Document 5",
+      imageUrl: "https://via.placeholder.com/100",
+    }, {
+      title: "Document Name 5",
+      description: "Description for Document 5",
+      imageUrl: "https://via.placeholder.com/100",
+    },
   ];
 
   return (
     <Box p={2}>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
-      >
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h5" fontWeight="bold">
           Recent Design
         </Typography>
@@ -70,19 +88,11 @@ const RecentDesign = ({ height, top, left }) => {
           justifyContent="center"
         >
           {viewMode === "grid" ? (
-            <IconButton
-              onClick={() => setViewMode("list")}
-              color="primary"
-              size="small"
-            >
+            <IconButton onClick={() => setViewMode("list")} color="primary" size="small">
               <ListIcon />
             </IconButton>
           ) : (
-            <IconButton
-              onClick={() => setViewMode("grid")}
-              color="primary"
-              size="small"
-            >
+            <IconButton onClick={() => setViewMode("grid")} color="primary" size="small">
               <GridViewIcon />
             </IconButton>
           )}
@@ -92,7 +102,7 @@ const RecentDesign = ({ height, top, left }) => {
       <Box height={height}>
         {viewMode === "list" && (
           <Box display="flex" flexDirection="column" gap={2}>
-            {documentNames.map((docName, index) => (
+            {documents.map((doc, index) => (
               <Box
                 key={index}
                 display="flex"
@@ -101,21 +111,26 @@ const RecentDesign = ({ height, top, left }) => {
                 p={2}
                 border="1px solid grey"
                 borderRadius="4px"
-                height="60px"
+                height="80px"
                 bgcolor="white"
-                onClick={() => console.log(`Clicked: ${docName}`)}
+                onClick={() => console.log(`Clicked: ${doc.title}`)}
                 sx={{ cursor: "pointer" }}
               >
                 <Box display="flex" alignItems="center" gap={2} flexGrow={1}>
                   <Box
                     component="img"
-                    src="https://via.placeholder.com/40"
+                    src={doc.imageUrl}
                     alt="Document Thumbnail"
                     width="40px"
                     height="40px"
                     borderRadius="4px"
                   />
-                  <Typography variant="body1">{docName}</Typography>
+                  <Box>
+                    <Typography variant="body1">{doc.title}</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {doc.description}
+                    </Typography>
+                  </Box>
                 </Box>
                 <Box display="flex" alignItems="center" gap={1}>
                   <IconButton
@@ -168,24 +183,49 @@ const RecentDesign = ({ height, top, left }) => {
               md: "repeat(4, 1fr)",
               lg: "repeat(5, 1fr)",
             }}
-            gap={2} // Ensure there's a gap between the grid items
+            gap={2}
           >
-            {documentNames.map((docName, index) => (
+            {documents.map((doc, index) => (
               <Box
                 key={index}
                 display="flex"
                 flexDirection="column"
+                alignItems="center"
                 position="relative"
-                p={2}
                 border="1px solid grey"
                 borderRadius="10px"
                 bgcolor="white"
-                height="100px" // Increased height of grid items
-                onClick={() => console.log(`Clicked: ${docName}`)}
+                onClick={() => console.log(`Clicked: ${doc.title}`)}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
                 sx={{ cursor: "pointer" }}
               >
+                {/* Document Image */}
+                <Box display="flex" justifyContent="center" p={2}>
+                  <Box
+                    component="img"
+                    src={doc.imageUrl}
+                    alt="Document Thumbnail"
+                    width="80px"
+                    height="80px"
+                    sx={{
+                      border: "1px solid grey", // Adding border to the image
+                      borderRadius: "4px",
+                    }}
+                  />
+                </Box>
+
+                {/* Title and Description inside the box */}
+                <Box textAlign="center" p={1}>
+                  <Typography variant="body1" fontWeight="bold">
+                    {doc.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {doc.description}
+                  </Typography>
+                </Box>
+
+                {/* Hover options */}
                 <Box
                   position="absolute"
                   top={0}
@@ -232,47 +272,6 @@ const RecentDesign = ({ height, top, left }) => {
                     </IconButton>
                   </Box>
                 </Box>
-
-                <Box
-                  display={hoveredIndex === index ? "flex" : "none"}
-                  justifyContent="center"
-                  alignItems="center"
-                  position="absolute"
-                  top={top}
-                  left={left}
-                  transform="translate(-50%, -50%)"
-                  zIndex={1}
-                >
-                  <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    sx={{ width: "100%" }}
-                  >
-                    <IconButton
-                      size="small"
-                      sx={{
-                        borderRadius: "6px",
-                        backgroundColor: "#7731d8",
-                        color: "white",
-                        border: "1px solid grey",
-                        padding: { xs: "4px 8px", md: "8px 16px" },
-                        fontSize: { xs: "0.7rem", md: "0.875rem" },
-                        "&:hover": { backgroundColor: "#673bb5" },
-                      }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate("/select");
-                      }}
-                    >
-                      Select
-                    </IconButton>
-                  </Box>
-                </Box>
-
-                <Typography variant="body1" textAlign="center" mt={2}>
-                  {docName}
-                </Typography>
               </Box>
             ))}
           </Box>
