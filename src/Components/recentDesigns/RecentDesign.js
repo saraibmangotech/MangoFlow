@@ -4,7 +4,9 @@ import ListIcon from "@mui/icons-material/List";
 import GridViewIcon from "@mui/icons-material/GridView";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import img1 from "../../Images/img1.png"; // Importing the image
+import img1 from "../../Images/img1.png";
+import img2 from "../../Images/img2.png";
+import img3 from "../../Images/img3.png";
 
 // Sample documents data
 const documents = [
@@ -16,12 +18,12 @@ const documents = [
   {
     title: "Document Name 2",
     description: "Description for Document 2",
-    imageUrl: img1,
+    imageUrl: img2,
   },
   {
     title: "Document Name 3",
     description: "Description for Document 3",
-    imageUrl: img1,
+    imageUrl: img3,
   },
   {
     title: "Document Name 4",
@@ -31,7 +33,7 @@ const documents = [
   {
     title: "Document Name 5",
     description: "Description for Document 5",
-    imageUrl: img1,
+    imageUrl: img3,
   },
 ];
 
@@ -180,6 +182,13 @@ const RecentDesign = ({ height }) => {
                 overflow="hidden"
                 display="flex"
                 flexDirection="column"
+                justifyContent={{
+                  xs: "flex-start",
+                  md: "flex-start",
+                  lg: "flex-start",
+                  xl:"flex-start"
+                }} // Center on large screens
+  
                 alignItems="center"
                 position="relative"
                 onClick={() => console.log(`Clicked: ${doc.title}`)}
@@ -201,11 +210,15 @@ const RecentDesign = ({ height }) => {
                   }}
                 />
                 {/* Title and Description below the image */}
-                <Box p={1} textAlign="center">
-                  <Typography variant="body1" fontWeight="bold">
+                <Box
+                  p={1}
+                  margin="2px 0"
+                 
+                >
+                  <Typography variant="body1" fontWeight="bold" margin="2px 0">
                     {doc.title}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" margin="2px 0">
                     {doc.description}
                   </Typography>
                 </Box>
