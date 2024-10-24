@@ -46,19 +46,26 @@ const HoverIcons = ({ onStarClick, onMoreClick }) => (
         backgroundColor: "white",
         borderRadius: "4px",
         border: "1px solid grey",
-        "&:hover": { backgroundColor: "#7731d8", color: "#fff" },
+        "&:hover": {
+          backgroundColor: "#7731d8",
+          "& .MuiSvgIcon-root": { color: "white" }, 
+        },
       }}
       onClick={onStarClick}
     >
       <StarBorderIcon sx={{ color: "black" }} />
     </IconButton>
+
     <IconButton
       size="small"
       sx={{
         backgroundColor: "white",
         borderRadius: "4px",
         border: "1px solid grey",
-        "&:hover": { backgroundColor: "#7731d8", color: "#fff" },
+        "&:hover": {
+          backgroundColor: "#7731d8",
+          "& .MuiSvgIcon-root": { color: "white" }, 
+        },
       }}
       onClick={onMoreClick}
     >
@@ -135,8 +142,8 @@ const RecentDesign = ({ height }) => {
                   component="img"
                   src={doc.imageUrl}
                   alt={doc.title}
-                  width={{ xs: "60px", sm: "80px" }} // Responsive sizes
-                  height={{ xs: "60px", sm: "80px" }} // Responsive sizes
+                  width={{ xs: "60px", sm: "80px" }} 
+                  height={{ xs: "60px", sm: "80px" }} 
                   borderRadius="4px"
                 />
                 <Box flexGrow={1}>
@@ -186,9 +193,8 @@ const RecentDesign = ({ height }) => {
                   xs: "flex-start",
                   md: "flex-start",
                   lg: "flex-start",
-                  xl:"flex-start"
+                  xl: "flex-start",
                 }} // Center on large screens
-  
                 alignItems="center"
                 position="relative"
                 onClick={() => console.log(`Clicked: ${doc.title}`)}
@@ -210,15 +216,15 @@ const RecentDesign = ({ height }) => {
                   }}
                 />
                 {/* Title and Description below the image */}
-                <Box
-                  p={1}
-                  margin="2px 0"
-                 
-                >
+                <Box p={1} margin="2px 0">
                   <Typography variant="body1" fontWeight="bold" margin="2px 0">
                     {doc.title}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" margin="2px 0">
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    margin="2px 0"
+                  >
                     {doc.description}
                   </Typography>
                 </Box>
