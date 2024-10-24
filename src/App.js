@@ -1,6 +1,9 @@
 import React from 'react';
-
+import theme from "./Components/customTheme/CustomTheme"
 import './styles.css';
+import '@fontsource/noto-sans'; 
+import { ThemeProvider } from "@emotion/react";
+
 import FlowGraph from './Components/FlowGraph';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -12,7 +15,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 function App() {
   return (
     <div className="App">
-     
+     <ThemeProvider theme={theme}>
       <BrowserRouter>
       <Routes>
         {/* Login Route */}
@@ -26,6 +29,7 @@ function App() {
 
       </Routes>
     </BrowserRouter>
+    </ThemeProvider>
     </div>
   );
 }
