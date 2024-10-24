@@ -20,7 +20,7 @@ function ProfileAvatar() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginRight: 2,
+          marginRight: 1,
           width: 40,
           height: 40,
           borderRadius: "8px",
@@ -31,7 +31,7 @@ function ProfileAvatar() {
           },
         }}
       >
-        <SettingsIcon sx={{ color: "black", fontSize: 30 }} />
+        <SettingsIcon sx={{ color: "black", fontSize: 25 }} />
       </Box>
 
       <Box
@@ -50,7 +50,7 @@ function ProfileAvatar() {
           },
         }}
       >
-        <NotificationsNoneIcon sx={{ color: "black", fontSize: 30 }} />
+        <NotificationsNoneIcon sx={{ color: "black", fontSize: 25 }} />
       </Box>
 
       <Avatar

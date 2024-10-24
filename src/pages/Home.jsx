@@ -49,7 +49,7 @@ const Home = () => {
         sx={{
           flexGrow: 1,
           overflowY: "auto",
-          padding: "10px",
+          padding: "5px",
           boxSizing: "border-box",
           display: "flex",
           justifyContent: "flex-end", // Align to the right
@@ -62,7 +62,7 @@ const Home = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            padding: { xs: "15px", sm: "20px" }, 
+            padding:"5px 20px",
             border: "2px solid #ddd",
             borderRadius: "16px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
