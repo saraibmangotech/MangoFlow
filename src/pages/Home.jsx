@@ -36,6 +36,7 @@ const Home = () => {
         flexDirection: { xs: "column", sm: "row" },
         height: "100vh",
         overflow: "hidden",
+        backgroundColor: "rgba(139, 61, 255, 0.1)",
       }}
     >
       {/* Sidebar on the left side */}
@@ -50,9 +51,11 @@ const Home = () => {
           overflowY: "auto",
           padding: "10px",
           boxSizing: "border-box",
-          backgroundColor: "rgba(139, 61, 255, 0.1)",
+       
           display: "flex",
           justifyContent: "flex-end", // Align to the right
+          
+          
         }}
       >
         {/* Bordered Box with Margin from the Right */}

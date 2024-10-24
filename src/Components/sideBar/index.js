@@ -105,14 +105,12 @@ const SideBar = () => {
   return (
     <Box
       sx={{
-        width: { xs: "100%", sm: 270, lg: 280, xl: 320 },
+        width: { xs: "100%", sm: 270, md:320, lg: 320, xl: 350},
         height: { xs: 70, sm: "100vh" },
         position: { xs: "fixed", sm: "relative" },
         bottom: { xs: 0, sm: "auto" },
-        backgroundColor: "rgba(139, 61, 255, 0.1)",
         display: "flex",
         flexDirection: "row",
-        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
         paddingTop: { sm: 2 },
         border: "none",
         overflow: "hidden",
@@ -121,11 +119,11 @@ const SideBar = () => {
       {/* Menu Items */}
       <List
         sx={{
-          width: isMobileView ? "100%" : "25%",
+          width: isMobileView ? "100%" : "20%",
           display: "flex",
-          flexDirection: isMobileView ? "row" : "column", // Row for mobile view, column for larger screens
-          justifyContent: isMobileView ? "center" : "flex-start", // Center horizontally on mobile, start on larger screens
-          alignItems: isMobileView ? "center" : "flex-start", // Center vertically on mobile, start on larger screens
+          flexDirection: isMobileView ? "row" : "column",
+          justifyContent: isMobileView ? "center" : "flex-start", 
+          alignItems: isMobileView ? "center" : "flex-start",
         }}
       >
         {menuItems.map((item) => (
@@ -180,7 +178,6 @@ const SideBar = () => {
           width: "1px",
           backgroundColor: "#ccc",
           height: { xs: 70, sm: "100vh" },
-          marginLeft: "2px",
           marginRight: 2,
           top:0,
           display: { xs: "none", sm: "block" },
@@ -195,7 +192,7 @@ const SideBar = () => {
             flexDirection: "column",
             alignItems: "flex-start",
             marginRight: 2,
-            width: { xs: "90%", sm: "60%", md: "58%", lg: "65%" },
+            width: { xs: "90%", sm: "60%", md: "65%", lg: "70%", xl:"75%" },
           }}
         >
           <Typography
@@ -220,7 +217,7 @@ const SideBar = () => {
               color: "white",
               borderRadius: 2,
               padding: "8px 30px",
-              fontSize: "clamp(0.5rem, 0.6vw, 0.65rem)",
+              fontSize: "clamp(0.5rem, 1vw, 0.65rem)",
               lineHeight: 1.2,
               margin: "5px 0",
               width: "100%",
@@ -239,7 +236,7 @@ const SideBar = () => {
               color: "#000",
               borderRadius: 2,
               padding: "8px 18px",
-              fontSize: "clamp(0.5rem, 0.6vw, 0.65rem)",
+              fontSize: "clamp(0.5rem, 1vw, 0.65rem)",
               lineHeight: 1.2,
               margin: "5px 0",
               width: "100%",
