@@ -12,6 +12,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import CardMembershipIcon from "@mui/icons-material/CardMembership";
 import DeleteOutlineTwoToneIcon from "@mui/icons-material/DeleteOutlineTwoTone";
+import logo from "../../Images/logo.png";
 import {
   CottageOutlined as CottageOutlinedIcon,
   Cottage as CottageIcon,
@@ -28,7 +29,6 @@ import Img1 from "../../Images/img1.png";
 import Img2 from "../../Images/img3.png";
 import Img3 from "../../Images/img2.png";
 import NewDesignPopup from "../newDesign/NewDesignPopup";
-
 
 const recentDesigns = [
   { title: "Design 1", imgSrc: Img1 },
@@ -201,20 +201,14 @@ const SideBar = () => {
             paddingTop: 1,
           }}
         >
-          <Typography
-            variant="h4"
+          <Box
             sx={{
-              fontWeight: "bold",
-              background: "linear-gradient(to right, #00a3a8, #7731d8)", // Use background for gradient
-              WebkitBackgroundClip: "text", // Clip background to text
-              color: "transparent", // Make text color transparent to show gradient
-              margin: "6px 0",
-              display: "inline-block", // Ensure it respects width for gradient effect
+              marginTop: "12px",
+             
             }}
           >
-            Canva
-          </Typography>
-
+            <img  height="30px" src={logo}   />
+          </Box>
           <Button
             variant="contained"
             size="small"
@@ -248,7 +242,7 @@ const SideBar = () => {
               lineHeight: 1.2,
               margin: "5px 0",
               width: "100%",
-              fontWeight:"bold"
+              fontWeight: "bold",
             }}
             startIcon={
               <CardMembershipIcon fontSize="small" sx={{ color: "#fdbc68" }} />
@@ -310,7 +304,7 @@ const SideBar = () => {
                     padding: 1,
                     borderRadius: "10px",
                     mb: 1,
-                    cursor:"pointer",
+                    cursor: "pointer",
                     "&:hover": { backgroundColor: "rgba(119, 49, 216, 0.1)" },
                   }}
                   onMouseEnter={() => setHoveredIndex(index)}
@@ -371,18 +365,18 @@ const SideBar = () => {
           <Box
             sx={{
               marginTop: "auto",
-              padding:"10px 0",
+              padding: "10px 0",
               display: "flex",
               alignItems: "center",
               gap: 1,
               width: "100%",
               height: "20px",
               marginBottom: "10px",
-              
-              borderRadius:"10px",
+
+              borderRadius: "10px",
               transition: "background-color 0.3s",
               "&:hover": {
-               backgroundColor: "rgba(119, 49, 216, 0.1)",
+                backgroundColor: "rgba(119, 49, 216, 0.1)",
                 cursor: "pointer",
               },
             }}
