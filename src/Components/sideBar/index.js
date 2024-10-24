@@ -182,6 +182,7 @@ const SideBar = () => {
           height: { xs: 70, sm: "100vh" },
           marginLeft: "2px",
           marginRight: 2,
+          top:0,
           display: { xs: "none", sm: "block" },
         }}
       />
