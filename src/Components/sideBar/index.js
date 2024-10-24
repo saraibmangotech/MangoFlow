@@ -248,6 +248,7 @@ const SideBar = () => {
               lineHeight: 1.2,
               margin: "5px 0",
               width: "100%",
+              fontWeight:"bold"
             }}
             startIcon={
               <CardMembershipIcon fontSize="small" sx={{ color: "#fdbc68" }} />
