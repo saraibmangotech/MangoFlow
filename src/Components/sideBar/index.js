@@ -27,6 +27,8 @@ import ArrowDropDownTwoToneIcon from "@mui/icons-material/ArrowDropDownTwoTone";
 import Img1 from "../../Images/img1.png";
 import Img2 from "../../Images/img3.png";
 import Img3 from "../../Images/img2.png";
+import NewDesignPopup from "../newDesign/NewDesignPopup";
+
 
 const recentDesigns = [
   { title: "Design 1", imgSrc: Img1 },
@@ -36,6 +38,7 @@ const recentDesigns = [
 
 const SideBar = () => {
   const [selected, setSelected] = useState();
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [showDesigns, setShowDesigns] = useState(false); // New state for toggle
   const navigate = useNavigate();
@@ -51,6 +54,8 @@ const SideBar = () => {
       navigate("/templates");
     }
   };
+  const handleOpenPopup = () => setIsPopupOpen(true);
+  const handleClosePopup = () => setIsPopupOpen(false);
 
   const toggleDesigns = () => {
     setShowDesigns((prev) => !prev); // Toggle designs visibility
@@ -105,13 +110,12 @@ const SideBar = () => {
   return (
     <Box
       sx={{
-        width: { xs: "100%", sm: 270, md:320, lg: 320, xl: 350},
+        width: { xs: "100%", sm: 270, md: 320, lg: 320, xl: 350 },
         height: { xs: 70, sm: "100vh" },
         position: { xs: "fixed", sm: "relative" },
         bottom: { xs: 0, sm: "auto" },
         display: "flex",
         flexDirection: "row",
-        paddingTop: { sm: 2 },
         border: "none",
         overflow: "hidden",
       }}
@@ -119,10 +123,11 @@ const SideBar = () => {
       {/* Menu Items */}
       <List
         sx={{
+          paddingTop: 2,
           width: isMobileView ? "100%" : "20%",
           display: "flex",
           flexDirection: isMobileView ? "row" : "column",
-          justifyContent: isMobileView ? "center" : "flex-start", 
+          justifyContent: isMobileView ? "center" : "flex-start",
           alignItems: isMobileView ? "center" : "flex-start",
         }}
       >
@@ -179,7 +184,7 @@ const SideBar = () => {
           backgroundColor: "#ccc",
           height: { xs: 70, sm: "100vh" },
           marginRight: 2,
-          top:0,
+          top: 0,
           display: { xs: "none", sm: "block" },
         }}
       />
@@ -192,7 +197,8 @@ const SideBar = () => {
             flexDirection: "column",
             alignItems: "flex-start",
             marginRight: 2,
-            width: { xs: "90%", sm: "60%", md: "65%", lg: "70%", xl:"75%" },
+            width: "100%",
+            paddingTop: 1,
           }}
         >
           <Typography
@@ -212,6 +218,7 @@ const SideBar = () => {
           <Button
             variant="contained"
             size="small"
+            onClick={handleOpenPopup}
             sx={{
               backgroundColor: "#7731d8",
               color: "white",
@@ -227,6 +234,7 @@ const SideBar = () => {
           >
             Create a Design
           </Button>
+          <NewDesignPopup open={isPopupOpen} onClose={handleClosePopup} />
 
           <Button
             variant="contained"
@@ -301,7 +309,8 @@ const SideBar = () => {
                     padding: 1,
                     borderRadius: "10px",
                     mb: 1,
-                    "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.1)" },
+                    cursor:"pointer",
+                    "&:hover": { backgroundColor: "rgba(119, 49, 216, 0.1)" },
                   }}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
@@ -361,14 +370,18 @@ const SideBar = () => {
           <Box
             sx={{
               marginTop: "auto",
-              paddingBottom: 4,
+              padding:"10px 0",
               display: "flex",
               alignItems: "center",
               gap: 1,
               width: "100%",
+              height: "20px",
+              marginBottom: "10px",
+              
+              borderRadius:"10px",
               transition: "background-color 0.3s",
               "&:hover": {
-                backgroundColor: "rgba(139, 61, 255, 0.1)",
+               backgroundColor: "rgba(119, 49, 216, 0.1)",
                 cursor: "pointer",
               },
             }}
