@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button,useMediaQuery } from "@mui/material";
 import RecentDesign from "../Components/recentDesigns/RecentDesign";
 import AddIcon from "@mui/icons-material/Add";
 import NewDesignPopup from "../Components/newDesign/NewDesignPopup";
@@ -7,12 +7,15 @@ import SideBar from "../Components/sideBar";
 import ProfileAvatar from "../Components/profileAvatar/ProfileAvatar";
 import CircleIcons from "../Components/iconCircle/IconCircle";
 
+
 const Home = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [itemsToShow, setItemsToShow] = useState(5);
 
   const handleOpenPopup = () => setIsPopupOpen(true);
   const handleClosePopup = () => setIsPopupOpen(false);
+
+  const isMobileView = useMediaQuery("(max-width:600px)");
 
   // Effect to adjust itemsToShow based on window width
   useEffect(() => {
@@ -76,6 +79,7 @@ const Home = () => {
               xl: "2000px",
             },
             overflow: "hidden",
+            
           }}
         >
           <ProfileAvatar />
@@ -131,11 +135,13 @@ const Home = () => {
               marginBottom: 3,
             }}
           >
-            <Button
+            
+            <Button 
               variant="contained"
               sx={{
                 backgroundColor: "#7731d8",
                 color: "white",
+                display: isMobileView ? "flex" :"none",
                 borderRadius: 2,
                 "&:hover": {
                   backgroundColor: "#5e24a6",
@@ -151,7 +157,7 @@ const Home = () => {
           {/* Recent Designs Section */}
           <Box
             sx={{
-              overflowY: "auto",
+              overflowY: "hidden",
               marginBottom: 2,
             }}
           >

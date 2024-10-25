@@ -129,6 +129,8 @@ const SideBar = () => {
           flexDirection: isMobileView ? "row" : "column",
           justifyContent: isMobileView ? "center" : "flex-start",
           alignItems: isMobileView ? "center" : "flex-start",
+          backgroundColor: isMobileView ? "#fff" : "none",
+          boder : isMobileView ? "1px solid #ccc":"none"
         }}
       >
         {menuItems.map((item) => (
