@@ -25,11 +25,7 @@ const documents = [
     description: "Description for Document 3",
     imageUrl: img3,
   },
-  {
-    title: "Document Name 4",
-    description: "Description for Document 4",
-    imageUrl: img1,
-  },
+ 
   {
     title: "Document Name 5",
     description: "Description for Document 5",
