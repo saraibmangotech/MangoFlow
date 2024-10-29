@@ -42,7 +42,6 @@ const SideBar = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [showDesigns, setShowDesigns] = useState(false); // New state for toggle
   const navigate = useNavigate();
-  const isSmallScreen = useMediaQuery("(max-width:600px)");
   const isMobileView = useMediaQuery("(max-width:600px)");
   const handleSelect = (index) => {
     setSelected(index);
@@ -192,7 +191,7 @@ const SideBar = () => {
       />
 
       {/* Canva Heading and Buttons */}
-      {!isSmallScreen && (
+      {!isMobileView && (
         <Box
           sx={{
             display: "flex",

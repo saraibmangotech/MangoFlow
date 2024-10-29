@@ -157,7 +157,7 @@ const Home = () => {
           {/* Recent Designs Section */}
           <Box
             sx={{
-              overflowY: "hidden",
+              overflowY: "auto",
               marginBottom: 2,
             }}
           >
