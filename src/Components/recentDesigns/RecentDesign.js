@@ -121,7 +121,7 @@ const RecentDesign = ({ height }) => {
           {viewMode === "grid" ? (
             <IconButton
               onClick={() => setViewMode("list")}
-              color="primary"
+              sx={{ color: "black" }}
               size="small"
             >
               <ListIcon />
@@ -129,7 +129,7 @@ const RecentDesign = ({ height }) => {
           ) : (
             <IconButton
               onClick={() => setViewMode("grid")}
-              color="primary"
+              sx={{ color: "black" }}
               size="small"
             >
               <GridViewIcon />
