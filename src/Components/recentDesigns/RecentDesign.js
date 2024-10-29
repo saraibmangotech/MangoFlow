@@ -112,11 +112,12 @@ const RecentDesign = ({ height }) => {
         <Box
           display="flex"
           alignItems="center"
-          width="40px"
-          height="40px"
+          width="35px"
+          height="35px"
           border="1px solid grey"
           borderRadius="4px"
           justifyContent="center"
+          cursor="pointer"
         >
           {viewMode === "grid" ? (
             <IconButton
