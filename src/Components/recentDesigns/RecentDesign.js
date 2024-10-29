@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Typography, useMediaQuery } from "@mui/material";
 import ListIcon from "@mui/icons-material/List";
 import GridViewIcon from "@mui/icons-material/GridView";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -25,55 +25,77 @@ const documents = [
     description: "Description for Document 3",
     imageUrl: img3,
   },
- 
+  {
+    title: "Document Name 4",
+    description: "Description for Document 4",
+    imageUrl: img3,
+  },
   {
     title: "Document Name 5",
     description: "Description for Document 5",
+    imageUrl: img2,
+  },
+  {
+    title: "Document Name 6",
+    description: "Description for Document 6",
     imageUrl: img3,
   },
- 
+  {
+    title: "Document Name 7",
+    description: "Description for Document 7",
+    imageUrl: img3,
+  },
+  {
+    title: "Document Name 8",
+    description: "Description for Document 8",
+    imageUrl: img2,
+  },
+  
 ];
 
 // IconButton component for hover icons
-const HoverIcons = ({ onStarClick, onMoreClick }) => (
+const HoverIcons = ({ onStarClick, onMoreClick, isMobileView }) => (
   <Box display="flex" gap={1}>
-    <IconButton
-      size="small"
-      sx={{
-        backgroundColor: "white",
-        borderRadius: "4px",
-        border: "1px solid grey",
-        "&:hover": {
-          backgroundColor: "#7731d8",
-          "& .MuiSvgIcon-root": { color: "white" }, 
-        },
-      }}
-      onClick={onStarClick}
-    >
-      <StarBorderIcon sx={{ color: "black" }} />
-    </IconButton>
+  <IconButton
+    size={isMobileView ? "small" : "medium"} // Adjust button size based on screen size
+    sx={{
+      padding: isMobileView ? "4px" : "8px", // Adjust padding for smaller buttons
+      backgroundColor: "white",
+      borderRadius: "4px",
+      border: "1px solid grey",
+      "&:hover": {
+        backgroundColor: "#7731d8",
+        "& .MuiSvgIcon-root": { color: "white" },
+      },
+    }}
+    onClick={onStarClick}
+  >
+    <StarBorderIcon sx={{ color: "black", fontSize: isMobileView ? "20px" : "24px" }} />
+  </IconButton>
 
-    <IconButton
-      size="small"
-      sx={{
-        backgroundColor: "white",
-        borderRadius: "4px",
-        border: "1px solid grey",
-        "&:hover": {
-          backgroundColor: "#7731d8",
-          "& .MuiSvgIcon-root": { color: "white" }, 
-        },
-      }}
-      onClick={onMoreClick}
-    >
-      <MoreHorizIcon sx={{ color: "black" }} />
-    </IconButton>
-  </Box>
+  <IconButton
+    size={isMobileView ? "small" : "medium"} // Adjust button size based on screen size
+    sx={{
+      padding: isMobileView ? "4px" : "8px", // Adjust padding for smaller buttons
+      backgroundColor: "white",
+      borderRadius: "4px",
+      border: "1px solid grey",
+      "&:hover": {
+        backgroundColor: "#7731d8",
+        "& .MuiSvgIcon-root": { color: "white" },
+      },
+    }}
+    onClick={onMoreClick}
+  >
+    <MoreHorizIcon sx={{ color: "black", fontSize: isMobileView ? "20px" : "24px" }} />
+  </IconButton>
+</Box>
 );
 
 const RecentDesign = ({ height }) => {
   const [viewMode, setViewMode] = useState("grid");
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const isMobileView = useMediaQuery("(max-width: 600px)"); // Detect small screens
 
   return (
     <Box p={2}>
@@ -139,8 +161,8 @@ const RecentDesign = ({ height }) => {
                   component="img"
                   src={doc.imageUrl}
                   alt={doc.title}
-                  width={{ xs: "60px", sm: "80px" }} 
-                  height={{ xs: "60px", sm: "80px" }} 
+                  width={{ xs: "60px", sm: "80px" }}
+                  height={{ xs: "60px", sm: "80px" }}
                   borderRadius="4px"
                 />
                 <Box flexGrow={1}>
@@ -161,6 +183,7 @@ const RecentDesign = ({ height }) => {
                     onMoreClick={() =>
                       console.log(`More clicked: ${doc.title}`)
                     }
+                    isMobileView={isMobileView}
                   />
                 )}
               </Box>
@@ -186,12 +209,7 @@ const RecentDesign = ({ height }) => {
                 overflow="hidden"
                 display="flex"
                 flexDirection="column"
-                justifyContent={{
-                  xs: "flex-start",
-                  md: "flex-start",
-                  lg: "flex-start",
-                  xl: "flex-start",
-                }} // Center on large screens
+                justifyContent="flex-start"
                 alignItems="center"
                 position="relative"
                 onClick={() => console.log(`Clicked: ${doc.title}`)}
@@ -214,13 +232,19 @@ const RecentDesign = ({ height }) => {
                 />
                 {/* Title and Description below the image */}
                 <Box p={1} margin="2px 0">
-                  <Typography variant="body1" fontWeight="bold" margin="2px 0">
+                  <Typography
+                    variant="body1"
+                    fontWeight="bold"
+                    margin="2px 0"
+                    fontSize={isMobileView ? "0.875rem" : "1rem"} // Adjust font size for small screens
+                  >
                     {doc.title}
                   </Typography>
                   <Typography
                     variant="body2"
                     color="text.secondary"
                     margin="2px 0"
+                    fontSize={isMobileView ? "0.75rem" : "0.875rem"} // Adjust font size for small screens
                   >
                     {doc.description}
                   </Typography>
@@ -242,6 +266,7 @@ const RecentDesign = ({ height }) => {
                       onMoreClick={() =>
                         console.log(`More clicked: ${doc.title}`)
                       }
+                      isMobileView={isMobileView}
                     />
                   </Box>
                 )}
