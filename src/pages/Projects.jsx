@@ -43,12 +43,8 @@ const Projects= () =>{
               backgroundColor: "#fff",
               boxSizing: "border-box",
               width: { xs: "100%", sm: "85%", md: "84%", lg: "88%", xl: "90%" }, 
-              minHeight: {
-                xs: "800px",
-                sm: "1000px",
-                md: "1950px",
-                xl: "2000px",
-              },
+              minHeight: "fit-content", 
+              maxHeight: "100%", 
               overflow: "hidden",
             }}
           >
