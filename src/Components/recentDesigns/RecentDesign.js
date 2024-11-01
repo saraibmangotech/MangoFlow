@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Box, IconButton, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Dialog, Grid, IconButton, TextField, Typography } from "@mui/material";
 import ListIcon from "@mui/icons-material/List";
 import GridViewIcon from "@mui/icons-material/GridView";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -7,6 +7,13 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import img1 from "../../Images/img1.png";
 import img2 from "../../Images/img2.png";
 import img3 from "../../Images/img3.png";
+import ArtBoardServices from "../../services/ArtBoardServices";
+import thumb from '../../Images/thumb.png'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ConfirmationDialog from "../Dialogs/ConfirmationDialog";
+import { useNavigate } from "react-router-dom";
+import AddIcon from "@mui/icons-material/Add";
+import { useForm } from "react-hook-form";
 
 // Sample documents data
 const documents = [
@@ -35,7 +42,7 @@ const documents = [
     description: "Description for Document 5",
     imageUrl: img3,
   },
- 
+
 ];
 
 // IconButton component for hover icons
@@ -49,12 +56,12 @@ const HoverIcons = ({ onStarClick, onMoreClick }) => (
         border: "1px solid grey",
         "&:hover": {
           backgroundColor: "#7731d8",
-          "& .MuiSvgIcon-root": { color: "white" }, 
+          "& .MuiSvgIcon-root": { color: "white" },
         },
       }}
       onClick={onStarClick}
     >
-      <StarBorderIcon sx={{ color: "black" }} />
+      <DeleteOutlineIcon sx={{ color: "black" }} />
     </IconButton>
 
     <IconButton
@@ -65,7 +72,7 @@ const HoverIcons = ({ onStarClick, onMoreClick }) => (
         border: "1px solid grey",
         "&:hover": {
           backgroundColor: "#7731d8",
-          "& .MuiSvgIcon-root": { color: "white" }, 
+          "& .MuiSvgIcon-root": { color: "white" },
         },
       }}
       onClick={onMoreClick}
@@ -75,12 +82,223 @@ const HoverIcons = ({ onStarClick, onMoreClick }) => (
   </Box>
 );
 
-const RecentDesign = ({ height }) => {
+const RecentDesign = ({ height, data, }) => {
+
+  const navigate = useNavigate()
   const [viewMode, setViewMode] = useState("grid");
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [selectedArtBoard, setSelectedArtBoard] = useState(null)
+  const [confirmationDialog, setConfirmationDialog] = useState(false)
+  const [open2, setOpen2] = useState(false)
+  const {
+    register: register2,
+    handleSubmit: handleSubmit2,
+    setValue: setValue2,
+    getValues: getValues2,
+    watch,
+    formState: { errors: errors2 },
+
+  } = useForm();
+
+  const [artboards, setArtboards] = useState(data)
+
+  console.log(data, 'datadata');
+
+
+  const getArtBoards = async (page, limit, filter) => {
+
+
+    try {
+
+      const { data } = await ArtBoardServices.getArtBoards()
+      setArtboards(data?.artboards)
+
+
+
+    } catch (error) {
+      console.log(error);
+
+    } finally {
+      console.log('asdasdad')
+    }
+  }
+  const UpdateArtBoard = async (data) => {
+    try {
+      let obj = {
+        id:selectedArtBoard?._id,
+        title: data?.artBoardName,
+        description: data?.description
+      }
+
+
+      const { responseCode } = await ArtBoardServices.UpdateArtBoard(obj)
+      console.log(responseCode);
+      if (responseCode == 200) {
+        getArtBoards()
+        setValue2('artBoardName', '')
+        setValue2('description', '')
+        setOpen2(false)
+      }
+
+
+
+
+    } catch (error) {
+      console.log(error);
+
+    } finally {
+      console.log('asdasdad')
+    }
+
+  };
+  const handleDeleteArtBoard = async (data) => {
+    setConfirmationDialog(false)
+    console.log(data);
+
+    try {
+      let params = {
+
+        id: selectedArtBoard?._id
+      }
+
+
+      const { responseCode } = await ArtBoardServices.DeleteArtBoard(params)
+      console.log(responseCode);
+
+      if (responseCode == 200) {
+        getArtBoards()
+
+      }
+
+
+
+    } catch (error) {
+      console.log(error);
+
+    } finally {
+      console.log('asdasdad')
+    }
+
+  };
+
+
+
+  useEffect(() => {
+    if(data){
+      setArtboards(data)
+
+    }
+  }, [data])
 
   return (
     <Box p={2}>
+<Dialog
+        open={open2}
+        onClose={() => setOpen2(false)}
+        fullWidth
+        maxWidth="sm" // Changed to lg for larger width
+        sx={{
+          "& .MuiDialog-paper": {
+            width: "95%", // Increased width percentage
+            borderRadius: "20px",
+          },
+        }}
+      >
+        <Box
+         
+          sx={{
+            overflowY: "auto",
+            overflowX: "hidden",
+          }}
+        >
+          <Box sx={{ padding: 3 }}>
+            <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+              Create a Design
+            </Typography>
+          </Box>
+
+          <Box sx={{ display: "flex", padding: "0 16px", gap: 2 }}>
+
+
+            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <form onSubmit={handleSubmit2(UpdateArtBoard)}>
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      size="small"
+                      variant="outlined"
+                      placeholder="ArtBoard Name"
+                      {...register2("artBoardName")}
+                      fullWidth
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": { borderRadius: 2 },
+                        },
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                     size="small"
+                      variant="outlined"
+                      placeholder="Description"
+                      {...register2("description")}
+                      multiline
+                      rows={5}
+                      fullWidth
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": { borderRadius: 2 },
+                        },
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} display={'flex'} justifyContent={'flex-end'} pb={2} >
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "#7731d8",
+                        color: "white",
+                        borderRadius: 2,
+                        "&:hover": {
+                          backgroundColor: "#5e24a6",
+                        },
+                      }}
+                      startIcon={<AddIcon />}
+                    >
+                      Update
+                    </Button>
+                  </Grid>
+                </Grid>
+              </form>
+
+              {/* <Box sx={{ flex: 1 }}>
+                {value === 0 && (
+                  <Box>
+                    <RecentDesign data={artboards} height="100%" top="40%" left="32%" />
+                  </Box>
+                )}
+                {value === 1 && (
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    Document
+                  </Typography>
+                )}
+              </Box> */}
+            </Box>
+          </Box>
+        </Box>
+      </Dialog>
+      <ConfirmationDialog
+        open={confirmationDialog}
+        onClose={() => setConfirmationDialog(false)}
+        message={"Are you sure you want to delete?"}
+        action={() => {
+          handleDeleteArtBoard()
+        }}
+      />
       {/* Header Section */}
       <Box
         display="flex"
@@ -124,7 +342,7 @@ const RecentDesign = ({ height }) => {
         {/* List View */}
         {viewMode === "list" && (
           <Box display="flex" flexDirection="column" gap={2}>
-            {documents.map((doc, index) => (
+            {artboards?.map((doc, index) => (
               <Box
                 key={index}
                 display="flex"
@@ -135,19 +353,20 @@ const RecentDesign = ({ height }) => {
                 borderRadius="4px"
                 bgcolor="white"
                 sx={{ cursor: "pointer", position: "relative" }}
-                onClick={() => console.log(`Clicked: ${doc.title}`)}
+                
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
               >
                 <Box
                   component="img"
-                  src={doc.imageUrl}
+                  src={thumb}
                   alt={doc.title}
-                  width={{ xs: "60px", sm: "80px" }} 
-                  height={{ xs: "60px", sm: "80px" }} 
+                  onClick={() => navigate(`/graph/${doc?._id}`)}
+                  width={{ xs: "60px", sm: "80px" }}
+                  height={{ xs: "60px", sm: "80px" }}
                   borderRadius="4px"
                 />
-                <Box flexGrow={1}>
+                <Box flexGrow={1} sx={{width:'100% !important'}}>
                   <Typography variant="body1" fontWeight="bold">
                     {doc.title}
                   </Typography>
@@ -160,10 +379,20 @@ const RecentDesign = ({ height }) => {
                 {hoveredIndex === index && (
                   <HoverIcons
                     onStarClick={() =>
-                      console.log(`Star clicked: ${doc.title}`)
+                     {
+                      setSelectedArtBoard(doc)
+                        setConfirmationDialog(true)
+                     }
+
                     }
                     onMoreClick={() =>
-                      console.log(`More clicked: ${doc.title}`)
+                    {
+                      setOpen2(true)
+                      setSelectedArtBoard(doc)
+                      setValue2('artBoardName',doc?.title)
+                      setValue2('description',doc?.description)
+                    }
+                      
                     }
                   />
                 )}
@@ -183,7 +412,7 @@ const RecentDesign = ({ height }) => {
             }}
             gap={2}
           >
-            {documents.map((doc, index) => (
+            {artboards?.map((doc, index) => (
               <Box
                 key={index}
                 bgcolor="white"
@@ -198,14 +427,15 @@ const RecentDesign = ({ height }) => {
                 }} // Center on large screens
                 alignItems="center"
                 position="relative"
-                onClick={() => console.log(`Clicked: ${doc.title}`)}
+                
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
               >
                 <Box
                   component="img"
-                  src={doc.imageUrl}
+                  src={thumb}
                   alt={doc.title}
+                  onClick={() => navigate(`/graph/${doc?._id}`)}
                   sx={{
                     cursor: "pointer",
                     width: "100%",
@@ -217,7 +447,7 @@ const RecentDesign = ({ height }) => {
                   }}
                 />
                 {/* Title and Description below the image */}
-                <Box p={1} margin="2px 0">
+                <Box p={1} sx={{width:'100% !important'}} margin="2px 0">
                   <Typography variant="body1" fontWeight="bold" margin="2px 0">
                     {doc.title}
                   </Typography>
@@ -240,11 +470,24 @@ const RecentDesign = ({ height }) => {
                     gap={1}
                   >
                     <HoverIcons
-                      onStarClick={() =>
-                        console.log(`Star clicked: ${doc.title}`)
+                      onStarClick={() => {
+
+                        setSelectedArtBoard(doc)
+                        setConfirmationDialog(true)
                       }
-                      onMoreClick={() =>
-                        console.log(`More clicked: ${doc.title}`)
+
+                      }
+                      onMoreClick={() => {
+
+                        {
+                          setOpen2(true)
+                          setSelectedArtBoard(doc)
+                          setValue2('artBoardName',doc?.title)
+                          setValue2('description',doc?.description)
+                        }
+
+                      }
+
                       }
                     />
                   </Box>

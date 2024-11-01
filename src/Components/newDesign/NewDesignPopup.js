@@ -6,14 +6,68 @@ import {
   InputAdornment,
   TextField,
   Button,
+  Grid,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import NewDesignSideBar from "./NewDesignSideBar";
 import IconCircle from "../iconCircle/IconCircle";
 import RecentDesign from "../recentDesigns/RecentDesign";
+import { useForm } from "react-hook-form";
+import ArtBoardServices from "../../services/ArtBoardServices";
 
-const NewDesignPopup = ({ open, onClose }) => {
+const NewDesignPopup = ({ open, onClose, data }) => {
+  const [artboards, setArtboards] = useState([])
+
+  const { register, handleSubmit,setValue : setValues } = useForm();
+  const getArtBoards = async (page, limit, filter) => {
+
+
+    try {
+
+      const { data } = await ArtBoardServices.getArtBoards()
+      setArtboards(data?.artboards)
+
+
+
+    } catch (error) {
+      console.log(error);
+
+    } finally {
+      console.log('asdasdad')
+    }
+  }
+
+  const onSubmit = async (data) => {
+    try {
+      let obj = {
+        title: data?.artBoardName,
+        description: data?.description
+      }
+
+
+      const { responseCode } = await ArtBoardServices.CreateArtBoard(obj)
+      console.log(responseCode);
+      if (responseCode == 200) {
+        getArtBoards()
+        setValues('artBoardName','')
+        setValues('description','')
+        handleClose()
+      }
+
+
+
+
+    } catch (error) {
+      console.log(error);
+
+    } finally {
+      console.log('asdasdad')
+    }
+
+  };
+
+  
   const [value, setValue] = useState(0); // State for the selected tab
   const [inputValue, setInputValue] = useState("");
   const [itemsToShow, setItemsToShow] = useState(4); // Default icons per row
@@ -42,6 +96,7 @@ const NewDesignPopup = ({ open, onClose }) => {
     // Add resize event listener for dynamic updates
     window.addEventListener("resize", updateItemsToShow);
     return () => window.removeEventListener("resize", updateItemsToShow);
+    getArtBoards()
   }, []);
 
   const handleSidebarChange = (index) => setValue(index);
@@ -84,64 +139,63 @@ const NewDesignPopup = ({ open, onClose }) => {
             <NewDesignSideBar onTabChange={handleSidebarChange} />
           </Box>
 
-          <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: 2,
-              }}
-            >
-              <TextField
-                variant="outlined"
-                placeholder="What would you like to create?"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                sx={{
-                  flexGrow: 1,
-                  maxWidth: { xs: "100%", sm: 500 },
-                  height: 40,
-                  "& .MuiOutlinedInput-root": {
-                    height: "100%",
-                    "& fieldset": { borderRadius: 4 },
-                  },
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon fontSize="small" />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "#7731d8",
-                  color: "white",
-                  borderRadius: 2,
-                  marginLeft: 2,
-                  "&:hover": {
-                    backgroundColor: "#5e24a6",
-                  },
-                }}
-                startIcon={<AddIcon />}
-                onClick={handleOpenPopup}
-              >
-                Create
-              </Button>
-            </Box>
+          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    variant="outlined"
+                    placeholder="ArtBoard Name"
+                    {...register("artBoardName")}
+                    fullWidth
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": { borderRadius: 4 },
+                      },
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={12}>
+                  <TextField
+                    variant="outlined"
+                    placeholder="Description"
+                    {...register("description")}
+                    multiline
+                    rows={5}
+                    fullWidth
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": { borderRadius: 4 },
+                      },
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} display={'flex'} justifyContent={'flex-end'} >
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "#7731d8",
+                      color: "white",
+                      borderRadius: 2,
+                      "&:hover": {
+                        backgroundColor: "#5e24a6",
+                      },
+                    }}
+                    startIcon={<AddIcon />}
+                  >
+                    Create
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
 
             <Box sx={{ flex: 1 }}>
               {value === 0 && (
                 <Box>
-                  <IconCircle
-                    itemsToShow={itemsToShow} // Pass items to show
-                    currentIndex={currentIndex}
-                    setCurrentIndex={setCurrentIndex}
-                  />
-                  <RecentDesign height="200px" top="40%" left="22%" />
+                  <RecentDesign data={artboards} height="100%" top="40%" left="32%" />
                 </Box>
               )}
               {value === 1 && (

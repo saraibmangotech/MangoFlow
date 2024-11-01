@@ -5,8 +5,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 * {
-  font-family: "Canva Sans", "Noto Sans Variable", "Noto Sans", -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: poppins;
 }
 
 code {
@@ -38,3 +37,43 @@ code {
   background-color: #5e24a6; /* Scrollbar hover color */
 }
 
+.custom-context-menu {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+width: 145px;
+  position: absolute;
+  z-index: 1000;
+  /* Add other styles for specific elements like icons and text */
+}
+
+.custom-context-menu li {
+  list-style: none;
+  font-size: 14px;
+}
+
+.custom-context-menu a {
+  color: #333;
+  text-decoration: none;
+  padding: 10px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.custom-context-menu a:hover {
+  text-decoration: none;
+}
+
+.custom-context-menu .icon {
+  /* Add styles for your icons here */
+  margin-right: 10px;
+}
+
+.react-flow__handle{
+  width: 8px !important;
+  height: 8px !important;
+}
+.react-flow__node{
+border: none !important;
+}
