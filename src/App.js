@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import Projects from './pages/Projects';
 import Templates from './pages/Templates';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Demo from './pages/Demo';
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
       <BrowserRouter>
       <Routes>
         {/* Login Route */}
-        <Route path="/" element={<Login />} />
+        <Route path="/demo" element={<Demo />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/graph" element={ <FlowGraph /> } />
         {/* Home Route */}
         <Route path="/home" element={<Home />} />
