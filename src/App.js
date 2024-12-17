@@ -19,7 +19,7 @@ function App() {
       <BrowserRouter>
       <Routes>
         {/* Login Route */}
-        <Route path="/demo" element={<Demo />} />
+        <Route path="/" element={<Demo />} />
         <Route path="/login" element={<Login />} />
         <Route path="/graph" element={ <FlowGraph /> } />
         {/* Home Route */}
