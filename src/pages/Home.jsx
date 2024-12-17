@@ -1,5 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Typography, Button, useMediaQuery, List, ListItem, ListItemIcon, IconButton, Dialog, Grid, TextField } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  useMediaQuery,
+  List,
+  ListItem,
+  ListItemIcon,
+  IconButton,
+  Dialog,
+  Grid,
+  TextField,
+  InputLabel,
+} from "@mui/material";
 import RecentDesign from "../Components/recentDesigns/RecentDesign";
 import AddIcon from "@mui/icons-material/Add";
 import NewDesignPopup from "../Components/newDesign/NewDesignPopup";
@@ -22,20 +35,21 @@ import {
 import IosShareSharpIcon from "@mui/icons-material/IosShareSharp";
 import MoreHorizSharpIcon from "@mui/icons-material/MoreHorizSharp";
 import ArrowDropDownTwoToneIcon from "@mui/icons-material/ArrowDropDownTwoTone";
-import thumb from '../Images/thumb.png'
+import thumb from "../Images/thumb.png";
 import { useForm } from "react-hook-form";
-
+import toast from "react-hot-toast";
 
 const Home = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [itemsToShow, setItemsToShow] = useState(5);
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState(0)
-  const popupRef = useRef(null); // Ref to measure popup size
+  const [open, setOpen] = useState(false);
+  const [roleModal, setRoleModal] = useState(false);
+  const [value, setValue] = useState(0);
+
+  const popupRef = useRef(null); 
   const { register, handleSubmit, setValue: setValues } = useForm();
-  const [open2, setOpen2] = useState(false)
-  
-  
+  const [open2, setOpen2] = useState(false);
+
   const {
     register: register2,
     handleSubmit: handleSubmit2,
@@ -43,7 +57,6 @@ const Home = () => {
     getValues: getValues2,
     watch,
     formState: { errors: errors2 },
-
   } = useForm();
 
 
@@ -51,39 +64,30 @@ const Home = () => {
     try {
       let obj = {
         title: data?.artBoardName,
-        description: data?.description
-      }
+        description: data?.description,
+      };
 
-
-      const { responseCode } = await ArtBoardServices.CreateArtBoard(obj)
+      const { responseCode } = await ArtBoardServices.CreateArtBoard(obj);
       console.log(responseCode);
       if (responseCode == 200) {
-        getArtBoards()
-        setValues('artBoardName', '')
-        setValues('description', '')
-        setOpen(false)
+        getArtBoards();
+        setValues("artBoardName", "");
+        setValues("description", "");
+        setOpen(false);
       }
-
-
-
-
     } catch (error) {
       console.log(error);
-
     } finally {
-      console.log('asdasdad')
+      console.log("asdasdad");
     }
-
   };
-  
-  const [artboards, setArtboards] = useState([])
 
-
+  const [artboards, setArtboards] = useState([]);
 
   const [selected, setSelected] = useState();
 
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [showDesigns, setShowDesigns] = useState(true); // New state for toggle
+  const [showDesigns, setShowDesigns] = useState(true);
   const navigate = useNavigate();
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const handleSelect = (index) => {
@@ -100,9 +104,8 @@ const Home = () => {
   const handleClosePopup = () => setIsPopupOpen(false);
 
   const toggleDesigns = () => {
-    setShowDesigns(!showDesigns); // Toggle designs visibility
+    setShowDesigns(!showDesigns); 
     console.log(data);
-
   };
 
   const getIcon = (index) => {
@@ -151,29 +154,19 @@ const Home = () => {
     { label: "Templates", index: 2 },
   ];
 
-
-
   const isMobileView = useMediaQuery("(max-width:600px)");
 
   const getArtBoards = async (page, limit, filter) => {
-
-
     try {
-
-      const { data } = await ArtBoardServices.getArtBoards()
-      setArtboards(data?.artboards)
-
-
-
+      const { data } = await ArtBoardServices.getArtBoards();
+      setArtboards(data?.artboards);
     } catch (error) {
       console.log(error);
-
     } finally {
-      console.log('asdasdad')
+      console.log("asdasdad");
     }
-  }
+  };
 
-  // Effect to adjust itemsToShow based on window width
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 1400) setItemsToShow(10);
@@ -189,29 +182,30 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    getArtBoards()
-  }, [])
+    getArtBoards();
+  }, []);
 
 
+  
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: { xs: "column", sm: "row" },
-        height: "auto",
+
         overflow: "hidden",
         backgroundColor: "rgba(139, 61, 255, 0.1)",
+        height: { md: "100vh", sm: "100vh", xs: "auto" },
       }}
     >
-
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
         fullWidth
-        maxWidth="sm" // Changed to lg for larger width
+        maxWidth="sm" 
         sx={{
           "& .MuiDialog-paper": {
-            width: "95%", // Increased width percentage
+            width: "95%",
             borderRadius: "20px",
           },
         }}
@@ -230,9 +224,9 @@ const Home = () => {
           </Box>
 
           <Box sx={{ display: "flex", padding: "0 16px", gap: 2 }}>
-
-
-            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box
+              sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}
+            >
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item xs={12} sm={12}>
@@ -252,7 +246,7 @@ const Home = () => {
 
                   <Grid item xs={12} sm={12}>
                     <TextField
-                     size="small"
+                      size="small"
                       variant="outlined"
                       placeholder="Description"
                       {...register("description")}
@@ -267,7 +261,13 @@ const Home = () => {
                     />
                   </Grid>
 
-                  <Grid item xs={12} display={'flex'} justifyContent={'flex-end'} pb={2} >
+                  <Grid
+                    item
+                    xs={12}
+                    display={"flex"}
+                    justifyContent={"flex-end"}
+                    pb={2}
+                  >
                     <Button
                       type="submit"
                       variant="contained"
@@ -304,14 +304,134 @@ const Home = () => {
         </Box>
       </Dialog>
 
-     
+      {/* <Dialog
+  open={roleModal}
+  onClose={() => setRoleModal(false)}
+  fullWidth
+  maxWidth="sm"
+  sx={{
+    "& .MuiDialog-paper": {
+      width: "95%",
+      borderRadius: "20px",
+    },
+  }}
+>
+  <Box
+    ref={popupRef}
+    sx={{
+      overflowY: "auto",
+      overflowX: "hidden",
+    }}
+  >
+    <Box sx={{ padding: 3 }}>
+      <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+        Create Role
+      </Typography>
+    </Box>
+
+    <Box sx={{ display: "flex", padding: "0 16px", gap: 2 }}>
+      <Box
+        sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}
+      >
+        <form onSubmit={handleSubmit3(onSubmit3)}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12}>
+            <InputLabel>Select Role</InputLabel>
+              <TextField
+                size="small"
+                variant="outlined"
+                placeholder="Enter Role"
+                {...register3("role", { required: "Role is required" })}
+                fullWidth
+                error={!!errors3.role}
+                helperText={errors3.role?.message}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderRadius: 2 },
+                  },
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+            <InputLabel>Select Background Color</InputLabel>
+           <Box
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    {[
+                      "#000000", // Black (Default)
+                      "#FF5733", // Red-Orange
+                      "#33FF57", // Green
+                      "#3357FF", // Blue
+                      "#FFD700", // Yellow
+                      "#8A2BE2", // Violet
+                      "#FF1493", // Deep Pink
+                      "#FFA500", // Orange
+                      "#00CED1", // Dark Turquoise
+                    ].map((color) => (
+                      <Box
+                        key={color}
+                        sx={{
+                          width: 40,
+                          height: 40,
+                          backgroundColor: color,
+                          borderRadius: "50%",
+                          cursor: "pointer",
+                          border: selectedColor === color ? "3px solid black" : "none",
+                        }}
+                        onClick={() => setSelectedColor(color)}
+                      />
+                    ))}
+                  </Box>
+              <Typography variant="body2" sx={{ mt: 1, color: "gray" }}>
+                Selected Color: {selectedColor || "None"}
+              </Typography>
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              display={"flex"}
+              justifyContent={"flex-end"}
+              pb={2}
+            >
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  backgroundColor: "#7731d8",
+                  color: "white",
+                  borderRadius: 2,
+                  "&:hover": {
+                    backgroundColor: "#5e24a6",
+                  },
+                }}
+                startIcon={<AddIcon />}
+              >
+                Create
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </Box>
+    </Box>
+  </Box>
+</Dialog> */}
+
+
       {/* Sidebar on the left side */}
       <Box sx={{ display: { xs: "none", sm: "block" }, width: "200px" }}>
         <Box
           sx={{
             width: { xs: "100%", sm: 270, md: 320, lg: 320, xl: 350 },
             height: { xs: 70, sm: "100vh" },
-            position: { xs: "fixed", sm: "relative" },
+            position: "sticky",
+            top: "0px",
+            // position: { xs: "fixed", sm: "relative" },
             bottom: { xs: 0, sm: "auto" },
             display: "flex",
             flexDirection: "row",
@@ -319,7 +439,7 @@ const Home = () => {
             overflow: "hidden",
           }}
         >
-          {/* Menu Items */}
+          
           <List
             sx={{
               paddingTop: 2,
@@ -329,7 +449,7 @@ const Home = () => {
               justifyContent: isMobileView ? "center" : "flex-start",
               alignItems: isMobileView ? "center" : "flex-start",
               backgroundColor: isMobileView ? "#fff" : "none",
-              boder: isMobileView ? "1px solid #ccc" : "none"
+              boder: isMobileView ? "1px solid #ccc" : "none",
             }}
           >
             {menuItems.map((item) => (
@@ -405,7 +525,6 @@ const Home = () => {
               <Box
                 sx={{
                   marginTop: "12px",
-
                 }}
               >
                 <img width="100px" src={logo} />
@@ -430,8 +549,7 @@ const Home = () => {
                 Create a Design
               </Button>
 
-
-              <Button
+              {/* <Button
                 variant="contained"
                 size="small"
                 sx={{
@@ -446,10 +564,32 @@ const Home = () => {
                   fontWeight: "bold",
                 }}
                 startIcon={
-                  <CardMembershipIcon fontSize="small" sx={{ color: "#fdbc68" }} />
+                  <CardMembershipIcon
+                    fontSize="small"
+                    sx={{ color: "#fdbc68" }}
+                  />
                 }
               >
                 Try Pro for 30 days
+              </Button> */}
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => navigate("/project")}
+                sx={{
+                  backgroundColor: "#7731d8",
+                  color: "white",
+                  borderRadius: 2,
+                  padding: "8px 30px",
+                  fontSize: "clamp(0.5rem, 1vw, 0.65rem)",
+                  lineHeight: 1.2,
+                  margin: "5px 0",
+                  width: "100%",
+                  "&:hover": { backgroundColor: "#5e24a6" },
+                }}
+                startIcon={<AddIcon fontSize="small" />}
+              >
+                Create Role Structure
               </Button>
 
               {/* Recent Designs with Toggle */}
@@ -498,7 +638,7 @@ const Home = () => {
                 <Box sx={{ marginTop: 1, width: "100%" }}>
                   {artboards?.map((design, index) => (
                     <Box
-                      key={design.id || index}  // Use unique ID if available, else fallback to index
+                      key={design.id || index} // Use unique ID if available, else fallback to index
                       sx={{
                         display: "flex",
                         alignItems: "center",
@@ -506,16 +646,16 @@ const Home = () => {
                         borderRadius: "10px",
                         mb: 1,
                         cursor: "pointer",
-                        "&:hover": { backgroundColor: "rgba(119, 49, 216, 0.1)" },
+                        "&:hover": {
+                          backgroundColor: "rgba(119, 49, 216, 0.1)",
+                        },
                       }}
                       onMouseEnter={() => setHoveredIndex(index)}
                       onMouseLeave={() => setHoveredIndex(null)}
                     >
-
-
                       {/* Design Image */}
                       <img
-                        src={thumb}  // Replace with a real URL or placeholder
+                        src={thumb} // Replace with a real URL or placeholder
                         alt={design?.title || "Design"}
                         style={{
                           width: 20,
@@ -614,8 +754,6 @@ const Home = () => {
           boxSizing: "border-box",
           display: "flex",
           justifyContent: "flex-end", // Align to the right
-
-
         }}
       >
         {/* Bordered Box with */}
@@ -637,7 +775,6 @@ const Home = () => {
               xl: "2000px",
             },
             overflow: "hidden",
-
           }}
         >
           <ProfileAvatar />
@@ -693,7 +830,6 @@ const Home = () => {
               marginBottom: 3,
             }}
           >
-
             <Button
               variant="contained"
               sx={{
@@ -723,11 +859,13 @@ const Home = () => {
           </Box>
 
           {/* Design Popup */}
-          <NewDesignPopup data={artboards} open={isPopupOpen} onClose={handleClosePopup} />
+          <NewDesignPopup
+            data={artboards}
+            open={isPopupOpen}
+            onClose={handleClosePopup}
+          />
         </Box>
       </Box>
-
-
     </Box>
   );
 };

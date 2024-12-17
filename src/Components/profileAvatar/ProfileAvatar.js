@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Avatar, Typography } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import LogoutIcon from '@mui/icons-material/Logout';
+import useAuth from "../../hooks/useProvideAuth";
+import { useNavigate } from "react-router-dom";
+import ConfirmationDialog from "../Dialogs/ConfirmationDialog";
 
 function ProfileAvatar() {
+  const {user}= useAuth()
+  const [openLogoutDialog ,setOpenLogoutDialog] = useState(false)
+  const navigate = useNavigate()  
+
+  const handleLogout =()=>{
+    localStorage.removeItem("user")
+    navigate("/")
+  }
+  console.log(user)
   return (
+    <>
     <Box
       sx={{
         display: "flex",
@@ -15,6 +29,25 @@ function ProfileAvatar() {
         marginBottom: 3,
       }}
     >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginRight: 1,
+          width: 40,
+          height: 40,
+          borderRadius: "8px",
+          cursor: "pointer",
+          "&:hover": {
+            backgroundColor: "lightgrey",
+            transition: "background-color 0.3s",
+          },
+        }}
+        onClick={()=>setOpenLogoutDialog(true)}
+      >
+        <LogoutIcon sx={{ color: "black", fontSize: 25 }} />
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -54,7 +87,7 @@ function ProfileAvatar() {
       </Box>
 
       <Avatar
-        alt="Profile"
+        alt={user?.name}
         src="/path/to/avatar.jpg"
         sx={{ width: 30, height: 30 }}
       />
@@ -68,9 +101,19 @@ function ProfileAvatar() {
           paddingLeft: 1,
         }}
       >
-        dummy name
+       {user?.name} 
       </Typography>
     </Box>
+    <ConfirmationDialog
+        open={openLogoutDialog}
+        onClose={() => setOpenLogoutDialog(false)}
+        message={"Are you sure you want to delete?"}
+        action={() => {
+          console.log("asdasda");
+          handleLogout();
+        }}
+      />
+    </>
   );
 }
 

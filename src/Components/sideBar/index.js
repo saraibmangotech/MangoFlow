@@ -122,12 +122,14 @@ const SideBar = (data) => {
       sx={{
         width: { xs: "100%", sm: 270, md: 320, lg: 320, xl: 350 },
         height: { xs: 70, sm: "100vh" },
-        position: { xs: "fixed", sm: "relative" },
+        position: { xs: "fixed", sm: "" },
         bottom: { xs: 0, sm: "auto" },
         display: "flex",
         flexDirection: "row",
         border: "none",
         overflow: "hidden",
+
+       
       }}
     >
       {/* Menu Items */}
@@ -242,7 +244,7 @@ const SideBar = (data) => {
           </Button>
           <NewDesignPopup open={isPopupOpen} onClose={handleClosePopup} />
 
-          <Button
+          {/* <Button
             variant="contained"
             size="small"
             sx={{
@@ -261,7 +263,8 @@ const SideBar = (data) => {
             }
           >
             Try Pro for 30 days
-          </Button>
+          </Button> */}
+         
 
           {/* Recent Designs with Toggle */}
           {/* <Box

@@ -191,7 +191,7 @@ const RecentDesign = ({ height, data, }) => {
   }, [data])
 
   return (
-    <Box p={2}>
+    <Box p={2} >
 <Dialog
         open={open2}
         onClose={() => setOpen2(false)}
@@ -305,6 +305,7 @@ const RecentDesign = ({ height, data, }) => {
         justifyContent="space-between"
         alignItems="center"
         mb={2}
+       
       >
         <Typography variant="h5" fontWeight="bold">
           Recent Design
