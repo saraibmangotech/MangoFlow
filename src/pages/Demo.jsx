@@ -9,7 +9,8 @@ import {
   Menu,
   MenuItem,
   Grid,
-  TextField
+  TextField,
+  Container,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import logo from "../Images/logo.png";
@@ -42,13 +43,7 @@ import { HiOutlineCreditCard } from "react-icons/hi2";
 import { MdOndemandVideo } from "react-icons/md";
 import { MdApartment } from "react-icons/md";
 
-import { Avatar, Slider, CircularProgress } from '@mui/material';
-
-
-
-
-
-
+import { Avatar, Slider, CircularProgress } from "@mui/material";
 
 const Demo = () => {
   const [menuAnchor, setMenuAnchor] = React.useState(null);
@@ -88,25 +83,23 @@ const Demo = () => {
     },
   ];
 
-
   const images = [
-    { src: gutWork, alt: "Pic 1", },
-    { src: phaseKit, alt: "Pic 2", },
-    { src: grubspot, alt: "Pic 3", },
-    { src: taskbot, alt: "Pic 4", },
-    { src: systek, alt: "Pic 5", },
-    { src: gutWork, alt: "Pic 6", },
-    { src: gutWork, alt: "Pic 7", },
-    { src: gutWork, alt: "Pic 8", },
-    { src: gutWork, alt: "Pic 9", },
-    { src: gutWork, alt: "Pic 10", },
-    { src: gutWork, alt: "Pic 11", },
-    { src: gutWork, alt: "Pic 12", },
-    { src: gutWork, alt: "Pic 13", },
-    { src: gutWork, alt: "Pic 14", },
-    { src: gutWork, alt: "Pic 15", },
+    { src: gutWork, alt: "Pic 1" },
+    { src: phaseKit, alt: "Pic 2" },
+    { src: grubspot, alt: "Pic 3" },
+    { src: taskbot, alt: "Pic 4" },
+    { src: systek, alt: "Pic 5" },
+    { src: gutWork, alt: "Pic 6" },
+    { src: gutWork, alt: "Pic 7" },
+    { src: gutWork, alt: "Pic 8" },
+    { src: gutWork, alt: "Pic 9" },
+    { src: gutWork, alt: "Pic 10" },
+    { src: gutWork, alt: "Pic 11" },
+    { src: gutWork, alt: "Pic 12" },
+    { src: gutWork, alt: "Pic 13" },
+    { src: gutWork, alt: "Pic 14" },
+    { src: gutWork, alt: "Pic 15" },
   ];
-
 
   const sliderData = [
     {
@@ -114,23 +107,21 @@ const Demo = () => {
       name: "John Doe",
       description: "Lorem ipsum dolor sit amet.",
       avatar: profile1,
-      bio: "lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged"
-
+      bio: "lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
     },
     {
       id: 2,
       name: "Jane Smith",
       description: "Consectetur adipiscing elit.",
       avatar: profile2,
-      bio: " when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged"
-
+      bio: " when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
     },
     {
       id: 3,
       name: "Alice Johnson",
       description: "Sed do eiusmod tempor incididunt.",
       avatar: profile3,
-      bio: "Took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged"
+      bio: "Took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
     },
   ];
 
@@ -143,9 +134,6 @@ const Demo = () => {
 
     return () => clearInterval(interval);
   }, [sliderData.length]);
-
-
-
 
   return (
     <>
@@ -177,7 +165,7 @@ const Demo = () => {
           sx={{
             flexDirection: "row",
             width: "100%",
-            maxWidth: { lg: "1200px", md: "1000px" }
+            maxWidth: { lg: "1200px", md: "1000px" },
           }}
         >
           <Box
@@ -241,16 +229,23 @@ const Demo = () => {
 
       <Box
         sx={{
-          px: 3,
+          
           backgroundColor: "#f5f6fa",
-          py: 14,
+          pt: {md:14, xs:5},
+          pb:{xs:14, },
           width: "100%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <Box sx={{ flexDirection: "row", width: "100%", maxWidth: { lg: "1200px", md: "1050px" } }}>
+        <Container
+          sx={{
+            flexDirection: "row",
+            width: "100%",
+            maxWidth: { lg: "1200px", md: "1050px" },
+          }}
+        >
           <Grid container spacing={8}>
             <Grid item xs={12} md={5} sx={{ mt: 12 }}>
               <Box
@@ -364,6 +359,8 @@ const Demo = () => {
                   alignItems: "center",
                   gap: 2, // Space between the images
                   height: "100%",
+                  pt:3
+      
                 }}
               >
                 {/* First Image */}
@@ -404,27 +401,23 @@ const Demo = () => {
               </Box>
             </Grid>
           </Grid>
-        </Box>
+        </Container>
       </Box>
 
-      <Box
+      <Container
         sx={{
           width: "100%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          py: 12,
+          pt: 12,
           flexDirection: "column", // Ensure stacking of sections
-
         }}
       >
         {/* Row 1: "PM Made Simple" */}
         <Box
           sx={{
             width: "100%",
-            maxWidth: { lg: "1200px", md: "1000px" },
-
-
           }}
         >
           <Box
@@ -514,7 +507,7 @@ const Demo = () => {
                     backgroundColor: "#837fcb",
                     width: "20%",
                     mb: 2,
-                    borderRadius: "20px"
+                    borderRadius: "20px",
                   }}
                 />{" "}
                 <Typography
@@ -525,7 +518,10 @@ const Demo = () => {
                     mb: 2, // Space below paragraph
                   }}
                 >
-                  Lorem ipsum dolor sit amet, eam ex probo tation tractatos. Ut vel hinc solet tincidunt, nec et iisque placerat pertinax. Ei minim probatus mea. Vide movet ad vis, eum at percipitur temporibus signiferumque.
+                  Lorem ipsum dolor sit amet, eam ex probo tation tractatos. Ut
+                  vel hinc solet tincidunt, nec et iisque placerat pertinax. Ei
+                  minim probatus mea. Vide movet ad vis, eum at percipitur
+                  temporibus signiferumque.
                 </Typography>
                 <Typography
                   variant="body1"
@@ -534,7 +530,9 @@ const Demo = () => {
                     color: "#4A4A4A",
                   }}
                 >
-                  Timeam adipisci mei ei, vis ut nulla urbanitas, mel ex tota laudem. Quo ne regione tritani placerat, labitur neglegentur ex vis, sale verterem perfecto an eum.
+                  Timeam adipisci mei ei, vis ut nulla urbanitas, mel ex tota
+                  laudem. Quo ne regione tritani placerat, labitur neglegentur
+                  ex vis, sale verterem perfecto an eum.
                 </Typography>
               </Grid>
 
@@ -592,7 +590,7 @@ const Demo = () => {
             </Grid>
           </Box>
         </Box>
-      </Box>
+      </Container>
 
       <Box
         sx={{
@@ -601,53 +599,34 @@ const Demo = () => {
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column", // Ensure stacking of sections
-          backgroundColor: "#fbfbfb"
-
-
+          backgroundColor: "#fbfbfb",
+          px: { xs: "20px" },
         }}
       >
         {/* Row 1: "PM Made Simple" */}
-        <Box
+        <Container
           sx={{
             width: "100%",
-            maxWidth: { lg: "1200px", md: "1000px" },
-
-
           }}
         >
-          <Grid container spacing={8} sx={{ py: 15 }}>
-            {/* Column Content for "Some New Tools" */}
+          <Grid container spacing={6} sx={{ py: 10 }}>
+            {/* Grid for Icons and Content */}
             <Grid
+              container
+              spacing={2}
               item
               xs={12}
-              md={7}
+              md={6}
               sx={{
-                alignContent: "center",
+                order: { xs: 1, sm: 1, md: 2 },
               }}
             >
               <Box
                 sx={{
-                  backgroundImage: `url(${manageProjects})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  height: "110%", // Set the desired height
-                  width: "90%", // Set the desired width
-                }}
-              />
-            </Grid>
-
-
-            {/* Grid for Icons and Content */}
-            <Grid container spacing={0} item xs={12} md={5} sx={{ maxWidth: { md: "600px", lg: "1000px", pb: 20 } }}>
-
-              <Box
-                sx={{
-                  position: "relative", // Make the container relative for absolute positioning inside
+                  position: "relative",
                   display: "flex",
-                  flexDirection: "column", // Arrange content vertically
+                  flexDirection: "column",
                   alignItems: "flex-start",
-
-
                 }}
               >
                 {/* Background Text */}
@@ -672,9 +651,9 @@ const Demo = () => {
                 {/* Icon */}
                 <Box
                   sx={{
-                    fontSize: "2.8rem", // Increased font size
+                    fontSize: "2.8rem",
                     color: "#837fcb",
-                    position: "relative", // Keep content above the background text
+                    position: "relative",
                     zIndex: 1,
                   }}
                 >
@@ -684,7 +663,7 @@ const Demo = () => {
                 {/* Content */}
                 <Box
                   sx={{
-                    position: "relative", // Keep content above the background text
+                    position: "relative",
                     zIndex: 1,
                   }}
                 >
@@ -696,7 +675,7 @@ const Demo = () => {
                       fontSize: "42px",
                       mb: 3, // Space below heading
                       maxWidth: { md: "100px", lg: "1000px" },
-                      lineHeight: 1.125
+                      lineHeight: 1.125,
                     }}
                   >
                     Manage Projects
@@ -707,29 +686,56 @@ const Demo = () => {
                       backgroundColor: "#837fcb",
                       width: "80px",
                       mb: 2,
-                      borderRadius: "20px"
+                      borderRadius: "20px",
                     }}
-                  />{" "}
-
+                  />
                   <Typography
                     variant="body2"
                     sx={{
                       fontSize: "1.2rem",
                       color: "#a9abac",
-                      maxWidth: { md: "300px", lg: "400px" }
-
+                      maxWidth: { md: "300px", lg: "400px" },
                     }}
                   >
-                    Lorem ipsum dolor sit amet, clita laoreet ne cum. His cu harum inermis iudicabit. Ex vidit fierent hendrerit eum, sed stet periculis ut. Vis in probo decore labitur.                    </Typography>
+                    Lorem ipsum dolor sit amet, clita laoreet ne cum. His cu
+                    harum inermis iudicabit. Ex vidit fierent hendrerit eum, sed
+                    stet periculis ut. Vis in probo decore labitur.
+                  </Typography>
                 </Box>
               </Box>
+            </Grid>
 
-
+            {/* Column Content for "Some New Tools" */}
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={6}
+              lg={6}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                order: { xs: 2, sm: 2, md: 1 },
+              }}
+            >
+              <Box
+                sx={{
+                  backgroundImage: `url(${manageProjects})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  height: { xs: "250px", sm: "350px", md: "110%" },
+                  width: "80%",
+                }}
+              />
             </Grid>
           </Grid>
-
-        </Box>
+        </Container>
       </Box>
+
+
+
+
 
 
       <Box
@@ -739,38 +745,36 @@ const Demo = () => {
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column", // Ensure stacking of sections
+
+          px:{xs:"20px"}
         }}
       >
         {/* Row 1: "PM Made Simple" */}
-        <Box
+        <Container
           sx={{
             width: "100%",
-            maxWidth: { lg: "1200px", md: "1000px" },
+            maxWidth: { lg: "950px", md: "1000px" },
+
           }}
         >
-          <Grid container spacing={4} sx={{ py: 15, justifyContent: "center" }}>
+          <Grid container spacing={6} sx={{ py: 10 }}>
             {/* Grid for Icons and Content */}
             <Grid
               container
-              spacing={0}
+              spacing={2}
               item
               xs={12}
-              md={5}
-              lg={6}
+              md={6}
               sx={{
-                maxWidth: { md: "600px", lg: "1000px" },
-                justifyContent: "center", // Horizontal alignment
-                alignItems: "center", // Vertical alignment
-
+                order: { xs: 1, sm: 1, md: 1, lg: 1, xl: 1 },
               }}
             >
               <Box
                 sx={{
-                  position: "relative", // Make the container relative for absolute positioning inside
+                  position: "relative",
                   display: "flex",
-                  flexDirection: "column", // Arrange content vertically
+                  flexDirection: "column",
                   alignItems: "flex-start",
-                  paddingLeft: "30px"
                 }}
               >
                 {/* Background Text */}
@@ -807,11 +811,11 @@ const Demo = () => {
                 {/* Content */}
                 <Box
                   sx={{
-                    position: "relative", // Keep content above the background text
+                    position: "relative",
                     zIndex: 1,
                   }}
                 >
-                  <Typography
+                      <Typography
                     variant="h6"
                     sx={{
                       fontWeight: "600",
@@ -833,7 +837,6 @@ const Demo = () => {
                       borderRadius: "20px",
                     }}
                   />
-
                   <Typography
                     variant="body2"
                     sx={{
@@ -842,7 +845,9 @@ const Demo = () => {
                       maxWidth: { md: "300px", lg: "400px" },
                     }}
                   >
-                    Lorem ipsum dolor sit amet, clita laoreet ne cum. His cu harum inermis iudicabit. Ex vidit fierent hendrerit eum, sed stet periculis ut. Vis in probo decore labitur.
+                    Lorem ipsum dolor sit amet, clita laoreet ne cum. His cu
+                    harum inermis iudicabit. Ex vidit fierent hendrerit eum, sed
+                    stet periculis ut. Vis in probo decore labitur.
                   </Typography>
                 </Box>
               </Box>
@@ -852,13 +857,15 @@ const Demo = () => {
             <Grid
               item
               xs={12}
-              md={7}
+              sm={12}
+              md={6}
               lg={6}
-
               sx={{
                 display: "flex",
-                justifyContent: "center", // Center horizontally
-                alignItems: "center", // Center vertically
+                justifyContent: "center",
+                alignItems: "center",
+                order: { xs: 2, sm: 2, md: 2, lg: 2, xl: 2 },
+                
               }}
             >
               <Box
@@ -866,16 +873,16 @@ const Demo = () => {
                   backgroundImage: `url(${attachFiles})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  height: "110%", // Set the desired height
-                  width: "90%", // Set the desired width
+                  height: { xs: "250px", sm: "350px", md: "110%" },
+                  width: {md:"80%", sm:"70%",xs:"70%"},
                 }}
               />
             </Grid>
           </Grid>
-        </Box>
+        </Container>
       </Box>
 
-
+    
       <Box
         sx={{
           width: "100%",
@@ -883,55 +890,34 @@ const Demo = () => {
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column", // Ensure stacking of sections
-          backgroundColor: "#fbfbfb"
-
-
+          backgroundColor: "#fbfbfb",
+          px: { xs: "20px" },
         }}
       >
         {/* Row 1: "PM Made Simple" */}
-        <Box
+        <Container
           sx={{
             width: "100%",
-            maxWidth: { lg: "1200px", md: "1000px" },
-
-
           }}
         >
-          <Grid container spacing={8} sx={{ py: 15 }}>
-            {/* Column Content for "Some New Tools" */}
+          <Grid container spacing={6} sx={{ py: 10 }}>
+            {/* Grid for Icons and Content */}
             <Grid
+              container
+              spacing={2}
               item
               xs={12}
-              md={7}
-              lg={6}
+              md={6}
               sx={{
-                alignContent: "center",
+                order: { xs: 1, sm: 1, md: 2 },
               }}
             >
               <Box
                 sx={{
-                  backgroundImage: `url(${secureContent})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  height: "110%", // Set the desired height
-                  width: "90%", // Set the desired width
-                }}
-              />
-            </Grid>
-
-
-            {/* Grid for Icons and Content */}
-            <Grid container spacing={0} item xs={12} md={5} lg={6} sx={{ maxWidth: { md: "600px", lg: "1000px", pb: 20 } }}>
-
-              <Box
-                sx={{
-                  position: "relative", // Make the container relative for absolute positioning inside
+                  position: "relative",
                   display: "flex",
-                  flexDirection: "column", // Arrange content vertically
+                  flexDirection: "column",
                   alignItems: "flex-start",
-
-
-
                 }}
               >
                 {/* Background Text */}
@@ -940,11 +926,11 @@ const Demo = () => {
                     position: "absolute",
                     textAlign: "center",
                     fontWeight: "bolder",
-                    top: "-80px", // Adjust to position text behind icon and heading
+                    top: "-60px", // Adjust to position text behind icon and heading
                     left: 0,
-                    right: 100,
+                    right: 180,
                     margin: "0 auto", // Center text
-                    fontSize: "180px", // Adjust as needed
+                    fontSize: "160px", // Adjust as needed
                     zIndex: 0, // Send the background text behind the content
                     opacity: 0.1,
                     color: "#999",
@@ -956,9 +942,9 @@ const Demo = () => {
                 {/* Icon */}
                 <Box
                   sx={{
-                    fontSize: "2.6rem", // Increased font size
+                    fontSize: "2.8rem",
                     color: "#837fcb",
-                    position: "relative", // Keep content above the background text
+                    position: "relative",
                     zIndex: 1,
                   }}
                 >
@@ -968,7 +954,7 @@ const Demo = () => {
                 {/* Content */}
                 <Box
                   sx={{
-                    position: "relative", // Keep content above the background text
+                    position: "relative",
                     zIndex: 1,
                   }}
                 >
@@ -979,8 +965,8 @@ const Demo = () => {
                       color: "#444f60",
                       fontSize: "42px",
                       mb: 3, // Space below heading
-                      maxWidth: "1000px",
-                      lineHeight: 1.125
+                      maxWidth: { md: "100px", lg: "1000px" },
+                      lineHeight: 1.125,
                     }}
                   >
                     Secure content
@@ -991,30 +977,56 @@ const Demo = () => {
                       backgroundColor: "#837fcb",
                       width: "80px",
                       mb: 2,
-                      borderRadius: "20px"
+                      borderRadius: "20px",
                     }}
-                  />{" "}
-
+                  />
                   <Typography
                     variant="body2"
                     sx={{
                       fontSize: "1.2rem",
                       color: "#a9abac",
-                      maxWidth: { md: "300px", lg: "400px" }
-
+                      maxWidth: { md: "300px", lg: "400px" },
                     }}
                   >
-                    Lorem ipsum dolor sit amet, clita laoreet ne cum. His cu harum inermis iudicabit. Ex vidit fierent hendrerit eum, sed stet periculis ut. Vis in probo decore labitur.                                  </Typography>
+                    Lorem ipsum dolor sit amet, clita laoreet ne cum. His cu
+                    harum inermis iudicabit. Ex vidit fierent hendrerit eum, sed
+                    stet periculis ut. Vis in probo decore labitur.
+                  </Typography>
                 </Box>
               </Box>
+            </Grid>
 
-
+            {/* Column Content for "Some New Tools" */}
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={6}
+              lg={6}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                order: { xs: 2, sm: 2, md: 1 },
+              }}
+            >
+              <Box
+                sx={{
+                  backgroundImage: `url(${secureContent})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  height: { xs: "250px", sm: "350px", md: "110%" },
+                  width: "80%",
+                }}
+              />
             </Grid>
           </Grid>
-
-        </Box>
+        </Container>
       </Box>
 
+
+
+   
 
       <Box
         sx={{
@@ -1116,7 +1128,6 @@ const Demo = () => {
                   borderRadius: "20px", // Rounded corners
                 }}
               />
-
             </Box>
 
             {/* 2 Rows and 2 Columns of Paragraphs */}
@@ -1128,10 +1139,7 @@ const Demo = () => {
                 mt: 7,
                 width: "100%",
                 maxWidth: { md: "700px", sm: "690px", xs: "500px" },
-                pl: { sm: "25px" }
-
-
-
+                pl: { sm: "25px" },
               }}
             >
               {/* Block 1 */}
@@ -1151,7 +1159,9 @@ const Demo = () => {
                     mr: 3, // Add spacing between icon and text
                   }}
                 >
-                  <LiaWalletSolid style={{ fontSize: "3rem", color: "#837fcb" }} />
+                  <LiaWalletSolid
+                    style={{ fontSize: "3rem", color: "#837fcb" }}
+                  />
                 </Box>
                 {/* Text Container */}
                 <Box
@@ -1167,8 +1177,8 @@ const Demo = () => {
                       fontWeight: "bold",
                       textAlign: "left",
                       color: "#333",
-                      fontSize: "1.125rem", color: "#363636"
-
+                      fontSize: "1.125rem",
+                      color: "#363636",
                     }}
                   >
                     Efficient Tools
@@ -1182,11 +1192,11 @@ const Demo = () => {
                       textAlign: "left",
                       color: "#",
                       lineHeight: "1.6",
-                      color: "#999"
+                      color: "#999",
                     }}
                   >
-                    Learn how to effortlessly manage your projects with tools designed to
-                    maximize efficiency and productivity.
+                    Learn how to effortlessly manage your projects with tools
+                    designed to maximize efficiency and productivity.
                   </Typography>
                 </Box>
               </Box>
@@ -1206,10 +1216,12 @@ const Demo = () => {
                     justifyContent: "center",
                     alignItems: "center",
                     mr: 4, // Add spacing between icon and text
-                    mt: 1
+                    mt: 1,
                   }}
                 >
-                  <HiOutlineCreditCard style={{ fontSize: "2.8rem", color: "#837fcb" }} />
+                  <HiOutlineCreditCard
+                    style={{ fontSize: "2.8rem", color: "#837fcb" }}
+                  />
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <Typography
@@ -1218,8 +1230,8 @@ const Demo = () => {
                       fontWeight: "bold",
                       textAlign: "left",
                       color: "#333",
-                      fontSize: "1.125rem", color: "#363636"
-
+                      fontSize: "1.125rem",
+                      color: "#363636",
                     }}
                   >
                     Tailored Insights
@@ -1232,12 +1244,11 @@ const Demo = () => {
                       textAlign: "left",
                       color: "#",
                       lineHeight: "1.6",
-                      color: "#999"
-
+                      color: "#999",
                     }}
                   >
-                    Gain insights and better organize your team with a platform tailored to
-                    meet modern challenges.
+                    Gain insights and better organize your team with a platform
+                    tailored to meet modern challenges.
                   </Typography>
                 </Box>
               </Box>
@@ -1268,8 +1279,8 @@ const Demo = () => {
                       fontWeight: "bold",
                       textAlign: "left",
                       color: "#333",
-                      fontSize: "1.125rem", color: "#363636",
-
+                      fontSize: "1.125rem",
+                      color: "#363636",
                     }}
                   >
                     Team Collaboration
@@ -1282,12 +1293,11 @@ const Demo = () => {
                       textAlign: "left",
                       color: "#",
                       lineHeight: "1.6",
-                      color: "#999"
-
+                      color: "#999",
                     }}
                   >
-                    Our system ensures that every team member stays on the same page,
-                    enabling better collaboration.
+                    Our system ensures that every team member stays on the same
+                    page, enabling better collaboration.
                   </Typography>
                 </Box>
               </Box>
@@ -1307,10 +1317,12 @@ const Demo = () => {
                     justifyContent: "center",
                     alignItems: "center",
                     mr: 3,
-                    pt: 1 // Add spacing between icon and text
+                    pt: 1, // Add spacing between icon and text
                   }}
                 >
-                  <MdOndemandVideo style={{ fontSize: "2.8rem", color: "#837fcb" }} />
+                  <MdOndemandVideo
+                    style={{ fontSize: "2.8rem", color: "#837fcb" }}
+                  />
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <Typography
@@ -1319,7 +1331,8 @@ const Demo = () => {
                       fontWeight: "bold",
                       textAlign: "left",
                       color: "#333",
-                      fontSize: "1.125rem", color: "#363636"
+                      fontSize: "1.125rem",
+                      color: "#363636",
                     }}
                   >
                     Simplified Workflows
@@ -1332,12 +1345,11 @@ const Demo = () => {
                       textAlign: "left",
                       color: "#",
                       lineHeight: "1.6",
-                      color: "#999"
-
+                      color: "#999",
                     }}
                   >
-                    Simplify your workflow with features that are intuitive and easy to
-                    use, designed with you in mind.
+                    Simplify your workflow with features that are intuitive and
+                    easy to use, designed with you in mind.
                   </Typography>
                 </Box>
               </Box>
@@ -1362,7 +1374,7 @@ const Demo = () => {
                   borderRadius: "50px",
                   fontSize: "1rem",
                   cursor: "pointer",
-                  minWidth: "220px"
+                  minWidth: "220px",
                 }}
               >
                 Start my Free Trial
@@ -1378,7 +1390,6 @@ const Demo = () => {
                 }}
               >
                 No credit card required.
-
               </Typography>
             </Box>
           </Box>
@@ -1476,9 +1487,7 @@ const Demo = () => {
             alignItems: "center",
             borderRadius: 2,
             overflow: "hidden",
-            boxShadow: "none"
-
-
+            boxShadow: "none",
           }}
         >
           {images.map((image, index) => (
@@ -1488,9 +1497,7 @@ const Demo = () => {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                boxShadow: "none"
-
-
+                boxShadow: "none",
               }}
             >
               <Box
@@ -1508,8 +1515,6 @@ const Demo = () => {
           ))}
         </Box>
 
-
-
         {/* Button */}
         <Box sx={{ marginTop: 4 }}>
           <button
@@ -1521,7 +1526,7 @@ const Demo = () => {
               borderRadius: "50px",
               fontSize: "1rem",
               cursor: "pointer",
-              minWidth: "220px"
+              minWidth: "220px",
             }}
           >
             Get Started Now
@@ -1529,9 +1534,7 @@ const Demo = () => {
         </Box>
       </Box>
 
-
-
-      <Box
+      <Container
         sx={{
           width: "100%",
           display: "flex",
@@ -1542,13 +1545,7 @@ const Demo = () => {
           flexDirection: "column",
         }}
       >
-        {/* Row 1: "PM Made Simple" */}
-        <Box
-          sx={{
-            width: "100%",
-            maxWidth: { lg: "1200px", md: "1000px" },
-          }}
-        >
+      
           <Box
             sx={{
               display: "flex",
@@ -1608,76 +1605,63 @@ const Demo = () => {
               Check out what they say about us
             </Typography>
 
-
-
-
+            
             {sliderData.map((item, index) => (
-              <Box
-                key={item.id}
-                sx={{
-                  my: 10,
-                  display: activeIndex === index ? "flex" : "none",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  boxShadow: 3,
-                  padding: 2,
-                  borderRadius: 1,
-                  marginBottom: 2,
-                  width: "38%",  // Increase card width
-                  zIndex: 1,
-                  transition: "opacity 0.5s",
-
-                  opacity: activeIndex === index ? 1 : 0.5,
-                }}
-              >
-                <Avatar src={item.avatar} sx={{ width: 80, height: 80, mb: 2, mt: -6 }} /> {/* Adjusted top margin */}
-                <Typography variant="h6" sx={{ textAlign: "center", fontWeight: "bold", color: "#837fcb" }}>
-                  {item.name}
-                </Typography>
-                <Typography variant="body2" sx={{ textAlign: "center", color: "#a9abac" }}>
-                  {item.description}
-                </Typography>
-                <Typography variant="body2" sx={{ textAlign: "left", pt: "18px", color: "#4A4A4A", px: "20px" }}>
-                  {item.bio}
-                </Typography>
-              </Box>
-            ))}
+        <Box
+          key={item.id}
+          sx={{
+            my: 10,
+            display: activeIndex === index ? "flex" : "none",
+            flexDirection: "column",
+            alignItems: "center",
+            boxShadow: 3,
+            padding: 2,
+            borderRadius: 1,
+            marginBottom: 2,
+            width: { md: "38%", xs: "90%", sm: "60%" },
+            zIndex: 1,
+            transition: "opacity 3s",
+            opacity: activeIndex === index ? 1 : 0.5,
+          }}
+        >
+          <Avatar src={item.avatar} sx={{ width: 80, height: 80, mb: 2, mt: -6 }} />
+          <Typography variant="h6" sx={{ textAlign: "center", fontWeight: "bold", color: "#837fcb" }}>
+            {item.name}
+          </Typography>
+          <Typography variant="body2" sx={{ textAlign: "center", color: "#a9abac" }}>
+            {item.description}
+          </Typography>
+          <Typography variant="body2" sx={{ textAlign: "left", pt: "18px", color: "#4A4A4A", px: "20px" }}>
+            {item.bio}
+          </Typography>
+        </Box>
+      ))}
 
 
             {/* Dots indicator */}
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 1 }}>
+            <Box
+              sx={{ display: "flex", justifyContent: "center", marginTop: 1 }}
+            >
               {sliderData.map((_, index) => (
                 <Box
                   key={index}
                   sx={{
                     width: 5,
                     height: 5,
-                    borderRadius: '50%',
-                    backgroundColor: activeIndex === index ? "#6a3144 " : 'grey.400',
+                    borderRadius: "50%",
+                    backgroundColor:
+                      activeIndex === index ? "#6a3144 " : "grey.400",
                     margin: 1.5,
                     transition: "background-color 0.3s",
                     cursor: "pointer",
-
                   }}
                   onClick={() => setActiveIndex(index)}
                 />
               ))}
             </Box>
           </Box>
-        </Box>
-
-
-
-
-
-
-
-
-
-
-
-      </Box>
-
+        
+      </Container>
 
       <Box
         sx={{
@@ -1689,7 +1673,6 @@ const Demo = () => {
           pb: 12,
           flexDirection: "column",
           backgroundColor: "#fbfbfb", // Default background color
-
         }}
       >
         {/* Row 1: "PM Made Simple" */}
@@ -1770,7 +1753,8 @@ const Demo = () => {
             gap: 2,
             marginTop: 8,
 
-            "@media (max-width: 600px)": { // For xs screens
+            "@media (max-width: 600px)": {
+              // For xs screens
               flexDirection: "column",
             },
           }}
@@ -1804,7 +1788,7 @@ const Demo = () => {
                 borderRadius: "50px",
                 fontSize: "1rem",
                 cursor: "pointer",
-                minWidth: "220px"
+                minWidth: "220px",
               }}
             >
               Sign me up
@@ -1813,135 +1797,133 @@ const Demo = () => {
         </Box>
       </Box>
 
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          pt: 17,
+          pb: 12,
+          flexDirection: "column",
+          backgroundColor: "#fbfbfb", // Default background color
+          position: "relative", // Required for absolute positioning
+        }}
+      >
+        {/* Your content here */}
+
+        {/* Image at the bottom */}
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: -10,
+            left: 0,
+            width: "100%",
+            height: "auto",
+          }}
+        >
+          <img src={wavyDark} alt="Bottom Image" style={{ width: "100%" }} />
+        </Box>
+      </Box>
 
       <Box
-  sx={{
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    pt: 17,
-    pb: 12,
-    flexDirection: "column",
-    backgroundColor: "#fbfbfb", // Default background color
-    position: "relative", // Required for absolute positioning
-  }}
->
-  {/* Your content here */}
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          pt: 17,
+          pb: 12,
+          flexDirection: "column",
+          backgroundColor: "#444f60", // Default background color
+          position: "relative",
+        }}
+      >
+        {/* Row 1: "PM Made Simple" */}
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: { lg: "1200px", md: "1000px" },
+          }}
+        >
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)", // 6 columns by 6 rows grid layout
+              gap: 4,
+              padding: 4,
+              backgroundColor: "#444f60",
+            }}
+          >
+            {/* First Grid: Logo and Social Media Icons */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              {/* Logo */}
+              <img
+                src={logo}
+                alt="Logo"
+                style={{ width: "100px", marginBottom: 8 }}
+              />
 
-  {/* Image at the bottom */}
-  <Box
-    sx={{
-      position: "absolute",
-      bottom: -10,
-      left: 0,
-      width: "100%",
-      height: "auto",
-
-    }}
-  >
-    <img src={wavyDark} alt="Bottom Image" style={{ width: "100%" }} />
-  </Box>
-</Box>
-
-<Box
-  sx={{
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    pt: 17,
-    pb: 12,
-    flexDirection: "column",
-    backgroundColor: "#444f60", // Default background color
-    position: "relative",
-  }}
->
-  {/* Row 1: "PM Made Simple" */}
-  <Box
-    sx={{
-      width: "100%",
-      maxWidth: { lg: "1200px", md: "1000px" },
-    }}
-  >
-      <Box
-    sx={{
-      display: "grid",
-      gridTemplateColumns: "repeat(2, 1fr)", // 6 columns by 6 rows grid layout
-      gap: 4,
-      padding: 4,
-      backgroundColor: "#444f60",
-    }}
-  >
-    {/* First Grid: Logo and Social Media Icons */}
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      {/* Logo */}
-      <img src={logo} alt="Logo" style={{ width: "100px", marginBottom: 8 }} />
-
-      {/* Social Media Icons */}
-      <Box sx={{ display: "flex", gap: 2 }}>
-        {/* <IconContext.Provider value={{ size: "2rem", color: "#333" }}>
+              {/* Social Media Icons */}
+              <Box sx={{ display: "flex", gap: 2 }}>
+                {/* <IconContext.Provider value={{ size: "2rem", color: "#333" }}>
           <FaFacebook />
           <FaTwitter />
           <FaInstagram />
           <FaLinkedin />
           <FaPinterest />
         </IconContext.Provider> */}
+              </Box>
+
+              {/* Text */}
+              <Typography
+                sx={{
+                  marginTop: 2,
+                  textAlign: "center",
+                  color: "#fff",
+                  fontSize: "1rem",
+                }}
+              >
+                Designed and coded with by MangoFlow.
+              </Typography>
+            </Box>
+
+            {/* Second Grid: Buttons */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: 4,
+              }}
+            >
+              <button
+                style={{
+                  backgroundColor: "#837fcb",
+                  color: "#fff",
+                  border: "none",
+                  padding: "16px 44px",
+                  borderRadius: "50px",
+                  fontSize: "1rem",
+                  cursor: "pointer",
+                  minWidth: "220px",
+                }}
+              >
+                Demo
+              </button>
+            </Box>
+          </Box>
+        </Box>
+
+        {/* Footer */}
       </Box>
-
-      {/* Text */}
-      <Typography sx={{ marginTop: 2, textAlign: "center", color: "#fff", fontSize: "1rem" }}>
-      Designed and coded with by MangoFlow.
-      </Typography>
-    </Box>
-
-    {/* Second Grid: Buttons */}
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 4
-      }}
-    >
-          
-          <button
-            style={{
-              backgroundColor: "#837fcb",
-              color: "#fff",
-              border: "none",
-              padding: "16px 44px",
-              borderRadius: "50px",
-              fontSize: "1rem",
-              cursor: "pointer",
-              minWidth: "220px"
-            }}
-          >
-            Demo
-          </button>
-        
-    </Box>
-  </Box>
-  </Box>
-
-  {/* Footer */}
-
-</Box>
-
-
-
-
-
-
-
-
     </>
   );
 };
