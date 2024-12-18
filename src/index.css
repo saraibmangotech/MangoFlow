@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Nexa';
+  src: url('/src/Fonts/NexaLight.otf') format('opentype');  
+  
+  font-weight: 'normal';
+  font-style: 'normal';
+}
+
 body {
   margin: 0;
 
@@ -38,3 +46,6 @@ code {
   background-color: #5e24a6; /* Scrollbar hover color */
 }
 
+.main-text {
+  font-family: 'Nexa', sans-serif !important;
+}

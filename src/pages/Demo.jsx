@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import {
   AppBar,
   Toolbar,
@@ -42,7 +42,7 @@ import { LiaWalletSolid } from "react-icons/lia";
 import { HiOutlineCreditCard } from "react-icons/hi2";
 import { MdOndemandVideo } from "react-icons/md";
 import { MdApartment } from "react-icons/md";
-
+import SwipeableViews from 'react-swipeable-views'
 import { Avatar, Slider, CircularProgress } from "@mui/material";
 
 const Demo = () => {
@@ -125,15 +125,15 @@ const Demo = () => {
     },
   ];
 
-  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [activeIndex, setActiveIndex] = useState(0); 
+  useEffect(() => { const interval = setInterval(() => 
+    { setActiveIndex((prevIndex) => (prevIndex + 1) % sliderData.length); 
+    }, 3000);
+    return () => clearInterval(interval)}, // Cleanup interval on component unmount }, 
+    [sliderData.length]); 
+    
 
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % sliderData.length);
-    }, 2500);
-
-    return () => clearInterval(interval);
-  }, [sliderData.length]);
+   const handleChangeIndex = (index) => { setActiveIndex(index)}
 
   return (
     <>
@@ -229,10 +229,9 @@ const Demo = () => {
 
       <Box
         sx={{
-          
           backgroundColor: "#f5f6fa",
-          pt: {md:14, xs:5},
-          pb:{xs:14, },
+          pt: { md: 14, xs: 5 },
+          pb: { xs: 14 },
           width: "100%",
           display: "flex",
           justifyContent: "center",
@@ -359,8 +358,7 @@ const Demo = () => {
                   alignItems: "center",
                   gap: 2, // Space between the images
                   height: "100%",
-                  pt:3
-      
+                  pt: 3,
                 }}
               >
                 {/* First Image */}
@@ -431,10 +429,12 @@ const Demo = () => {
           >
             {/* Background Text */}
             <Typography
+              className="main-text"
               sx={{
                 position: "absolute",
                 textAlign: "center",
                 fontWeight: "bolder",
+
                 top: "-100px",
                 marginLeft: "auto",
                 marginRight: "auto",
@@ -631,11 +631,13 @@ const Demo = () => {
               >
                 {/* Background Text */}
                 <Typography
+                  className="main-text"
                   sx={{
                     position: "absolute",
                     textAlign: "center",
+
                     fontWeight: "bolder",
-                    top: "-80px", // Adjust to position text behind icon and heading
+                    top: "-40px", // Adjust to position text behind icon and heading
                     left: 0,
                     right: 150,
                     margin: "0 auto", // Center text
@@ -733,11 +735,6 @@ const Demo = () => {
         </Container>
       </Box>
 
-
-
-
-
-
       <Box
         sx={{
           width: "100%",
@@ -746,7 +743,7 @@ const Demo = () => {
           alignItems: "center",
           flexDirection: "column", // Ensure stacking of sections
 
-          px:{xs:"20px"}
+          px: { xs: "20px" },
         }}
       >
         {/* Row 1: "PM Made Simple" */}
@@ -754,7 +751,6 @@ const Demo = () => {
           sx={{
             width: "100%",
             maxWidth: { lg: "950px", md: "1000px" },
-
           }}
         >
           <Grid container spacing={6} sx={{ py: 10 }}>
@@ -779,13 +775,14 @@ const Demo = () => {
               >
                 {/* Background Text */}
                 <Typography
+                  className="main-text"
                   sx={{
                     position: "absolute",
                     textAlign: "center",
                     fontWeight: "bolder",
-                    top: "-80px", // Adjust to position text behind icon and heading
+                    top: "-40px", // Adjust to position text behind icon and heading
                     left: 0,
-                    right: 70,
+                    right: 150,
                     margin: "0 auto", // Center text
                     fontSize: "190px", // Adjust as needed
                     zIndex: 0, // Send the background text behind the content
@@ -815,7 +812,7 @@ const Demo = () => {
                     zIndex: 1,
                   }}
                 >
-                      <Typography
+                  <Typography
                     variant="h6"
                     sx={{
                       fontWeight: "600",
@@ -865,7 +862,6 @@ const Demo = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 order: { xs: 2, sm: 2, md: 2, lg: 2, xl: 2 },
-                
               }}
             >
               <Box
@@ -874,7 +870,7 @@ const Demo = () => {
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   height: { xs: "250px", sm: "350px", md: "110%" },
-                  width: {md:"80%", sm:"70%",xs:"70%"},
+                  width: { md: "80%", sm: "70%", xs: "70%" },
                 }}
               />
             </Grid>
@@ -882,7 +878,6 @@ const Demo = () => {
         </Container>
       </Box>
 
-    
       <Box
         sx={{
           width: "100%",
@@ -922,11 +917,12 @@ const Demo = () => {
               >
                 {/* Background Text */}
                 <Typography
+                  className="main-text"
                   sx={{
                     position: "absolute",
                     textAlign: "center",
                     fontWeight: "bolder",
-                    top: "-60px", // Adjust to position text behind icon and heading
+                    top: "-30px", // Adjust to position text behind icon and heading
                     left: 0,
                     right: 180,
                     margin: "0 auto", // Center text
@@ -1023,10 +1019,6 @@ const Demo = () => {
           </Grid>
         </Container>
       </Box>
-
-
-
-   
 
       <Box
         sx={{
@@ -1545,122 +1537,144 @@ const Demo = () => {
           flexDirection: "column",
         }}
       >
-      
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-              position: "relative",
-            }}
-          >
-            {/* Background Text */}
-            <Typography
-              sx={{
-                position: "absolute",
-                textAlign: "center",
-                fontWeight: "bolder",
-                top: "-120px",
-                marginLeft: "auto",
-                marginRight: "auto",
-                left: 0,
-                right: 0,
-                fontSize: "180px",
-                zIndex: 0,
-                opacity: 0.1,
-                color: "#999",
-              }}
-            >
-              5
-            </Typography>
-
-            {/* Heading */}
-            <Typography
-              variant="h2"
-              sx={{
-                textAlign: "center",
-                fontWeight: "bold",
-                zIndex: 1,
-                marginBottom: 1,
-                fontSize: "2.7rem",
-                color: "#444f60",
-              }}
-            >
-              Our customers love us
-            </Typography>
-
-            {/* Description */}
-            <Typography
-              variant="body1"
-              sx={{
-                textAlign: "center",
-                color: "#",
-                zIndex: 1,
-                maxWidth: "800px",
-                fontWeight: 300,
-                fontSize: "1.2rem",
-              }}
-            >
-              Check out what they say about us
-            </Typography>
-
-            
-            {sliderData.map((item, index) => (
         <Box
-          key={item.id}
           sx={{
-            my: 10,
-            display: activeIndex === index ? "flex" : "none",
-            flexDirection: "column",
+            display: "flex",
+            justifyContent: "center",
             alignItems: "center",
-            boxShadow: 3,
-            padding: 2,
-            borderRadius: 1,
-            marginBottom: 2,
-            width: { md: "38%", xs: "90%", sm: "60%" },
-            zIndex: 1,
-            transition: "opacity 3s",
-            opacity: activeIndex === index ? 1 : 0.5,
+            flexDirection: "column",
+            position: "relative",
           }}
         >
-          <Avatar src={item.avatar} sx={{ width: 80, height: 80, mb: 2, mt: -6 }} />
-          <Typography variant="h6" sx={{ textAlign: "center", fontWeight: "bold", color: "#837fcb" }}>
-            {item.name}
+          {/* Background Text */}
+          <Typography
+            sx={{
+              position: "absolute",
+              textAlign: "center",
+              fontWeight: "bolder",
+              top: "-120px",
+              marginLeft: "auto",
+              marginRight: "auto",
+              left: 0,
+              right: 0,
+              fontSize: "180px",
+              zIndex: 0,
+              opacity: 0.1,
+              color: "#999",
+            }}
+          >
+            5
           </Typography>
-          <Typography variant="body2" sx={{ textAlign: "center", color: "#a9abac" }}>
-            {item.description}
-          </Typography>
-          <Typography variant="body2" sx={{ textAlign: "left", pt: "18px", color: "#4A4A4A", px: "20px" }}>
-            {item.bio}
-          </Typography>
-        </Box>
-      ))}
 
+          {/* Heading */}
+          <Typography
+            variant="h2"
+            sx={{
+              textAlign: "center",
+              fontWeight: "bold",
+              zIndex: 1,
+              marginBottom: 1,
+              fontSize: "2.7rem",
+              color: "#444f60",
+            }}
+          >
+            Our customers love us
+          </Typography>
 
-            {/* Dots indicator */}
-            <Box
-              sx={{ display: "flex", justifyContent: "center", marginTop: 1 }}
-            >
-              {sliderData.map((_, index) => (
-                <Box
-                  key={index}
+          {/* Description */}
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: "center",
+              color: "#",
+              zIndex: 1,
+              maxWidth: "800px",
+              fontWeight: 300,
+              fontSize: "1.2rem",
+            }}
+          >
+            Check out what they say about us
+          </Typography>
+
+          <SwipeableViews index={activeIndex} onChangeIndex={handleChangeIndex}>
+            {sliderData.map((item, index) => (
+              <Box
+                key={item.id}
+                sx={{
+                  margin: "80px auto",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  boxShadow: 3,
+                  padding: 2,
+                  borderRadius: 1,
+                  marginBottom: 2,
+                  width: { md: "38%", xs: "90%", sm: "60%" },
+                  zIndex: 1,
+                  transition: "opacity 5s all ease out",
+                  
+               
+                }}
+              >
+                {" "}
+                <Avatar
+                  src={item.avatar}
+                  sx={{ width: 80, height: 80, mb: 2, mt: -6 }}
+                />{" "}
+                <Typography
+                  variant="h6"
                   sx={{
-                    width: 5,
-                    height: 5,
-                    borderRadius: "50%",
-                    backgroundColor:
-                      activeIndex === index ? "#6a3144 " : "grey.400",
-                    margin: 1.5,
-                    transition: "background-color 0.3s",
-                    cursor: "pointer",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    color: "#837fcb",
                   }}
-                  onClick={() => setActiveIndex(index)}
-                />
-              ))}
-            </Box>
+                >
+                  {" "}
+                  {item.name}{" "}
+                </Typography>{" "}
+                <Typography
+                  variant="body2"
+                  sx={{ textAlign: "center", color: "#a9abac" }}
+                >
+                  {" "}
+                  {item.description}{" "}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    textAlign: "left",
+                    pt: "18px",
+                    color: "#4A4A4A",
+                    px: "20px",
+                  }}
+                >
+                  {" "}
+                  {item.bio}{" "}
+                </Typography>{" "}
+              </Box>
+            ))}{" "}
+          </SwipeableViews>
+
+          {/* Dots indicator */}
+          <Box sx={{ display: "flex", justifyContent: "center", marginTop: 1 }}>
+            {sliderData.map((_, index) => (
+              <Box
+                key={index}
+                sx={{
+                  width: 5,
+                  height: 5,
+                  borderRadius: "50%",
+                  backgroundColor:
+                    activeIndex === index ? "#6a3144 " : "grey.400",
+                  margin: 1.5,
+                  transition: "background-color 0.3s",
+                  cursor: "pointer",
+                }}
+                onClick={() => setActiveIndex(index)}
+              />
+            ))}
           </Box>
-        
+        </Box>
       </Container>
 
       <Box
