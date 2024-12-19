@@ -13,6 +13,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import useAuth from "./hooks/useProvideAuth";
 import SignUp from "./pages/Signup";
+import Demo from "./pages/Demo";
 
 function App() {
   const { user } = useAuth();
@@ -25,9 +26,10 @@ function App() {
         <BrowserRouter>
           <Routes>
             {/* Login Route */}
-            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/graph/:id" element={<FlowGraph />} />
+            <Route path="/" element={<Demo />} />
 
             {/* Protected Routes */}
             {user && user?.token ? (
