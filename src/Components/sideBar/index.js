@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   List,
@@ -36,13 +36,16 @@ const recentDesigns = [
   { title: "Design 3", imgSrc: Img3 },
 ];
 
-const SideBar = () => {
+const SideBar = (data) => {
+  console.log(data?.data, 'sidebar');
+
   const [selected, setSelected] = useState();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [showDesigns, setShowDesigns] = useState(false); // New state for toggle
+  const [showDesigns, setShowDesigns] = useState(true); // New state for toggle
   const navigate = useNavigate();
   const isMobileView = useMediaQuery("(max-width:600px)");
+  const [artBoards, setArtBoards] = useState([])
   const handleSelect = (index) => {
     setSelected(index);
     if (index === 0) {
@@ -57,7 +60,9 @@ const SideBar = () => {
   const handleClosePopup = () => setIsPopupOpen(false);
 
   const toggleDesigns = () => {
-    setShowDesigns((prev) => !prev); // Toggle designs visibility
+    setShowDesigns(!showDesigns); // Toggle designs visibility
+    console.log(data);
+    
   };
 
   const getIcon = (index) => {
@@ -106,17 +111,24 @@ const SideBar = () => {
     { label: "Templates", index: 2 },
   ];
 
+  useEffect(() => {
+
+    setArtBoards(data?.data)
+  }, [data])
+
   return (
     <Box
       sx={{
         width: { xs: "100%", sm: 270, md: 320, lg: 320, xl: 350 },
         height: { xs: 70, sm: "100vh" },
-        position: { xs: "fixed", sm: "relative" },
+        position: { xs: "fixed", sm: "" },
         bottom: { xs: 0, sm: "auto" },
         display: "flex",
         flexDirection: "row",
         border: "none",
         overflow: "hidden",
+
+       
       }}
     >
       {/* Menu Items */}
@@ -129,7 +141,7 @@ const SideBar = () => {
           justifyContent: isMobileView ? "center" : "flex-start",
           alignItems: isMobileView ? "center" : "flex-start",
           backgroundColor: isMobileView ? "#fff" : "none",
-          boder : isMobileView ? "1px solid #ccc":"none"
+          boder: isMobileView ? "1px solid #ccc" : "none"
         }}
       >
         {menuItems.map((item) => (
@@ -205,10 +217,10 @@ const SideBar = () => {
           <Box
             sx={{
               marginTop: "12px",
-             
+
             }}
           >
-            <img  height="30px" src={logo}   />
+            <img height="30px" src={logo} />
           </Box>
           <Button
             variant="contained"
@@ -231,7 +243,7 @@ const SideBar = () => {
           </Button>
           <NewDesignPopup open={isPopupOpen} onClose={handleClosePopup} />
 
-          <Button
+          {/* <Button
             variant="contained"
             size="small"
             sx={{
@@ -250,10 +262,11 @@ const SideBar = () => {
             }
           >
             Try Pro for 30 days
-          </Button>
+          </Button> */}
+         
 
           {/* Recent Designs with Toggle */}
-          <Box
+          {/* <Box
             sx={{
               display: "flex",
               alignItems: "center",
@@ -268,7 +281,7 @@ const SideBar = () => {
                 color: "rgba(64, 87, 109, 1)", // Change text color on hover
               },
             }}
-            onClick={toggleDesigns}
+            onClick={() => toggleDesigns()}
           >
             <Typography
               sx={{
@@ -292,13 +305,13 @@ const SideBar = () => {
             >
               <ArrowDropDownTwoToneIcon />
             </IconButton>
-          </Box>
+          </Box> */}
 
           {showDesigns && (
             <Box sx={{ marginTop: 1, width: "100%" }}>
-              {recentDesigns.map((design, index) => (
+              {data?.data?.map((design, index) => (
                 <Box
-                  key={index}
+                  key={design.id || index}  // Use unique ID if available, else fallback to index
                   sx={{
                     display: "flex",
                     alignItems: "center",
@@ -311,9 +324,13 @@ const SideBar = () => {
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
+                  {/* Text Placeholder */}
+                  <Typography variant="body2" sx={{ mr: 1 }}>Design Text</Typography>
+
+                  {/* Design Image */}
                   <img
-                    src={design.imgSrc}
-                    alt={design.title}
+                    src={design.imageUrl || "default-image-url"}  // Replace with a real URL or placeholder
+                    alt={design?.title || "Design"}
                     style={{
                       width: 20,
                       height: 20,
@@ -321,19 +338,22 @@ const SideBar = () => {
                       borderRadius: "5px",
                     }}
                   />
+
+                  {/* Design Title */}
                   <Typography
                     variant="body2"
                     sx={{ flex: 1, color: "rgba(64, 87, 109, 0.8)" }}
                   >
                     {design.title}
                   </Typography>
+
+                  {/* Hover Icons */}
                   {hoveredIndex === index && (
-                    <Box size="small" sx={{ display: "flex", gap: 1 }}>
+                    <Box sx={{ display: "flex", gap: 1 }}>
                       <Box
                         sx={{
-                          padding: "1px ",
+                          padding: "1px",
                           borderRadius: "5px",
-
                           "&:hover": {
                             backgroundColor: "rgba(255, 255, 255, 0.1)",
                           },
@@ -347,7 +367,7 @@ const SideBar = () => {
                       <Box
                         sx={{
                           padding: "1px",
-                          borderRadius: "2px",
+                          borderRadius: "5px",
                           "&:hover": {
                             backgroundColor: "rgba(255, 255, 255, 0.1)",
                           },
@@ -363,6 +383,7 @@ const SideBar = () => {
               ))}
             </Box>
           )}
+
           <Box
             sx={{
               marginTop: "auto",

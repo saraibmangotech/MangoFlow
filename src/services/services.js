@@ -1,5 +1,5 @@
-import instance from "config/axios";
-import { ErrorHandler } from "config/ErrorHandler";
+import instance from "../config/axios";
+import { ErrorHandler } from "../config/ErrorHandler";
 
 export const get = async (endPoint, params) => {
     try {

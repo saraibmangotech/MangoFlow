@@ -6,16 +6,78 @@ import {
   InputAdornment,
   TextField,
   Button,
+<<<<<<< HEAD
   useMediaQuery,
+=======
+  Grid,
+>>>>>>> 43aba46ec7a9eb52c09e5314af1e46b13aaf04dc
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import NewDesignSideBar from "./NewDesignSideBar"; // Import Sidebar
 import IconCircle from "../iconCircle/IconCircle";
 import RecentDesign from "../recentDesigns/RecentDesign";
+import { useForm } from "react-hook-form";
+import ArtBoardServices from "../../services/ArtBoardServices";
 
+<<<<<<< HEAD
 const NewDesignPopup = ({ open, onClose }) => {
   const [value, setValue] = useState(0);
+=======
+const NewDesignPopup = ({ open, onClose, data }) => {
+  const [artboards, setArtboards] = useState([])
+
+  const { register, handleSubmit,setValue : setValues } = useForm();
+  const getArtBoards = async (page, limit, filter) => {
+
+
+    try {
+
+      const { data } = await ArtBoardServices.getArtBoards()
+      setArtboards(data?.artboards)
+
+
+
+    } catch (error) {
+      console.log(error);
+
+    } finally {
+      console.log('asdasdad')
+    }
+  }
+
+  const onSubmit = async (data) => {
+    try {
+      let obj = {
+        title: data?.artBoardName,
+        description: data?.description
+      }
+
+
+      const { responseCode } = await ArtBoardServices.CreateArtBoard(obj)
+      console.log(responseCode);
+      if (responseCode == 200) {
+        getArtBoards()
+        setValues('artBoardName','')
+        setValues('description','')
+        handleClose()
+      }
+
+
+
+
+    } catch (error) {
+      console.log(error);
+
+    } finally {
+      console.log('asdasdad')
+    }
+
+  };
+
+  
+  const [value, setValue] = useState(0); // State for the selected tab
+>>>>>>> 43aba46ec7a9eb52c09e5314af1e46b13aaf04dc
   const [inputValue, setInputValue] = useState("");
   const [itemsToShow, setItemsToShow] = useState(4);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -45,6 +107,7 @@ const NewDesignPopup = ({ open, onClose }) => {
   useEffect(() => {
     window.addEventListener("resize", updateItemsToShow);
     return () => window.removeEventListener("resize", updateItemsToShow);
+    getArtBoards()
   }, []);
 
   const handleSidebarChange = (index) => setValue(index);
@@ -98,6 +161,7 @@ const NewDesignPopup = ({ open, onClose }) => {
             />
           </Box>
 
+<<<<<<< HEAD
           <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
           <Box
       sx={{
@@ -149,16 +213,74 @@ const NewDesignPopup = ({ open, onClose }) => {
         Create
       </Button>
     </Box>
+=======
+          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    variant="outlined"
+                    placeholder="ArtBoard Name"
+                    {...register("artBoardName")}
+                    fullWidth
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": { borderRadius: 4 },
+                      },
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={12}>
+                  <TextField
+                    variant="outlined"
+                    placeholder="Description"
+                    {...register("description")}
+                    multiline
+                    rows={5}
+                    fullWidth
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": { borderRadius: 4 },
+                      },
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} display={'flex'} justifyContent={'flex-end'} >
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "#7731d8",
+                      color: "white",
+                      borderRadius: 2,
+                      "&:hover": {
+                        backgroundColor: "#5e24a6",
+                      },
+                    }}
+                    startIcon={<AddIcon />}
+                  >
+                    Create
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+>>>>>>> 43aba46ec7a9eb52c09e5314af1e46b13aaf04dc
 
             <Box sx={{ flex: 1 }}>
               {value === 0 && (
                 <Box>
+<<<<<<< HEAD
                   <IconCircle
                     itemsToShow={itemsToShow}
                     currentIndex={currentIndex}
                     setCurrentIndex={setCurrentIndex}
                   />
                   <RecentDesign height="200px" top="40%" left="22%" />
+=======
+                  <RecentDesign data={artboards} height="100%" top="40%" left="32%" />
+>>>>>>> 43aba46ec7a9eb52c09e5314af1e46b13aaf04dc
                 </Box>
               )}
               {value === 1 && (

@@ -19,7 +19,7 @@ import useAuth from "../hooks/useProvideAuth";
 import AuthServices from "../services/AuthServices";
 import toast from "react-hot-toast";
 
-const Login = () => {
+const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const navigate = useNavigate();
@@ -36,28 +36,36 @@ const Login = () => {
   //   navigate('/home');
   // };
 
-  const LoginUser = async (formData) => {
+  const SignUp = async (formData) => {
     const obj = {
+        name:formData.name,
       email: formData.email,
+      phone:formData.phone,
       password: formData.password,
     };
-    
+    // setLoading(true);
     try {
-      const response = await AuthServices.login(obj);
-      if (response?.data?.token != "") {
-        userLogin(response?.data);
+      const data = await AuthServices.register(obj);
+      toast.success(data?.message || "Login successful!");
+      if (data?.data?.token) {
         navigate("/home");
-      }else {
-        console.log("first")
       }
 
-      toast.success(response?.message);
-      console.log(response)
-   
+      // if(data?.data?.role == "admin"){
+      //   navigate("/dashboard");
+      //   setName("/dashboard");
+      // }else if(data?.data?.role == "employee"){
+      //   navigate("/home");
+      //   setName("/home");
+      // }
     } catch (error) {
-      toast.error(error); 
+      toast.error(error || "Something went wrong. Please try again.");
+
+      // ErrorToaster(error);
       console.log(error);
-    } 
+    } finally {
+      // setLoading(false);
+    }
   };
 
   const handleSnackbarClose = () => {
@@ -92,7 +100,7 @@ const Login = () => {
         <Typography
           variant="h4"
           sx={{
-            mb: 2,
+            mb: 3,
             fontWeight: "bold",
             background: "linear-gradient(to right, #00a3a8, #7731d8)",
             WebkitBackgroundClip: "text",
@@ -100,20 +108,32 @@ const Login = () => {
             fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" }, // Responsive font size
           }}
         >
-          Welcome Back
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            mb: 4,
-            color: "#6b7280",
-            fontSize: { xs: "0.9rem", sm: "1rem" }, // Responsive font size
-          }}
-        >
-          Login to your account
+          SignUp Your Account
         </Typography>
 
-        <form onSubmit={handleSubmit(LoginUser)}>
+        <form onSubmit={handleSubmit(SignUp)}>
+          <TextField
+            label="Name"
+            type="text"
+            variant="outlined"
+            fullWidth
+            sx={{
+              mb: 3,
+              "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#7731d8",
+                },
+              "& label.Mui-focused": {
+                color: "#7731d8",
+              },
+              fontSize: { xs: "0.9rem", sm: "1rem" },
+            }}
+            {...register("name", {
+              required: "Name is required",
+            })}
+            error={!!errors.name}
+            helperText={errors.name ? errors.name.message : ""}
+          />
           <TextField
             label="Email"
             type="email"
@@ -139,6 +159,38 @@ const Login = () => {
             })}
             error={!!errors.email}
             helperText={errors.email ? errors.email.message : ""}
+          />
+          <TextField
+            label="Phone Number"
+            type="tel"
+            variant="outlined"
+            fullWidth
+            sx={{
+              mb: 3,
+              "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#7731d8",
+                },
+              "& label.Mui-focused": {
+                color: "#7731d8",
+              },
+              fontSize: { xs: "0.9rem", sm: "1rem" },
+            }}
+            {...register("phone", {
+              required: "Phone number is required",
+              pattern: {
+                //   value: /^[0-9]{10,15}$/,
+                //   message: "Phone number must be 10-15 digits",
+                value: /^\d+$/,
+                message: "Phone number must contain only numbers",
+              },
+            })}
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+            }}
+            error={!!errors.phone}
+            helperText={errors.phone ? errors.phone.message : ""}
           />
 
           <TextField
@@ -174,36 +226,6 @@ const Login = () => {
             }}
           />
 
-          {/* Remember Me and Forgot Password Section */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 3,
-            }}
-          >
-            <FormControlLabel
-              control={<Checkbox color="primary" />}
-              label="Remember Me"
-              sx={{
-                color: "#6b7280",
-                fontSize: { xs: "0.8rem", sm: "1rem" }, // Smaller font size on small screens
-              }}
-            />
-            <Typography
-              variant="body2"
-              sx={{
-                color: "#7731d8",
-                cursor: "pointer",
-                textAlign: "right",
-                fontSize: { xs: "0.8rem", sm: "1rem" },
-              }} // Smaller font size on small screens
-            >
-              Forgot Password?
-            </Typography>
-          </Box>
-
           <Button
             type="submit"
             variant="contained"
@@ -217,16 +239,16 @@ const Login = () => {
               fontSize: { xs: "1rem", sm: "1rem" }, // Responsive font size
             }}
           >
-            Login
+            Sign up
           </Button>
 
           <Typography
             variant="body2"
             sx={{ color: "#6b7280", fontSize: { xs: "0.9rem", sm: "1rem" } }} // Responsive font size
           >
-            Don’t have an account?{" "}
-            <Box component={"span"}  onClick={()=>navigate("/signup")} style={{ color: "#7731d8",textDecoration:'underline' }}>
-              Sign up
+            Already have an account?{" "}
+            <Box component={"span"} onClick={()=>navigate("/")} style={{ color: "#7731d8",textDecoration:'underline' }}>
+             Login
             </Box>
           </Typography>
         </form>
@@ -243,4 +265,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
