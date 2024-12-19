@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -11,6 +11,7 @@ import {
   Grid,
   TextField,
   Container,
+  Drawer, List, ListItem, ListItemText
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import logo from "../Images/logo.png";
@@ -45,16 +46,14 @@ import { MdApartment } from "react-icons/md";
 import SwipeableViews from 'react-swipeable-views'
 import { Avatar, Slider, CircularProgress } from "@mui/material";
 
+
+
 const Demo = () => {
-  const [menuAnchor, setMenuAnchor] = React.useState(null);
-
-  const handleMenuOpen = (event) => {
-    setMenuAnchor(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setMenuAnchor(null);
-  };
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const handleMenuOpen = (event) => { setMenuAnchor(event.currentTarget); };
+  const handleMenuClose = () => { setMenuAnchor(null); };
+  const handleDrawerToggle = () => { setDrawerOpen(!drawerOpen); };
 
   const features = [
     {
@@ -125,15 +124,17 @@ const Demo = () => {
     },
   ];
 
-  const [activeIndex, setActiveIndex] = useState(0); 
-  useEffect(() => { const interval = setInterval(() => 
-    { setActiveIndex((prevIndex) => (prevIndex + 1) % sliderData.length); 
+  const [activeIndex, setActiveIndex] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % sliderData.length);
     }, 3000);
-    return () => clearInterval(interval)}, // Cleanup interval on component unmount }, 
-    [sliderData.length]); 
-    
+    return () => clearInterval(interval)
+  }, // Cleanup interval on component unmount }, 
+    [sliderData.length]);
 
-   const handleChangeIndex = (index) => { setActiveIndex(index)}
+
+  const handleChangeIndex = (index) => { setActiveIndex(index) }
 
   return (
     <>
@@ -149,7 +150,7 @@ const Demo = () => {
       </style>
 
       <AppBar
-        position="static"
+        position="fixed"
         sx={{
           backgroundColor: "#f5f6fa",
           boxShadow: "none",
@@ -168,53 +169,42 @@ const Demo = () => {
             maxWidth: { lg: "1200px", md: "1000px" },
           }}
         >
-          <Box
-            component="img"
-            src={logo}
-            alt="Logo"
-            sx={{ flexGrow: 0, width: 100, height: 60 }}
-          />
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, ml: 2 }}>
-            <IconButton
-              edge="start"
-              sx={{ color: "#4a4a4a" }}
-              aria-label="menu"
-              onClick={handleMenuOpen}
-            >
+          <Box component="img" src={logo} alt="Logo" sx={{ flexGrow: 0, width: 100, height: 60 }} />
+
+          <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 1, ml: 2 }}>
+            <IconButton edge="start" sx={{ color: "#4a4a4a" }} aria-label="menu" onClick={handleMenuOpen}>
               <MenuIcon />
             </IconButton>
-            <Menu
-              anchorEl={menuAnchor}
-              open={Boolean(menuAnchor)}
-              onClose={handleMenuClose}
-            >
+            <Menu anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={handleMenuClose}>
               <MenuItem onClick={handleMenuClose}>Link 1</MenuItem>
               <MenuItem onClick={handleMenuClose}>Link 2</MenuItem>
               <MenuItem onClick={handleMenuClose}>Link 3</MenuItem>
             </Menu>
+            <Button sx={{ color: "#4a4a4a", textTransform: "none" }}>Features</Button>
+            <Button sx={{ color: "#4a4a4a", textTransform: "none" }}>Pricing</Button>
+            <Button sx={{ color: "#4a4a4a", textTransform: "none" }}>Login</Button>
 
-            <Button sx={{ color: "#4a4a4a", textTransform: "none" }}>
-              Features
-            </Button>
-            <Button sx={{ color: "#4a4a4a", textTransform: "none" }}>
-              Pricing
-            </Button>
-            <Button sx={{ color: "#4a4a4a", textTransform: "none" }}>
-              Login
-            </Button>
+
+
           </Box>
+
           <Box sx={{ flexGrow: 1 }} />
-          <Link>
+          <Link to="/login" >
             <Button
               variant="contained"
               sx={{
                 padding: "10px 40px",
                 backgroundColor: "transparent",
+                textDecoration: "none",
                 borderRadius: "40px",
                 boxShadow: "none",
-                border: "2px solid #837fcb",
+                border: "3px solid #837fcb",
                 color: "#837fcb",
                 fontWeight: "bold",
+                "@media (max-width: 600px)": { /* Media query for responsiveness */
+                  display: "none",
+                  padding: "8px 30px",
+                },
                 "&:hover": {
                   backgroundColor: "#837fcb",
                   color: "white",
@@ -224,13 +214,56 @@ const Demo = () => {
               Demo
             </Button>
           </Link>
+
+
+          <Box sx={{ display: { xs: 'flex', sm: 'none' } }}>
+            <IconButton edge="start" sx={{ color: "#4a4a4a" }} aria-label="menu" onClick={handleDrawerToggle}>
+              <MenuIcon />
+            </IconButton>
+            <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle} sx={{ width: '80%' }}>
+              <List>
+                <ListItem button onClick={handleMenuClose}>
+                  <ListItemText primary="Features" />
+                </ListItem>
+                <ListItem button onClick={handleMenuClose}>
+                  <ListItemText primary="Pricing" />
+                </ListItem>
+                <ListItem button onClick={handleMenuClose}>
+                  <ListItemText primary="Login" />
+                </ListItem>
+                <ListItem button onClick={handleMenuClose}>
+                  <Link to="/login">
+                    <Button
+                      variant="contained"
+                      sx={{
+                        padding: "10px 40px",
+                        backgroundColor: "transparent",
+                        borderRadius: "40px",
+                        boxShadow: "none",
+                        border: "2px solid #837fcb",
+                        color: "#837fcb",
+                        fontWeight: "bold",
+                        "&:hover": {
+                          backgroundColor: "#837fcb",
+                          color: "white",
+                        },
+                      }}
+                    >
+                      Demo
+                    </Button>
+                  </Link>
+                </ListItem>
+              </List>
+            </Drawer>
+          </Box>
         </Toolbar>
       </AppBar>
+
 
       <Box
         sx={{
           backgroundColor: "#f5f6fa",
-          pt: { md: 14, xs: 5 },
+          pt: { md: 14, xs: 2 },
           pb: { xs: 14 },
           width: "100%",
           display: "flex",
@@ -256,8 +289,9 @@ const Demo = () => {
                   border: "1px solid #e5e5e5",
                   borderRadius: "8px",
                   gap: 1,
-                  width: "80%",
-                  mb: "20px",
+                  width: "95",
+
+                  margin: { xs: "0 auto 20px auto" }
                 }}
               >
                 <Box
@@ -284,11 +318,12 @@ const Demo = () => {
                 </Typography>
               </Box>
               <Typography
+                className="main-text"
                 variant="h1"
                 sx={{
                   fontSize: "3rem",
                   color: "#444f60",
-                  fontWeight: "bold",
+                  fontWeight: "600 !important",
                   lineHeight: 1.3,
                   pb: "5px",
                 }}
@@ -301,6 +336,7 @@ const Demo = () => {
                   fontSize: "0.9rem",
                   color: "#8E9BAF",
                   lineHeight: 1.3,
+                  fontWeight: "none"
                 }}
               >
                 Take control over your business by deploying an all-in-one
@@ -315,8 +351,10 @@ const Demo = () => {
                   border: "1px solid #e5e5e5",
                   borderRadius: "40px",
                   gap: 1,
-                  width: "90%",
-                  my: "20px",
+                  width: "95%",
+
+                  margin: { xs: "20px auto 20px auto" }
+
                 }}
               >
                 <input
@@ -335,6 +373,7 @@ const Demo = () => {
                 <Button
                   variant="contained"
                   sx={{
+                    display: { xs: "none", sm: "block" },
                     backgroundColor: "#837fcb",
                     color: "white",
                     textTransform: "none",
@@ -348,6 +387,25 @@ const Demo = () => {
                   Sign Up
                 </Button>
               </Box>
+              <Button
+                variant="contained"
+                sx={{
+                  width: "95%",
+                  display: { xs: "block", sm: "none" },
+                  backgroundColor: "#837fcb",
+                  color: "white",
+                  textTransform: "none",
+                  padding: "15px 30px",
+                  borderRadius: "40px",
+                  fontSize: "13px",
+                  fontWeight: "bold",
+                  ml: "2px",
+                  margin: { xs: "20px auto 20px auto" }
+
+                }}
+              >
+                Sign Up
+              </Button>
             </Grid>
 
             <Grid item xs={12} md={7}>
@@ -404,7 +462,7 @@ const Demo = () => {
 
       <Container
         sx={{
-          width: "100%",
+          width: { md: "90%", xs: "100%" },
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -412,184 +470,181 @@ const Demo = () => {
           flexDirection: "column", // Ensure stacking of sections
         }}
       >
-        {/* Row 1: "PM Made Simple" */}
+
         <Box
           sx={{
-            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            position: "relative",
           }}
         >
-          <Box
+          {/* Background Text */}
+          <Typography
+            className="main-text"
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-              position: "relative",
+              position: "absolute",
+              textAlign: "center",
+              fontWeight: "bolder",
+
+              top: "-100px",
+              marginLeft: "auto",
+              marginRight: "auto",
+              left: 0,
+              right: 0,
+              fontSize: "160px",
+              zIndex: 0,
+              opacity: 0.1,
+              color: "#999",
             }}
           >
-            {/* Background Text */}
-            <Typography
-              className="main-text"
-              sx={{
-                position: "absolute",
-                textAlign: "center",
-                fontWeight: "bolder",
+            1
+          </Typography>
 
-                top: "-100px",
-                marginLeft: "auto",
-                marginRight: "auto",
-                left: 0,
-                right: 0,
-                fontSize: "160px",
-                zIndex: 0,
-                opacity: 0.1,
-                color: "#999",
+          {/* Heading */}
+          <Typography
+            className="main-text"
+            variant="h2"
+            sx={{
+              textAlign: "center",
+              fontWeight: "bold",
+              zIndex: 1,
+              fontSize: "2.7rem",
+              color: "#444f60",
+            }}
+          >
+            PM made Simple
+          </Typography>
+
+          {/* Description */}
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: "center",
+              color: "#",
+              zIndex: 1,
+              maxWidth: "800px",
+              fontWeight: 300,
+              fontSize: "1.2rem",
+              color: "#999",
+            }}
+          >
+            Discover a seamless experience in Project Management
+          </Typography>
+
+          {/* Row 2: "Some New Tools" Content */}
+          <Grid container spacing={6} sx={{ py: 15, px:"10px" }}>
+            {/* Column Content for "Some New Tools" */}
+            <Grid
+              item
+              xs={12}
+              md={5}
+              sx={{
+                alignContent: "center",
               }}
             >
-              1
-            </Typography>
-
-            {/* Heading */}
-            <Typography
-              variant="h2"
-              sx={{
-                textAlign: "center",
-                fontWeight: "bold",
-                zIndex: 1,
-                marginBottom: 1,
-                fontSize: "2.7rem",
-                color: "#444f60",
-              }}
-            >
-              PM made Simple
-            </Typography>
-
-            {/* Description */}
-            <Typography
-              variant="body1"
-              sx={{
-                textAlign: "center",
-                color: "#",
-                zIndex: 1,
-                maxWidth: "800px",
-                fontWeight: 300,
-                fontSize: "1.2rem",
-                color: "#999",
-              }}
-            >
-              Discover a seamless experience in Project Management
-            </Typography>
-
-            {/* Row 2: "Some New Tools" Content */}
-            <Grid container spacing={6} sx={{ py: 15 }}>
-              {/* Column Content for "Some New Tools" */}
-              <Grid
-                item
-                xs={12}
-                md={5}
+              <Typography
+                className="main-text"
+                variant="h4"
                 sx={{
-                  alignContent: "center",
+                  fontWeight: "600",
+                  mb: 2, // Space below heading
+                  color: "#444f60",
                 }}
               >
-                <Typography
-                  variant="h4"
-                  sx={{
-                    fontWeight: "600",
-                    mb: 2, // Space below heading
-                    color: "#444f60",
-                  }}
-                >
-                  Some New Tools
-                </Typography>
-                <Box
-                  sx={{
-                    height: "5px",
-                    backgroundColor: "#837fcb",
-                    width: "20%",
-                    mb: 2,
-                    borderRadius: "20px",
-                  }}
-                />{" "}
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontSize: "1rem",
-                    color: "#4A4A4A",
-                    mb: 2, // Space below paragraph
-                  }}
-                >
-                  Lorem ipsum dolor sit amet, eam ex probo tation tractatos. Ut
-                  vel hinc solet tincidunt, nec et iisque placerat pertinax. Ei
-                  minim probatus mea. Vide movet ad vis, eum at percipitur
-                  temporibus signiferumque.
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontSize: "1rem",
-                    color: "#4A4A4A",
-                  }}
-                >
-                  Timeam adipisci mei ei, vis ut nulla urbanitas, mel ex tota
-                  laudem. Quo ne regione tritani placerat, labitur neglegentur
-                  ex vis, sale verterem perfecto an eum.
-                </Typography>
-              </Grid>
+                Some New Tools
+              </Typography>
+              <Box
+                sx={{
+                  height: "5px",
+                  backgroundColor: "#837fcb",
+                  width: "20%",
+                  mb: 2,
+                  borderRadius: "20px",
+                }}
+              />{" "}
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: "1rem",
+                  color: "#4A4A4A",
+                  mb: 2, // Space below paragraph
+                }}
+              >
+                Lorem ipsum dolor sit amet, eam ex probo tation tractatos. Ut
+                vel hinc solet tincidunt, nec et iisque placerat pertinax. Ei
+                minim probatus mea. Vide movet ad vis, eum at percipitur
+                temporibus signiferumque.
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: "1rem",
+                  color: "#4A4A4A",
+                }}
+              >
+                Timeam adipisci mei ei, vis ut nulla urbanitas, mel ex tota
+                laudem. Quo ne regione tritani placerat, labitur neglegentur
+                ex vis, sale verterem perfecto an eum.
+              </Typography>
+            </Grid>
 
-              {/* Grid for Icons and Content */}
-              <Grid container spacing={3} item xs={12} md={7}>
-                {features.map((feature, index) => (
-                  <Grid item xs={6} key={index}>
+            {/* Grid for Icons and Content */}
+            <Grid container spacing={3} item xs={12} md={7}>
+              {features.map((feature, index) => (
+                <Grid item xs={6} key={index}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column", // Arrange content vertically
+                      alignItems: "flex-start",
+                      mb: 1, // Margin below each row
+                    }}
+                  >
+                    {/* Icon */}
                     <Box
                       sx={{
-                        display: "flex",
-                        flexDirection: "column", // Arrange content vertically
-                        alignItems: "flex-start",
-                        mb: 1, // Margin below each row
+                        fontSize: "3.4rem", // Increased font size
+                        color: "#837fcb",
+                        // Space below icon
+                        //   mr:20, // Align icon to the left
                       }}
                     >
-                      {/* Icon */}
-                      <Box
+                      {feature.icon}
+                    </Box>
+
+                    {/* Content */}
+                    <Box>
+                      <Typography
+                        className="para-text"
+                        variant="h6"
                         sx={{
-                          fontSize: "3.4rem", // Increased font size
-                          color: "#837fcb",
-                          // Space below icon
-                          //   mr:20, // Align icon to the left
+                          fontWeight: "600",
+                          color: "#444f60",
+                          fontSize: "17px",
+                          mb: 1, // Space below heading
                         }}
                       >
-                        {feature.icon}
-                      </Box>
-
-                      {/* Content */}
-                      <Box>
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontWeight: "600",
-                            color: "#444f60",
-                            fontSize: "17px",
-                            mb: 1, // Space below heading
-                          }}
-                        >
-                          {feature.heading}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontSize: "14px",
-                            color: "#a9abac",
-                          }}
-                        >
-                          {feature.description}
-                        </Typography>
-                      </Box>
+                        {feature.heading}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontSize: "14px",
+                          color: "#a9abac",
+                        }}
+                      >
+                        {feature.description}
+                      </Typography>
                     </Box>
-                  </Grid>
-                ))}
-              </Grid>
+                  </Box>
+                </Grid>
+              ))}
             </Grid>
-          </Box>
+          </Grid>
         </Box>
+
       </Container>
 
       <Box
@@ -600,7 +655,7 @@ const Demo = () => {
           alignItems: "center",
           flexDirection: "column", // Ensure stacking of sections
           backgroundColor: "#fbfbfb",
-          px: { xs: "20px" },
+
         }}
       >
         {/* Row 1: "PM Made Simple" */}
@@ -627,6 +682,8 @@ const Demo = () => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "flex-start",
+                  px: { xs: "20px" }
+
                 }}
               >
                 {/* Background Text */}
@@ -670,9 +727,10 @@ const Demo = () => {
                   }}
                 >
                   <Typography
+                    className="main-text"
                     variant="h6"
                     sx={{
-                      fontWeight: "600",
+                      fontWeight: "800",
                       color: "#444f60",
                       fontSize: "42px",
                       mb: 3, // Space below heading
@@ -728,6 +786,9 @@ const Demo = () => {
                   backgroundPosition: "center",
                   height: { xs: "250px", sm: "350px", md: "110%" },
                   width: "80%",
+                  "@media (max-width: 300px)": { /* Media query for extra-small screens */
+                    width: "100%", /* Adjust width for screens smaller than 300px */
+                  },
                 }}
               />
             </Grid>
@@ -743,14 +804,13 @@ const Demo = () => {
           alignItems: "center",
           flexDirection: "column", // Ensure stacking of sections
 
-          px: { xs: "20px" },
+
         }}
       >
         {/* Row 1: "PM Made Simple" */}
         <Container
           sx={{
             width: "100%",
-            maxWidth: { lg: "950px", md: "1000px" },
           }}
         >
           <Grid container spacing={6} sx={{ py: 10 }}>
@@ -771,6 +831,7 @@ const Demo = () => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "flex-start",
+                  px: { xs: "20px" }
                 }}
               >
                 {/* Background Text */}
@@ -813,12 +874,14 @@ const Demo = () => {
                   }}
                 >
                   <Typography
+                    className="main-text"
+
                     variant="h6"
                     sx={{
-                      fontWeight: "600",
+                      fontWeight: "800",
                       color: "#444f60",
                       fontSize: "42px",
-                      mb: 3, // Space below heading
+                      mb: 2, // Space below heading
                       maxWidth: { md: "1000px" },
                       lineHeight: 1.125,
                     }}
@@ -871,6 +934,9 @@ const Demo = () => {
                   backgroundPosition: "center",
                   height: { xs: "250px", sm: "350px", md: "110%" },
                   width: { md: "80%", sm: "70%", xs: "70%" },
+                  "@media (max-width: 300px)": { /* Media query for extra-small screens */
+                    width: "100%", /* Adjust width for screens smaller than 300px */
+                  },
                 }}
               />
             </Grid>
@@ -886,7 +952,7 @@ const Demo = () => {
           alignItems: "center",
           flexDirection: "column", // Ensure stacking of sections
           backgroundColor: "#fbfbfb",
-          px: { xs: "20px" },
+
         }}
       >
         {/* Row 1: "PM Made Simple" */}
@@ -913,6 +979,8 @@ const Demo = () => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "flex-start",
+                  px: { xs: "20px" }
+
                 }}
               >
                 {/* Background Text */}
@@ -955,6 +1023,7 @@ const Demo = () => {
                   }}
                 >
                   <Typography
+                    className="main-text"
                     variant="h6"
                     sx={{
                       fontWeight: "600",
@@ -1013,6 +1082,9 @@ const Demo = () => {
                   backgroundPosition: "center",
                   height: { xs: "250px", sm: "350px", md: "110%" },
                   width: "80%",
+                  "@media (max-width: 300px)": { /* Media query for extra-small screens */
+                    width: "100%", /* Adjust width for screens smaller than 300px */
+                  },
                 }}
               />
             </Grid>
@@ -1020,7 +1092,7 @@ const Demo = () => {
         </Container>
       </Box>
 
-      <Box
+      <Container
         sx={{
           width: "100%",
           display: "flex",
@@ -1031,362 +1103,355 @@ const Demo = () => {
           flexDirection: "column", // Ensure stacking of sections
         }}
       >
-        {/* Row 1: "PM Made Simple" */}
+
         <Box
           sx={{
-            width: "100%",
-            maxWidth: { lg: "1200px", md: "1000px" },
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            position: "relative",
           }}
         >
+          {/* Background Text */}
+          <Typography
+            sx={{
+              position: "absolute",
+              textAlign: "center",
+              fontWeight: "bolder",
+              top: "-120px",
+              marginLeft: "auto",
+              marginRight: "auto",
+              left: 0,
+              right: 0,
+              fontSize: "180px",
+              zIndex: 0,
+              opacity: 0.1,
+              color: "#999",
+            }}
+          >
+            8
+          </Typography>
+
+          {/* Heading */}
+          <Typography
+            variant="h2"
+            sx={{
+              textAlign: "center",
+              fontWeight: "bold",
+              zIndex: 1,
+              fontSize: "2.7rem",
+              color: "#444f60",
+            }}
+          >
+            Try out our demo
+          </Typography>
+
+          {/* Description */}
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: "center",
+              color: "#999",
+              zIndex: 1,
+              maxWidth: "800px",
+              fontWeight: 300,
+              fontSize: "1.2rem",
+              pt: "20px",
+            }}
+          >
+            Discover a seamless experience in Project Management
+          </Typography>
+
+          {/* Centered Image */}
           <Box
             sx={{
               display: "flex",
+              mt: 8,
               justifyContent: "center",
               alignItems: "center",
-              flexDirection: "column",
-              position: "relative",
+              width: "80%",
             }}
           >
-            {/* Background Text */}
-            <Typography
+            <Box
+              component="img"
+              src={demoExperience}
+              alt="PM Made Simple"
               sx={{
-                position: "absolute",
-                textAlign: "center",
-                fontWeight: "bolder",
-                top: "-120px",
-                marginLeft: "auto",
-                marginRight: "auto",
-                left: 0,
-                right: 0,
-                fontSize: "180px",
-                zIndex: 0,
-                opacity: 0.1,
-                color: "#999",
+                maxWidth: { md: "90%", sm: "112%", xs: "112%" }, // Responsive width
+                height: "auto", // Maintain aspect ratio
+                objectFit: "contain", // Ensure the image fits nicely
+                border: "1px solid #dbdbdb", // Add border
+                borderRadius: "20px", // Rounded corners
               }}
-            >
-              8
-            </Typography>
+            />
+          </Box>
 
-            {/* Heading */}
-            <Typography
-              variant="h2"
-              sx={{
-                textAlign: "center",
-                fontWeight: "bold",
-                zIndex: 1,
-                marginBottom: 1,
-                fontSize: "2.7rem",
-                color: "#444f60",
-              }}
-            >
-              PM made Simple
-            </Typography>
-
-            {/* Description */}
-            <Typography
-              variant="body1"
-              sx={{
-                textAlign: "center",
-                color: "#",
-                zIndex: 1,
-                maxWidth: "800px",
-                fontWeight: 300,
-                fontSize: "1.2rem",
-                pt: "20px",
-              }}
-            >
-              Discover a seamless experience in Project Management
-            </Typography>
-
-            {/* Centered Image */}
+          {/* 2 Rows and 2 Columns of Paragraphs */}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+              gap: 4,
+              mt: 7,
+              width: "100%",
+              maxWidth: { md: "700px", sm: "690px", xs: "500px" },
+              pl: { sm: "25px" },
+            }}
+          >
+            {/* Block 1 */}
             <Box
               sx={{
                 display: "flex",
-                mt: 8,
-                justifyContent: "center",
+                flexDirection: "row",
                 alignItems: "center",
-                width: "80%",
               }}
             >
-              <Box
-                component="img"
-                src={demoExperience}
-                alt="PM Made Simple"
-                sx={{
-                  maxWidth: { md: "90%", sm: "112%", xs: "112%" }, // Responsive width
-                  height: "auto", // Maintain aspect ratio
-                  objectFit: "contain", // Ensure the image fits nicely
-                  border: "1px solid #dbdbdb", // Add border
-                  borderRadius: "20px", // Rounded corners
-                }}
-              />
-            </Box>
-
-            {/* 2 Rows and 2 Columns of Paragraphs */}
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-                gap: 4,
-                mt: 7,
-                width: "100%",
-                maxWidth: { md: "700px", sm: "690px", xs: "500px" },
-                pl: { sm: "25px" },
-              }}
-            >
-              {/* Block 1 */}
+              {/* Icon */}
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "row",
+                  justifyContent: "center",
                   alignItems: "center",
+                  mr: 3, // Add spacing between icon and text
                 }}
               >
-                {/* Icon */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    mr: 3, // Add spacing between icon and text
-                  }}
-                >
-                  <LiaWalletSolid
-                    style={{ fontSize: "3rem", color: "#837fcb" }}
-                  />
-                </Box>
-                {/* Text Container */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  {/* Heading */}
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: "bold",
-                      textAlign: "left",
-                      color: "#333",
-                      fontSize: "1.125rem",
-                      color: "#363636",
-                    }}
-                  >
-                    Efficient Tools
-                  </Typography>
-                  {/* Description */}
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontSize: "0.9rem",
-                      fontWeight: 400,
-                      textAlign: "left",
-                      color: "#",
-                      lineHeight: "1.6",
-                      color: "#999",
-                    }}
-                  >
-                    Learn how to effortlessly manage your projects with tools
-                    designed to maximize efficiency and productivity.
-                  </Typography>
-                </Box>
+                <LiaWalletSolid
+                  style={{ fontSize: "3rem", color: "#837fcb" }}
+                />
               </Box>
-
-              {/* Repeat the same structure for other blocks */}
+              {/* Text Container */}
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: "column",
                 }}
               >
-                {/* Icon */}
-                <Box
+                {/* Heading */}
+                <Typography
+                  variant="h6"
                   sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    mr: 4, // Add spacing between icon and text
-                    mt: 1,
+                    fontWeight: "bold",
+                    textAlign: "left",
+                    color: "#333",
+                    fontSize: "1.125rem",
+                    color: "#363636",
                   }}
                 >
-                  <HiOutlineCreditCard
-                    style={{ fontSize: "2.8rem", color: "#837fcb" }}
-                  />
-                </Box>
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: "bold",
-                      textAlign: "left",
-                      color: "#333",
-                      fontSize: "1.125rem",
-                      color: "#363636",
-                    }}
-                  >
-                    Tailored Insights
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontSize: "0.9rem",
-                      fontWeight: 400,
-                      textAlign: "left",
-                      color: "#",
-                      lineHeight: "1.6",
-                      color: "#999",
-                    }}
-                  >
-                    Gain insights and better organize your team with a platform
-                    tailored to meet modern challenges.
-                  </Typography>
-                </Box>
-              </Box>
-
-              {/* Block 3 */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                {/* Icon */}
-                <Box
+                  Efficient Tools
+                </Typography>
+                {/* Description */}
+                <Typography
+                  variant="body2"
                   sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    mr: 3, // Add spacing between icon and text
+                    fontSize: "0.9rem",
+                    fontWeight: 400,
+                    textAlign: "left",
+                    color: "#",
+                    lineHeight: "1.6",
+                    color: "#999",
                   }}
                 >
-                  <GrSecure style={{ fontSize: "2.8rem", color: "#837fcb" }} />
-                </Box>
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: "bold",
-                      textAlign: "left",
-                      color: "#333",
-                      fontSize: "1.125rem",
-                      color: "#363636",
-                    }}
-                  >
-                    Team Collaboration
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontSize: "0.9rem",
-                      fontWeight: 400,
-                      textAlign: "left",
-                      color: "#",
-                      lineHeight: "1.6",
-                      color: "#999",
-                    }}
-                  >
-                    Our system ensures that every team member stays on the same
-                    page, enabling better collaboration.
-                  </Typography>
-                </Box>
-              </Box>
-
-              {/* Block 4 */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                {/* Icon */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    mr: 3,
-                    pt: 1, // Add spacing between icon and text
-                  }}
-                >
-                  <MdOndemandVideo
-                    style={{ fontSize: "2.8rem", color: "#837fcb" }}
-                  />
-                </Box>
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: "bold",
-                      textAlign: "left",
-                      color: "#333",
-                      fontSize: "1.125rem",
-                      color: "#363636",
-                    }}
-                  >
-                    Simplified Workflows
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontSize: "0.9rem",
-                      fontWeight: 400,
-                      textAlign: "left",
-                      color: "#",
-                      lineHeight: "1.6",
-                      color: "#999",
-                    }}
-                  >
-                    Simplify your workflow with features that are intuitive and
-                    easy to use, designed with you in mind.
-                  </Typography>
-                </Box>
+                  Learn how to effortlessly manage your projects with tools
+                  designed to maximize efficiency and productivity.
+                </Typography>
               </Box>
             </Box>
 
-            {/* Button and Description */}
+            {/* Repeat the same structure for other blocks */}
             <Box
               sx={{
                 display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
+                flexDirection: "row",
                 alignItems: "center",
-                mt: 6,
               }}
             >
-              <button
-                style={{
-                  backgroundColor: "#837fcb",
-                  color: "#fff",
-                  border: "none",
-                  padding: "16px 52px",
-                  borderRadius: "50px",
-                  fontSize: "1rem",
-                  cursor: "pointer",
-                  minWidth: "220px",
-                }}
-              >
-                Start my Free Trial
-              </button>
-              <Typography
-                variant="body2"
+              {/* Icon */}
+              <Box
                 sx={{
-                  textAlign: "center",
-                  fontSize: "0.9rem",
-                  color: "#999",
-                  mt: 2,
-                  maxWidth: "500px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  mr: 4, // Add spacing between icon and text
+                  mt: 1,
                 }}
               >
-                No credit card required.
-              </Typography>
+                <HiOutlineCreditCard
+                  style={{ fontSize: "2.8rem", color: "#837fcb" }}
+                />
+              </Box>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: "bold",
+                    textAlign: "left",
+                    color: "#333",
+                    fontSize: "1.125rem",
+                    color: "#363636",
+                  }}
+                >
+                  Tailored Insights
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontSize: "0.9rem",
+                    fontWeight: 400,
+                    textAlign: "left",
+                    color: "#",
+                    lineHeight: "1.6",
+                    color: "#999",
+                  }}
+                >
+                  Gain insights and better organize your team with a platform
+                  tailored to meet modern challenges.
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Block 3 */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              {/* Icon */}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  mr: 3, // Add spacing between icon and text
+                }}
+              >
+                <GrSecure style={{ fontSize: "2.8rem", color: "#837fcb" }} />
+              </Box>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: "bold",
+                    textAlign: "left",
+                    color: "#333",
+                    fontSize: "1.125rem",
+                    color: "#363636",
+                  }}
+                >
+                  Team Collaboration
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontSize: "0.9rem",
+                    fontWeight: 400,
+                    textAlign: "left",
+                    color: "#",
+                    lineHeight: "1.6",
+                    color: "#999",
+                  }}
+                >
+                  Our system ensures that every team member stays on the same
+                  page, enabling better collaboration.
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Block 4 */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              {/* Icon */}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  mr: 3,
+                  pt: 1, // Add spacing between icon and text
+                }}
+              >
+                <MdOndemandVideo
+                  style={{ fontSize: "2.8rem", color: "#837fcb" }}
+                />
+              </Box>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: "bold",
+                    textAlign: "left",
+                    color: "#333",
+                    fontSize: "1.125rem",
+                    color: "#363636",
+                  }}
+                >
+                  Simplified Workflows
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontSize: "0.9rem",
+                    fontWeight: 400,
+                    textAlign: "left",
+                    color: "#",
+                    lineHeight: "1.6",
+                    color: "#999",
+                  }}
+                >
+                  Simplify your workflow with features that are intuitive and
+                  easy to use, designed with you in mind.
+                </Typography>
+              </Box>
             </Box>
           </Box>
+
+          {/* Button and Description */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              mt: 6,
+            }}
+          >
+            <button
+              style={{
+                backgroundColor: "#837fcb",
+                color: "#fff",
+                border: "none",
+                padding: "16px 52px",
+                borderRadius: "50px",
+                fontSize: "1rem",
+                cursor: "pointer",
+                minWidth: "220px",
+              }}
+            >
+              Start my Free Trial
+            </button>
+            <Typography
+              variant="body2"
+              sx={{
+                textAlign: "center",
+                fontSize: "0.9rem",
+                color: "#999",
+                mt: 2,
+                maxWidth: "500px",
+              }}
+            >
+              No credit card required.
+            </Typography>
+          </Box>
         </Box>
-      </Box>
+
+      </Container>
 
       <Box
         sx={{
@@ -1438,17 +1503,17 @@ const Demo = () => {
 
             {/* Heading */}
             <Typography
+              className="main-text"
               variant="h2"
               sx={{
                 textAlign: "center",
-                fontWeight: "bold",
+                fontWeight: "800",
                 zIndex: 1,
-                marginBottom: 1,
                 fontSize: "2.7rem",
                 color: "#444f60",
               }}
             >
-              PM made Simple
+              We build Trust.
             </Typography>
 
             {/* Description */}
@@ -1456,32 +1521,65 @@ const Demo = () => {
               variant="body1"
               sx={{
                 textAlign: "center",
-                color: "#",
+                color: "#999",
                 zIndex: 1,
                 maxWidth: "800px",
                 fontWeight: 300,
                 fontSize: "1.2rem",
               }}
             >
-              Discover a seamless experience in Project Management
+              More than 900 Teams use our product.
+
             </Typography>
           </Box>
         </Box>
 
-        {/* Table */}
         <Box
           sx={{
             marginTop: 4,
             display: "grid",
-            gridTemplateColumns: { md: "repeat(5, 1fr)", sm: "repeat(1,1fr)" },
+            gridTemplateColumns: { md: "repeat(5, 1fr)", sm: "repeat(1, 1fr)" },
+            gridTemplateRows: { md: "repeat(3, auto)", sm: "auto" }, // Ensures 3 rows
             gap: 2,
             justifyContent: "center",
             alignItems: "center",
             borderRadius: 2,
             overflow: "hidden",
             boxShadow: "none",
+            position: "relative", // Required for pseudo-elements
           }}
         >
+          {/* Vertical Lines */}
+          {[...Array(4)].map((_, i) => (
+            <Box
+              key={`v-line-${i}`}
+              sx={{
+                display: { xs: "none", sm: "none", md: "block" },
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                left: `${(i + 1) * (100 / 5)}%`,
+                borderLeft: "1px solid #dbdbdb",
+              }}
+            />
+          ))}
+
+          {/* Horizontal Lines */}
+          {[...Array(3)].map((_, i) => (
+            <Box
+              key={`h-line-${i}`}
+              sx={{
+                display: { xs: "none", sm: "none", md: "block" },
+
+                position: "absolute",
+                left: 0,
+                right: 0,
+                top: `${(i + 1) * (100 / 3)}%`,
+                borderTop: "1px solid #dbdbdb",
+              }}
+            />
+          ))}
+
           {images.map((image, index) => (
             <Box
               key={index}
@@ -1506,6 +1604,7 @@ const Demo = () => {
             </Box>
           ))}
         </Box>
+
 
         {/* Button */}
         <Box sx={{ marginTop: 4 }}>
@@ -1544,6 +1643,7 @@ const Demo = () => {
             alignItems: "center",
             flexDirection: "column",
             position: "relative",
+            maxWidth: { xs: "60%" }
           }}
         >
           {/* Background Text */}
@@ -1568,12 +1668,12 @@ const Demo = () => {
 
           {/* Heading */}
           <Typography
+            className="main-text"
             variant="h2"
             sx={{
               textAlign: "center",
               fontWeight: "bold",
               zIndex: 1,
-              marginBottom: 1,
               fontSize: "2.7rem",
               color: "#444f60",
             }}
@@ -1586,7 +1686,7 @@ const Demo = () => {
             variant="body1"
             sx={{
               textAlign: "center",
-              color: "#",
+              color: "#999",
               zIndex: 1,
               maxWidth: "800px",
               fontWeight: 300,
@@ -1598,7 +1698,7 @@ const Demo = () => {
 
           <SwipeableViews index={activeIndex} onChangeIndex={handleChangeIndex}>
             {sliderData.map((item, index) => (
-              <Box
+              <Container
                 key={item.id}
                 sx={{
                   margin: "80px auto",
@@ -1609,13 +1709,16 @@ const Demo = () => {
                   padding: 2,
                   borderRadius: 1,
                   marginBottom: 2,
-                  width: { md: "38%", xs: "90%", sm: "60%" },
+                  width: { xs: "95%", sm: "95%", md: "55%" }, /* Use media queries */
                   zIndex: 1,
-                  transition: "opacity 5s all ease out",
-                  
-               
+                  transition: "opacity 5s all ease-out",
+                  "@media (max-width: 360px)": { /* Media query for extra-small screens */
+                    width: "70%", /* Adjust width for screens smaller than 300px */
+                  },
                 }}
               >
+
+
                 {" "}
                 <Avatar
                   src={item.avatar}
@@ -1645,13 +1748,13 @@ const Demo = () => {
                     textAlign: "left",
                     pt: "18px",
                     color: "#4A4A4A",
-                    px: "20px",
+
                   }}
                 >
                   {" "}
                   {item.bio}{" "}
                 </Typography>{" "}
-              </Box>
+              </Container>
             ))}{" "}
           </SwipeableViews>
 
@@ -1727,12 +1830,12 @@ const Demo = () => {
 
             {/* Heading */}
             <Typography
+              className="main-text"
               variant="h2"
               sx={{
                 textAlign: "center",
-                fontWeight: "bold",
+                fontWeight: 800,
                 zIndex: 1,
-                marginBottom: 1,
                 fontSize: "2.7rem",
                 color: "#444f60",
               }}
@@ -1766,7 +1869,7 @@ const Demo = () => {
             flexDirection: "row", // Change direction to row
             gap: 2,
             marginTop: 8,
-
+            zIndex: 1,
             "@media (max-width: 600px)": {
               // For xs screens
               flexDirection: "column",
@@ -1830,7 +1933,7 @@ const Demo = () => {
         <Box
           sx={{
             position: "absolute",
-            bottom: -10,
+            bottom: { xl: -20, md: -18, xs: -5 },
             left: 0,
             width: "100%",
             height: "auto",
@@ -1840,33 +1943,32 @@ const Demo = () => {
         </Box>
       </Box>
 
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          pt: 17,
-          pb: 12,
-          flexDirection: "column",
-          backgroundColor: "#444f60", // Default background color
-          position: "relative",
-        }}
-      >
-        {/* Row 1: "PM Made Simple" */}
-        <Box
+      <Box sx={{
+        backgroundColor: "#444f60", // Default background color
+
+      }}>
+        <Container
           sx={{
             width: "100%",
-            maxWidth: { lg: "1200px", md: "1000px" },
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            pt: 17,
+            pb: 12,
+            flexDirection: "column",
+            backgroundColor: "#444f60", // Default background color
+            position: "relative",
+            "@media (max-width: 600px)": { /* Media query for extra-small screens */
+              flexDirection: "column", /* Switch to column layout */
+            },
           }}
         >
+          {/* Row 1: "PM Made Simple" */}
           <Box
             sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)", // 6 columns by 6 rows grid layout
-              gap: 4,
-              padding: 4,
-              backgroundColor: "#444f60",
+              width: "100%",
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" }, /* Responsive layout */
             }}
           >
             {/* First Grid: Logo and Social Media Icons */}
@@ -1875,6 +1977,9 @@ const Demo = () => {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                width: "100%", /* Adjust width */
+
+                backgroundColor: "#444f60",
               }}
             >
               {/* Logo */}
@@ -1916,6 +2021,7 @@ const Demo = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 marginTop: 4,
+                width: "100%", /* Adjust width */
               }}
             >
               <button
@@ -1934,10 +2040,10 @@ const Demo = () => {
               </button>
             </Box>
           </Box>
-        </Box>
 
-        {/* Footer */}
+        </Container>
       </Box>
+
     </>
   );
 };

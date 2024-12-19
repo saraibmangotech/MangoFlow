@@ -1,11 +1,24 @@
 @font-face {
-  font-family: 'Nexa';
+  font-family: 'Nexa-bold';
+  src: url('/src/Fonts/NexaBold.otf') format('opentype');  
+  
+  font-weight: 'bold';
+  font-style: 'normal';
+}
+@font-face {
+  font-family: 'Nexa-light';
   src: url('/src/Fonts/NexaLight.otf') format('opentype');  
   
   font-weight: 'normal';
   font-style: 'normal';
 }
-
+@font-face {
+  font-family: 'blink';
+  src: url('/src/Fonts/blinkmacsystemfont-bold.otf') format('opentype');  
+  
+  font-weight: 'normal';
+  font-style: 'normal';
+}
 body {
   margin: 0;
 
@@ -47,5 +60,8 @@ code {
 }
 
 .main-text {
-  font-family: 'Nexa', sans-serif !important;
+  font-family: 'Nexa-bold', sans-serif !important;
+}
+.para-text {
+  font-family: 'Nexa-light', sans-serif !important;
 }
