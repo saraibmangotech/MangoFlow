@@ -1178,7 +1178,7 @@ const Demo = () => {
               src={demoExperience}
               alt="PM Made Simple"
               sx={{
-                maxWidth: { md: "90%", sm: "112%", xs: "112%" }, // Responsive width
+                maxWidth: { md: "90%", sm: "112%", xs: "126%" }, // Responsive width
                 height: "auto", // Maintain aspect ratio
                 objectFit: "contain", // Ensure the image fits nicely
                 border: "1px solid #dbdbdb", // Add border
@@ -1933,7 +1933,7 @@ const Demo = () => {
         <Box
           sx={{
             position: "absolute",
-            bottom: { xl: -20, md: -18, xs: -5 },
+            bottom: { xl: -8, md: -7, xs: -7 },
             left: 0,
             width: "100%",
             height: "auto",
