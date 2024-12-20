@@ -71,7 +71,7 @@ const SideBar = (data) => {
       [
         <CottageIcon
           sx={{
-            color: selected === index ? "#7731d8" : "rgba(119, 49, 216, 0.7)",
+            color: selected === index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
             fontSize: "1.5rem",
           }}
         />,
@@ -82,7 +82,7 @@ const SideBar = (data) => {
       [
         <FolderIcon
           sx={{
-            color: selected === index ? "#7731d8" : "rgba(119, 49, 216, 0.7)",
+            color: selected === index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
             fontSize: "1.5rem",
           }}
         />,
@@ -93,7 +93,7 @@ const SideBar = (data) => {
       [
         <AutoAwesomeMosaicIcon
           sx={{
-            color: selected === index ? "#7731d8" : "rgba(119, 49, 216, 0.7)",
+            color: selected === index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
             fontSize: "1.5rem",
           }}
         />,
@@ -153,7 +153,7 @@ const SideBar = (data) => {
             sx={{
               flexDirection: "column",
               alignItems: "center",
-              color: selected === item.index ? "#7731d8" : "inherit",
+              color: selected === item.index ? "#837fcb" : "inherit",
               padding: "8px 16px",
               position: "relative",
               cursor: "pointer",
@@ -168,7 +168,7 @@ const SideBar = (data) => {
                 justifyContent: "center",
                 color:
                   selected === item.index
-                    ? "#7731d8"
+                    ? "#837fcb"
                     : "rgba(119, 49, 216, 0.7)",
                 minWidth: "24px",
               }}
@@ -228,7 +228,7 @@ const SideBar = (data) => {
             size="small"
             onClick={handleOpenPopup}
             sx={{
-              backgroundColor: "#7731d8",
+              backgroundColor: "#837fcb",
               color: "white",
               borderRadius: 2,
               padding: "8px 30px",
@@ -236,7 +236,7 @@ const SideBar = (data) => {
               lineHeight: 1.2,
               margin: "5px 0",
               width: "100%",
-              "&:hover": { backgroundColor: "#5e24a6" },
+              "&:hover": { backgroundColor: "#837fcb" },
             }}
             startIcon={<AddIcon fontSize="small" />}
           >

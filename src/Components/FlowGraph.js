@@ -70,7 +70,7 @@ import { useParams } from "react-router-dom";
 import SaveIcon from "@mui/icons-material/Save";
 import ArtBoardServices from "../services/ArtBoardServices";
 import toast from "react-hot-toast";
-import useAuth from "../hooks/useProvideAuth";
+import useAuth from "../hooks/useProvideAuth"
 import { Drawer } from "@mui/material";
 import { toPng } from "html-to-image";
 
@@ -82,9 +82,12 @@ function downloadImage(dataUrl) {
 }
 
 const DownloadButton = () => {
-  const { getNodes } = useReactFlow();
+  const { getNodes,fitView } = useReactFlow();
 
   const handleDownload = () => {
+    fitView({
+      padding:"0.5"
+    })
     const imageWidth = 1500;
     const imageHeight = 768;
 
@@ -186,16 +189,18 @@ const nodeClassName = (node) => node.type;
 
 const OverviewFlow = () => {
   const [rolesAndColors, setRolesAndColors] = useState([]);
-  const [backgroundColor, setBackgroundColor] = useState("#ffffff"); 
+  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   const [selectedRole, setSelectedRole] = useState("");
-  const [editNode, setEditNode] = useState(""); 
- 
-  console.log(backgroundColor)
+  const [editNode, setEditNode] = useState("");
+
+  console.log(backgroundColor);
   useEffect(() => {
-    const savedRoles = JSON.parse(localStorage.getItem("rolesAndColors")) || [{
-        role:"Admin",
-        color:"#FF5733"
-    }];
+    const savedRoles = JSON.parse(localStorage.getItem("rolesAndColors")) || [
+      {
+        role: "Admin",
+        color: "#FF5733",
+      },
+    ];
     setRolesAndColors(savedRoles);
   }, []);
 
@@ -208,7 +213,6 @@ const OverviewFlow = () => {
       setBackgroundColor(selected.color);
     }
   };
- 
 
   const { user } = useAuth();
   const useStyles = styled({
@@ -273,7 +277,7 @@ const OverviewFlow = () => {
     setValue: setValue3,
     getValues: getValues3,
     formState: { errors: errors3 },
-    reset
+    reset,
   } = useForm();
   const {
     register: register4,
@@ -281,13 +285,12 @@ const OverviewFlow = () => {
     setValue: setValue4,
     getValues: getValues4,
     formState: { errors: errors4 },
-    
   } = useForm();
   console.log(watch());
   const { id } = useParams();
 
   const [selectedEdge, setSelectedEdge] = useState(null);
- 
+
   const classes = useStyles();
   // Function to log node data on click
   const onNodeClick = useCallback((event, node) => {
@@ -335,23 +338,26 @@ const OverviewFlow = () => {
   //   setOpen(true);
   // };
   const handleClickOpen = () => {
-    
     setValue("name", selectedNode?.data?.label);
     setColor(selectedNode?.style.backgroundColor);
     setTextColor(selectedNode?.style.color);
-  
+
     if (editNode) {
-      const roleColorMapping = JSON.parse(localStorage.getItem("rolesAndColors"));
+      const roleColorMapping = JSON.parse(
+        localStorage.getItem("rolesAndColors")
+      );
 
       const matchedRole = roleColorMapping?.find(
-        (item) => item.color.toLowerCase() === selectedNode?.style.backgroundColor?.toLowerCase()
+        (item) =>
+          item.color.toLowerCase() ===
+          selectedNode?.style.backgroundColor?.toLowerCase()
       );
-  
+
       if (matchedRole) {
         setSelectedRole(matchedRole.role);
-        setBackgroundColor(matchedRole.color) 
+        setBackgroundColor(matchedRole.color);
       }
-      
+
       // Open the drawer
       setOpen(true);
     }
@@ -363,11 +369,11 @@ const OverviewFlow = () => {
   //     const matchedRole = roleColorMapping?.find(
   //       (item) => item.color.toLowerCase() === selectedNode?.style.backgroundColor?.toLowerCase()
   //     );
-  
+
   //     if (matchedRole) {
-  //       setSelectedRole(matchedRole.role); 
+  //       setSelectedRole(matchedRole.role);
   //     }
-    
+
   //   }
   // },[drawerOpen])
 
@@ -392,32 +398,32 @@ const OverviewFlow = () => {
   const [pendingParams, setPendingParams] = useState(null);
 
   // Handle creating new edges by connecting nodes
-  const onConnect = useCallback(async (params) => {
-    setOpen3(true);
-    const sourceNode = nodes?.find((node) => node.id === params.source);
-    if (sourceNode) {
-     
-      const strokeColor = sourceNode?.style?.backgroundColor || "black";
-  
-      params.style = { stroke: strokeColor };
+  const onConnect = useCallback(
+    async (params) => {
+      setOpen3(true);
+      const sourceNode = nodes?.find((node) => node.id === params.source);
+      if (sourceNode) {
+        const strokeColor = sourceNode?.style?.backgroundColor || "black";
 
-      params.label = getValues3("name");
-      params.type = "smoothstep";
-      params.artboard_id = id;
-      params.id = params?.source + params?.target;  
-  
-    
-      setEdges((eds) => {
-        const updatedEdges = addEdge(params, eds);
-        console.log("Updated Edges:", updatedEdges);
-        setPendingParams(params);
-        return updatedEdges;
-      });
-    } else {
-      console.log("Source node not found.");
-    }
-  }, [nodes, id, getValues3]);
-  
+        params.style = { stroke: strokeColor };
+
+        params.label = getValues3("name");
+        params.type = "smoothstep";
+        params.artboard_id = id;
+        params.id = params?.source + params?.target;
+
+        setEdges((eds) => {
+          const updatedEdges = addEdge(params, eds);
+          console.log("Updated Edges:", updatedEdges);
+          setPendingParams(params);
+          return updatedEdges;
+        });
+      } else {
+        console.log("Source node not found.");
+      }
+    },
+    [nodes, id, getValues3]
+  );
 
   const [color, setColor] = React.useState("#ffffff");
   const [textColor, setTextColor] = React.useState("#ffffff");
@@ -463,7 +469,7 @@ const OverviewFlow = () => {
       };
       const { data } = await GraphServices.getEdges(params);
       setEdges(data?.edges);
-      console.log(data)
+      console.log(data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -471,13 +477,12 @@ const OverviewFlow = () => {
     }
   };
 
-  const CreateEdge =async (data) => {
+  const CreateEdge = async (data) => {
     let currentEdge = edges?.find((item) => item?.id == pendingParams?.id);
     const edge = edges?.find((edge) => edge?.id === pendingParams?.id);
     console.log(data);
     const sourceNode = nodes?.find((node) => node?.id === pendingParams.source);
-    if(edge){
-
+    if (edge) {
       edge.label = data?.name;
       edge.style = { stroke: sourceNode?.style?.backgroundColor };
     }
@@ -487,18 +492,15 @@ const OverviewFlow = () => {
 
       if (responseCode == 200) {
         setOpen3(false);
-      // UpdateArtBoard()
+        // UpdateArtBoard()
         getEdges();
-        reset()
-        
+        reset();
       }
     } catch (error) {
       console.log(error);
     } finally {
       console.log("asdasdad");
     }
-
-    
   };
   // const CreateEdge = (data) => {
   //   console.log(edges, "pendingParams");
@@ -509,7 +511,7 @@ const OverviewFlow = () => {
   //   const sourceNode = nodes.find((node) => node.id === pendingParams.source);
 
   //   if (edge) {
-      
+
   //     edge.label = data?.name;
   //     edge.style = { stroke: sourceNode?.style?.backgroundColor };
 
@@ -523,7 +525,6 @@ const OverviewFlow = () => {
 
   //   console.log("Updated edges array:", edges);
 
-    
   // };
 
   const UpdateEdge = async (data) => {
@@ -539,7 +540,7 @@ const OverviewFlow = () => {
 
       if (responseCode == 200) {
         setOpen4(false);
-        getEdges();       
+        getEdges();
       }
     } catch (error) {
       console.log(error);
@@ -561,8 +562,8 @@ const OverviewFlow = () => {
 
       if (responseCode == 200) {
         setOpen(false);
-        setDrawerOpen(false)
-        }
+        setDrawerOpen(false);
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -572,7 +573,7 @@ const OverviewFlow = () => {
 
   const UpdateArtBoard = async (page, limit, filter) => {
     const obj = {
-      id: id, 
+      id: id,
       nodes: nodes,
       edges: edges,
     };
@@ -615,12 +616,10 @@ const OverviewFlow = () => {
     },
     [onNodesChange]
   );
- 
 
-  useEffect(()=>{
+  useEffect(() => {
     handleClickOpen();
-  },[drawerOpen])
-  
+  }, [drawerOpen]);
 
   const contextMenu = useRef(null);
 
@@ -636,16 +635,15 @@ const OverviewFlow = () => {
       command: () => {
         if (selectedNode) {
           // Add your edit node logic here
-          
+
           console.log("Editing node", selectedNode);
-          setEditNode(selectedNode?.style?.backgroundColor)
+          setEditNode(selectedNode?.style?.backgroundColor);
           setDrawerOpen(true); // Open drawer on click
         }
         if (selectedEdge) {
-        
           console.log("Editing edge", selectedEdge);
           setValue4("name", selectedEdge?.label);
-          setEditNode(selectedEdge?.style?.backgroundColor)
+          setEditNode(selectedEdge?.style?.backgroundColor);
           // UpdateArtBoard()
           // setEdgeColor(selectedEdge?.style?.stroke);
           setOpen4(true);
@@ -724,7 +722,7 @@ const OverviewFlow = () => {
         setValue2("inputField", "");
         setColor("#ffffff");
         setTextColor("#ffffff");
-        setSelectedRole("")
+        setSelectedRole("");
       }
     } catch (error) {
       console.log(error);
@@ -839,304 +837,128 @@ const OverviewFlow = () => {
         }}
       />
       <Drawer
-  anchor="left"
-  open={open3}
-  onClose={() => setOpen3(false)}
-  sx={{
-    width: "400px", // You can adjust the width as needed
-    ".MuiPaper-elevation": { padding: "16px !important" },
-  }}
->
-  <Box
-    sx={{
-      textAlign: "center",
-      fontSize: "25px",
-      color: "#00789f",
-      fontWeight: "bold",
-    }}
-  >
-    Create Connection
-  </Box>
-  
-  <Divider />
-
-  <Box
-    component="form"
-    onSubmit={handleSubmit3(CreateEdge)}
-    sx={{ display: "flex", flexDirection: "column", mt: 3 }}
-  >
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <InputLabel sx={{ color: "black", mb: 0.5 }}>Label</InputLabel>
-        <TextField
-          fullWidth
-          InputProps={{
-            sx: {
-              borderRadius: "3px", // Adjust the value as needed
-              border: "1px solid black",
-            },
+        anchor="left"
+        open={open3}
+        onClose={() => setOpen3(false)}
+        sx={{
+          width: "400px", // You can adjust the width as needed
+          ".MuiPaper-elevation": { padding: "16px !important" },
+        }}
+      >
+        <Box
+          sx={{
+            textAlign: "center",
+            fontSize: "25px",
+            color: "#837fcb",
+            fontWeight: "bold",
           }}
-          size="small"
-          {...register3("name")}
-        />
-      </Grid>
-    </Grid>
+        >
+          Create Connection
+        </Box>
 
-    <Button
-      variant="standard"
-      type="submit"
-      sx={{
-        mt: 2,
-        backgroundColor: "#00789f",
-        color: "white",
-        textTransform: "capitalize",
-        "&:hover": {
-          backgroundColor: "#00789f", // Optional: maintain the same color on hover
-        },
-      }}
-    >
-      Create
-    </Button>
-  </Box>
-</Drawer>
+        <Divider />
 
-      {/* <Dialog
-        fullWidth={fullWidth}
-        maxWidth={"sm"}
+        <Box
+          component="form"
+          onSubmit={handleSubmit3(CreateEdge)}
+          sx={{ display: "flex", flexDirection: "column", mt: 3 }}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <InputLabel sx={{ color: "black", mb: 0.5 }}>Label</InputLabel>
+              <TextField
+                fullWidth
+                InputProps={{
+                  sx: {
+                    borderRadius: "3px", // Adjust the value as needed
+                    border: "1px solid black",
+                  },
+                }}
+                size="small"
+                {...register3("name")}
+              />
+            </Grid>
+          </Grid>
+
+          <Button
+            variant="standard"
+            type="submit"
+            sx={{
+              mt: 2,
+              backgroundColor: "#837fcb",
+              color: "white",
+              textTransform: "capitalize",
+              "&:hover": {
+                backgroundColor: "#837fcb", // Optional: maintain the same color on hover
+              },
+            }}
+          >
+            Create
+          </Button>
+        </Box>
+      </Drawer>
+
+      <Drawer
+        anchor="left"
         open={open4}
         onClose={() => setOpen4(false)}
-        PaperProps={{
-          style: {
-            borderRadius: "16px", // Adjust the radius as needed
-          },
+        sx={{
+          width: "400px", // You can adjust the width as needed
+          ".MuiPaper-elevation": { padding: "16px !important" },
         }}
       >
-        <DialogContent className={classes.blurredBackground}>
-          <DialogTitle sx={{ textAlign: "center" }}>
-            Update Connection
-          </DialogTitle>
-          <Box
-            component="form"
-            onSubmit={handleSubmit4(UpdateEdge)}
-            sx={{ display: "flex", flexDirection: "column" }}
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <InputLabel sx={{ color: "black", mb: 0.5 }}>Label</InputLabel>
-                <TextField
-                  fullWidth
-                  InputProps={{
-                    sx: {
-                      borderRadius: "3px", // Adjust the value as needed
-                      border: "1px solid black",
-                    },
-                  }}
-                  size="small"
-                  {...register4("name")}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel sx={{ color: "black" }}>Layer Color</InputLabel>
-                <Box
-                  component="input"
-                  type="color"
-                  value={edgeColor}
-                  onChange={(e) => handleChange3(e)}
-                  sx={{
-                    width: "100%",
-                    height: "50px",
-                    padding: 0,
-                    border: "none",
-                    backgroundColor: "transparent",
-                    cursor: "pointer",
-                    borderRadius: "12px",
-                  }}
-                />
-              </Grid>
-            </Grid>
-            <Button
-              variant="standard"
-              type="submit"
-              sx={{
-                mt: 2,
-                backgroundColor: "#00789f",
-                color: "white",
-                textTransform: "capitalize",
-                "&:hover": {
-                  backgroundColor: "#00789f", // Optional: maintain the same color on hover
-                },
-              }}
-            >
-              Update
-            </Button>
-          </Box>
-        </DialogContent>
-      </Dialog> */}
-
-
-<Drawer
-  anchor="left"
-  open={open4}
-  onClose={() => setOpen4(false)}
-  sx={{
-    width: "400px", // You can adjust the width as needed
-    ".MuiPaper-elevation": { padding: "16px !important" },
-  }}
->
-  <Box
-    sx={{
-      textAlign: "center",
-      fontSize: "25px",
-      color: "#00789f",
-      fontWeight: "bold",
-    }}
-  >
-    Update Connection
-  </Box>
-
-  <Divider />
-
-  <Box
-    component="form"
-    onSubmit={handleSubmit4(UpdateEdge)}
-    sx={{ display: "flex", flexDirection: "column", mt: 3 }}
-  >
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <InputLabel sx={{ color: "black", mb: 0.5 }}>Label</InputLabel>
-        <TextField
-          fullWidth
-          InputProps={{
-            sx: {
-              borderRadius: "3px", // Adjust the value as needed
-              border: "1px solid black",
-            },
+        <Box
+          sx={{
+            textAlign: "center",
+            fontSize: "25px",
+            color: "#837fcb",
+            fontWeight: "bold",
           }}
-          size="small"
-          {...register4("name")}
-        />
-      </Grid>
-      
-    </Grid>
+        >
+          Update Connection
+        </Box>
 
-    <Button
-      variant="standard"
-      type="submit"
-      sx={{
-        mt: 2,
-        backgroundColor: "#00789f",
-        color: "white",
-        textTransform: "capitalize",
-        "&:hover": {
-          backgroundColor: "#00789f", // Optional: maintain the same color on hover
-        },
-      }}
-    >
-      Update
-    </Button>
-  </Box>
-</Drawer>
+        <Divider />
 
-
-
-
-      {/* <Dialog
-        fullWidth={fullWidth}
-        maxWidth={'sm'}
-        open={open2}
-        onClose={() => setOpen2(false)}
-        PaperProps={{
-          style: {
-            borderRadius: '16px', 
-          },
-        }}
-      >
-
-        <DialogTitle sx={{ textAlign: 'center' }}>Create Node</DialogTitle>
-        <DialogContent>
-          <Box
-
-            component="form"
-            onSubmit={handleSubmit2(CreateNode)}
-            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'space-between' }}
-          >
-            <Grid container spacing={2} >
-              <Grid item xs={12}>
-                <InputLabel sx={{ color: 'black' }}>Name</InputLabel>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={5}
-                  sx={{ mt: 0.5 }}
-                  size='small'
-                  {...register2('inputField')}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel sx={{ color: 'black' }}>Text Color</InputLabel>
-                <Box
-                  component="input"
-                  type="color"
-                  value={textColor}
-                  onChange={(e) => handleChange2(e)}
-                  sx={{
-                    width: '100%',
-                    height: '48px',
-                    padding: 0,
-                    border: 'none',
-                    backgroundColor: 'transparent',
-                    cursor: 'pointer',
-                    borderRadius: '12px'
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel sx={{ color: 'black' }}>Backgorund Color</InputLabel>
-                <Box
-                  component="input"
-                  type="color"
-                  value={color}
-                  onChange={(e) => handleChange(e)}
-                  sx={{
-                    width: '100%',
-                    height: '48px',
-                    padding: 0,
-                    border: 'none',
-                    backgroundColor: 'transparent',
-                    cursor: 'pointer',
-                    borderRadius: '12px'
-                  }}
-                />
-              </Grid>
+        <Box
+          component="form"
+          onSubmit={handleSubmit4(UpdateEdge)}
+          sx={{ display: "flex", flexDirection: "column", mt: 3 }}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <InputLabel sx={{ color: "black", mb: 0.5 }}>Label</InputLabel>
+              <TextField
+                fullWidth
+                InputProps={{
+                  sx: {
+                    borderRadius: "3px", // Adjust the value as needed
+                    border: "1px solid black",
+                  },
+                }}
+                size="small"
+                {...register4("name")}
+              />
             </Grid>
-  
+          </Grid>
 
-            <Grid2 container justifyContent={'center'} >
-
-              <Grid2 item display={'flex'} justifyContent={'center'} size={12}>
-                <Button
-                  fullWidth
-                  variant="standard"
-                  type='submit'
-                  sx={{
-                    mt: 2,
-                    backgroundColor: '#00789f',
-                    color: 'white',
-                    textTransform: 'capitalize',
-                    '&:hover': {
-                      backgroundColor: '#00789f', // Optional: maintain the same color on hover
-
-                    },
-                  }}
-                >
-                  Create
-                </Button>
-              </Grid2>
-            </Grid2>
-          </Box>
-        </DialogContent>
-
-      </Dialog> */}
+          <Button
+            variant="standard"
+            type="submit"
+            sx={{
+              mt: 2,
+              backgroundColor: "#837fcb",
+              color: "white",
+              textTransform: "capitalize",
+              "&:hover": {
+                backgroundColor: "#837fcb", // Optional: maintain the same color on hover
+              },
+            }}
+          >
+            Update
+          </Button>
+        </Box>
+      </Drawer>
 
       <SwipeableDrawer
         anchor={"left"}
@@ -1149,7 +971,7 @@ const OverviewFlow = () => {
           sx={{
             textAlign: "center",
             fontSize: "25px",
-            color: "#00789f",
+            color: "#837fcb",
             fontWeight: "bold",
           }}
         >
@@ -1180,29 +1002,24 @@ const OverviewFlow = () => {
               />
             </Grid>
             <Grid item xs={12}>
-            <InputLabel sx={{ color: "black" }}>Select Role</InputLabel>
-            <Select
-              fullWidth
-              value={selectedRole}
-              onChange={handleRoleChange}
-              displayEmpty
-              sx={{ mt: 0.5 }}
-              
-
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {rolesAndColors.map((item, index) => (
-                <MenuItem key={index} value={item.role}>
-                  {item.role}
+              <InputLabel sx={{ color: "black" }}>Select Role</InputLabel>
+              <Select
+                fullWidth
+                value={selectedRole}
+                onChange={handleRoleChange}
+                displayEmpty
+                sx={{ mt: 0.5 }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
                 </MenuItem>
-              ))}
-            </Select>
-    
-    
-          </Grid>
-            
+                {rolesAndColors.map((item, index) => (
+                  <MenuItem key={index} value={item.role}>
+                    {item.role}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Grid>
           </Grid>
 
           <Grid2 container justifyContent={"center"}>
@@ -1213,11 +1030,11 @@ const OverviewFlow = () => {
                 type="submit"
                 sx={{
                   mt: 2,
-                  backgroundColor: "#00789f",
+                  backgroundColor: "#837fcb",
                   color: "white",
                   textTransform: "capitalize",
                   "&:hover": {
-                    backgroundColor: "#00789f", // Optional: maintain the same color on hover
+                    backgroundColor: "#837fcb", // Optional: maintain the same color on hover
                   },
                 }}
               >
@@ -1227,193 +1044,7 @@ const OverviewFlow = () => {
           </Grid2>
         </Box>
       </SwipeableDrawer>
-      {/* <SwipeableDrawer
-        anchor={"right"}
-        open={state["right"]}
-        onClose={toggleDrawer("right", false)}
-        onOpen={toggleDrawer("right", true)}
-        sx={{ ".MuiPaper-elevation ": { padding: "16px !important" } }}
-      >
-        <Box
-          sx={{
-            textAlign: "center",
-            fontSize: "25px",
-            color: "#00789f",
-            fontWeight: "bold",
-          }}
-        >
-          Create Node
-        </Box>
 
-        <Divider />
-        <Box
-          component="form"
-          onSubmit={handleSubmit2(CreateNode)}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            mt: 3,
-            alignItems: "space-between",
-          }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <InputLabel sx={{ color: "black" }}>Name</InputLabel>
-              <TextField
-                fullWidth
-                multiline
-                rows={5}
-                sx={{ mt: 0.5 }}
-                size="small"
-                {...register2("inputField")}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <InputLabel sx={{ color: "black" }}>Text Color</InputLabel>
-              <Box
-                component="input"
-                type="color"
-                value={textColor}
-                onChange={(e) => handleChange2(e)}
-                sx={{
-                  width: "100%",
-                  height: "48px",
-                  padding: 0,
-                  border: "none",
-                  backgroundColor: "transparent",
-                  cursor: "pointer",
-                  borderRadius: "12px",
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <InputLabel sx={{ color: "black" }}>Background Color</InputLabel>
-              <Box
-                component="input"
-                type="color"
-                value={color}
-                onChange={(e) => handleChange(e)}
-                sx={{
-                  width: "100%",
-                  height: "48px",
-                  padding: 0,
-                  border: "none",
-                  backgroundColor: "transparent",
-                  cursor: "pointer",
-                  borderRadius: "12px",
-                }}
-              />
-            </Grid>
-          </Grid>
-
-          <Grid2 container justifyContent={"center"}>
-            <Grid2 item display={"flex"} justifyContent={"center"} size={12}>
-              <Button
-                fullWidth
-                variant="standard"
-                type="submit"
-                sx={{
-                  mt: 2,
-                  backgroundColor: "#00789f",
-                  color: "white",
-                  textTransform: "capitalize",
-                  "&:hover": {
-                    backgroundColor: "#00789f", // Optional: maintain the same color on hover
-                  },
-                }}
-              >
-                Create
-              </Button>
-            </Grid2>
-          </Grid2>
-        </Box>
-      </SwipeableDrawer> */}
-
-      {/* <Dialog
-        fullWidth={fullWidth}
-        maxWidth={"sm"}
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          style: {
-            borderRadius: "16px", // Adjust the radius as needed
-          },
-        }}
-      >
-        <DialogTitle sx={{ textAlign: "center" }}>Update Node</DialogTitle>
-        <DialogContent>
-          <Box
-            component="form"
-            onSubmit={handleSubmit(updateNode)}
-            sx={{ display: "flex", flexDirection: "column" }}
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={5}
-                  size="small"
-                  {...register("name")}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel sx={{ color: "black" }}>Text Color</InputLabel>
-                <Box
-                  component="input"
-                  type="color"
-                  value={textColor}
-                  onChange={(e) => handleChange2(e)}
-                  sx={{
-                    width: "100%",
-                    height: "48px",
-                    padding: 0,
-                    border: "none",
-                    backgroundColor: "transparent",
-                    cursor: "pointer",
-                    borderRadius: "12px",
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel sx={{ color: "black" }}>
-                  Backgorund Color
-                </InputLabel>
-                <Box
-                  component="input"
-                  type="color"
-                  value={color}
-                  onChange={(e) => handleChange(e)}
-                  sx={{
-                    width: "100%",
-                    height: "48px",
-                    padding: 0,
-                    border: "none",
-                    backgroundColor: "transparent",
-                    cursor: "pointer",
-                    borderRadius: "12px",
-                  }}
-                />
-              </Grid>
-            </Grid>
-            <Button
-              variant="standard"
-              type="submit"
-              sx={{
-                mt: 2,
-                backgroundColor: "#00789f",
-                color: "white",
-                textTransform: "capitalize",
-                "&:hover": {
-                  backgroundColor: "#00789f", // Optional: maintain the same color on hover
-                },
-              }}
-            >
-              Update
-            </Button>
-          </Box>
-        </DialogContent>
-      </Dialog> */}
       <Drawer
         anchor="left"
         open={drawerOpen}
@@ -1427,7 +1058,7 @@ const OverviewFlow = () => {
           sx={{
             textAlign: "center",
             fontSize: "25px",
-            color: "#00789f",
+            color: "#837fcb",
             fontWeight: "bold",
           }}
         >
@@ -1451,33 +1082,33 @@ const OverviewFlow = () => {
               />
             </Grid>
             <Grid item xs={12}>
-            <FormControl fullWidth>
-              <InputLabel>Role</InputLabel>
+              <FormControl fullWidth>
+                <InputLabel>Role</InputLabel>
                 <Select
                   value={selectedRole}
                   onChange={handleRoleChange}
                   label="Role"
                   size="small"
                 >
-                {rolesAndColors.map((item, index) => (
-                  <MenuItem key={index} value={item.role}>
-                    {item.role}
-                  </MenuItem>
-                ))}
+                  {rolesAndColors.map((item, index) => (
+                    <MenuItem key={index} value={item.role}>
+                      {item.role}
+                    </MenuItem>
+                  ))}
                 </Select>
-            </FormControl>
-          </Grid>
+              </FormControl>
+            </Grid>
           </Grid>
           <Button
             variant="standard"
             type="submit"
             sx={{
               mt: 2,
-              backgroundColor: "#00789f",
+              backgroundColor: "#837fcb",
               color: "white",
               textTransform: "capitalize",
               "&:hover": {
-                backgroundColor: "#00789f", // Optional: maintain the same color on hover
+                backgroundColor: "#837fcb", // Optional: maintain the same color on hover
               },
             }}
           >
@@ -1485,96 +1116,7 @@ const OverviewFlow = () => {
           </Button>
         </Box>
       </Drawer>
-      {/* <Drawer
-        anchor="left"
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        sx={{
-          width: "400px",
-          ".MuiPaper-elevation": { padding: "16px !important" },
-        }}
-      >
-        <Box
-          sx={{
-            textAlign: "center",
-            fontSize: "25px",
-            color: "#00789f",
-            fontWeight: "bold",
-          }}
-        >
-          Update Node
-        </Box>
 
-        <Divider />
-        <Box
-          component="form"
-          onSubmit={handleSubmit(updateNode)}
-          sx={{ display: "flex", flexDirection: "column", mt: 3 }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                multiline
-                rows={5}
-                size="small"
-                {...register("name")}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <InputLabel sx={{ color: "black" }}>Text Color</InputLabel>
-              <Box
-                component="input"
-                type="color"
-                value={textColor}
-                onChange={(e) => handleChange2(e)}
-                sx={{
-                  width: "100%",
-                  height: "48px",
-                  padding: 0,
-                  border: "none",
-                  backgroundColor: "transparent",
-                  cursor: "pointer",
-                  borderRadius: "12px",
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <InputLabel sx={{ color: "black" }}>Backgorund Color</InputLabel>
-              <Box
-                component="input"
-                type="color"
-                value={color}
-                onChange={(e) => handleChange(e)}
-                sx={{
-                  width: "100%",
-                  height: "48px",
-                  padding: 0,
-                  border: "none",
-                  backgroundColor: "transparent",
-                  cursor: "pointer",
-                  borderRadius: "12px",
-                }}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            variant="standard"
-            type="submit"
-            sx={{
-              mt: 2,
-              backgroundColor: "#00789f",
-              color: "white",
-              textTransform: "capitalize",
-              "&:hover": {
-                backgroundColor: "#00789f", // Optional: maintain the same color on hover
-              },
-            }}
-          >
-            Update
-          </Button>
-        </Box>
-      </Drawer> */}
       {user?.token && (
         <>
           <ContextMenu
@@ -1687,8 +1229,6 @@ const OverviewFlow = () => {
             </IconButton>
           </Box>
 
-          {/* Copy Link Section */}
-          {/* <Box sx={{textAlign:"left",width:'100%'}}>Copy Link </Box> */}
           <Box
             sx={{
               display: "flex",
@@ -1721,22 +1261,22 @@ const OverviewFlow = () => {
       </Dialog>
 
       <ReactFlow
-        nodes={nodes} // Nodes are passed from state
-        edges={edges} // Edges are passed from state
+        nodes={nodes} 
+        edges={edges} 
         onNodesChange={user?.token ? handleNodesChange : undefined}
         onEdgesChange={user?.token ? onEdgesChange : undefined}
         onConnect={user?.token ? onConnect : undefined}
-        fitView // Ensures the graph fits the available space
+        fitView 
         attributionPosition="top-right"
-        onNodeClick={onNodeClick} // Handle node click
-        nodeTypes={nodeTypes} // Custom node types
-        edgeTypes={edgeTypes} // Custom edge types
-        onEdgesDelete={onEdgesDelete} // Handle edge deletion
-        onNodesDelete={onNodesDelete} // Handle node deletion
-        onEdgeClick={onEdgeClick} // Handle edge click
+        onNodeClick={onNodeClick} 
+        nodeTypes={nodeTypes} 
+        edgeTypes={edgeTypes} 
+        onEdgesDelete={onEdgesDelete} 
+        onNodesDelete={onNodesDelete} 
+        onEdgeClick={onEdgeClick} 
         onNodeContextMenu={onNodeContextMenu}
         onEdgeContextMenu={onEdgeContextMenu}
-        className="overview" // Optional custom styling class
+        className="overview" 
       >
         <MiniMap zoomable pannable nodeClassName={nodeClassName} />
 
@@ -1782,7 +1322,7 @@ const OverviewFlow = () => {
           <Panel position="top-left">
             <Box sx={{ m: 2 }}>
               <CircleButton
-                //  onClick={() => setOpen2(true)}
+                
                 onClick={toggleDrawer("left", true)}
               >
                 <AddIcon sx={{ fontSize: "27px" }} />
@@ -1799,7 +1339,6 @@ const OverviewFlow = () => {
               </CircleButton>
             </Box>
             <Box sx={{ m: 2 }}>
-             
               <DownloadButton />
             </Box>
           </Panel>

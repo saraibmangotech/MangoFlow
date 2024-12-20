@@ -71,13 +71,15 @@ const Login = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: `
-          radial-gradient(100.99% 100.73% at 0% 0%, rgba(0, 196, 204, 0.726) 0%, #00c4cc 0.01%, rgba(0, 196, 204, 0) 100%), 
-          radial-gradient(68.47% 129.02% at 22.82% 97.71%, #6420ff 0%, rgba(100, 32, 255, 0) 100%), 
-          radial-gradient(106.1% 249.18% at 0% 0%, #00c4cc 0%, rgba(0, 196, 204, 0) 100%), 
-          radial-gradient(64.14% 115.13% at 5.49% 50%, #6420ff 0%, rgba(100, 32, 255, 0) 100%), 
-          #7d2ae7;
-        `,
+        background:'#f5f6fa'
+        // background:'#837fcb'
+        // background: `
+        //   radial-gradient(100.99% 100.73% at 0% 0%, rgba(0, 196, 204, 0.726) 0%, #00c4cc 0.01%, rgba(0, 196, 204, 0) 100%), 
+        //   radial-gradient(68.47% 129.02% at 22.82% 97.71%, #6420ff 0%, rgba(100, 32, 255, 0) 100%), 
+        //   radial-gradient(106.1% 249.18% at 0% 0%, #00c4cc 0%, rgba(0, 196, 204, 0) 100%), 
+        //   radial-gradient(64.14% 115.13% at 5.49% 50%, #6420ff 0%, rgba(100, 32, 255, 0) 100%), 
+        //   #7d2ae7;
+        // `,
       }}
     >
       <Paper
@@ -94,9 +96,9 @@ const Login = () => {
           sx={{
             mb: 2,
             fontWeight: "bold",
-            background: "linear-gradient(to right, #00a3a8, #7731d8)",
+            
             WebkitBackgroundClip: "text",
-            color: "transparent",
+            color: "#837fcb ",
             fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" }, // Responsive font size
           }}
         >
@@ -123,10 +125,10 @@ const Login = () => {
               mb: 3,
               "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
                 {
-                  borderColor: "#7731d8",
+                  borderColor: "#837fcb",
                 },
               "& label.Mui-focused": {
-                color: "#7731d8",
+                color: "#837fcb",
               },
               fontSize: { xs: "0.9rem", sm: "1rem" }, // Responsive font size
             }}
@@ -153,10 +155,10 @@ const Login = () => {
               mb: 3,
               "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
                 {
-                  borderColor: "#7731d8",
+                  borderColor: "#837fcb",
                 },
               "& label.Mui-focused": {
-                color: "#7731d8",
+                color: "#837fcb",
               },
               fontSize: { xs: "0.9rem", sm: "1rem" }, // Responsive font size
             }}
@@ -194,7 +196,7 @@ const Login = () => {
             <Typography
               variant="body2"
               sx={{
-                color: "#7731d8",
+                color: "#837fcb",
                 cursor: "pointer",
                 textAlign: "right",
                 fontSize: { xs: "0.8rem", sm: "1rem" },
@@ -209,8 +211,8 @@ const Login = () => {
             variant="contained"
             fullWidth
             sx={{
-              backgroundColor: "#7731d8",
-              "&:hover": { backgroundColor: "#7731d8" },
+              backgroundColor: "#837fcb",
+              "&:hover": { backgroundColor: "#837fcb" },
               padding: { xs: "12px", sm: "10px" }, // Responsive padding
               borderRadius: "8px",
               mb: 2,
@@ -225,7 +227,7 @@ const Login = () => {
             sx={{ color: "#6b7280", fontSize: { xs: "0.9rem", sm: "1rem" } }} // Responsive font size
           >
             Don’t have an account?{" "}
-            <Box component={"span"}  onClick={()=>navigate("/signup")} style={{ color: "#7731d8",textDecoration:'underline' }}>
+            <Box component={"span"}  onClick={()=>navigate("/signup")} style={{ color: "#837fcb",textDecoration:'underline' }}>
               Sign up
             </Box>
           </Typography>

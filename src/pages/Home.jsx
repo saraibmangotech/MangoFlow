@@ -113,7 +113,7 @@ const Home = () => {
       [
         <CottageIcon
           sx={{
-            color: selected === index ? "#7731d8" : "rgba(119, 49, 216, 0.7)",
+            color: selected === index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
             fontSize: "1.5rem",
           }}
         />,
@@ -124,7 +124,7 @@ const Home = () => {
       [
         <FolderIcon
           sx={{
-            color: selected === index ? "#7731d8" : "rgba(119, 49, 216, 0.7)",
+            color: selected === index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
             fontSize: "1.5rem",
           }}
         />,
@@ -135,7 +135,7 @@ const Home = () => {
       [
         <AutoAwesomeMosaicIcon
           sx={{
-            color: selected === index ? "#7731d8" : "rgba(119, 49, 216, 0.7)",
+            color: selected === index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
             fontSize: "1.5rem",
           }}
         />,
@@ -272,11 +272,11 @@ const Home = () => {
                       type="submit"
                       variant="contained"
                       sx={{
-                        backgroundColor: "#7731d8",
+                        backgroundColor: "#837fcb",
                         color: "white",
                         borderRadius: 2,
                         "&:hover": {
-                          backgroundColor: "#5e24a6",
+                          backgroundColor: "#837fcb",
                         },
                       }}
                       startIcon={<AddIcon />}
@@ -403,11 +403,11 @@ const Home = () => {
                 type="submit"
                 variant="contained"
                 sx={{
-                  backgroundColor: "#7731d8",
+                  backgroundColor: "#837fcb",
                   color: "white",
                   borderRadius: 2,
                   "&:hover": {
-                    backgroundColor: "#5e24a6",
+                    backgroundColor: "#837fcb",
                   },
                 }}
                 startIcon={<AddIcon />}
@@ -460,7 +460,7 @@ const Home = () => {
                 sx={{
                   flexDirection: "column",
                   alignItems: "center",
-                  color: selected === item.index ? "#7731d8" : "inherit",
+                  color: selected === item.index ? "#837fcb" : "inherit",
                   padding: "8px 16px",
                   position: "relative",
                   cursor: "pointer",
@@ -475,7 +475,7 @@ const Home = () => {
                     justifyContent: "center",
                     color:
                       selected === item.index
-                        ? "#7731d8"
+                        ? "#837fcb"
                         : "rgba(119, 49, 216, 0.7)",
                     minWidth: "24px",
                   }}
@@ -534,7 +534,7 @@ const Home = () => {
                 size="small"
                 onClick={() => setOpen(true)}
                 sx={{
-                  backgroundColor: "#7731d8",
+                  backgroundColor: "#837fcb",
                   color: "white",
                   borderRadius: 2,
                   padding: "8px 30px",
@@ -542,7 +542,7 @@ const Home = () => {
                   lineHeight: 1.2,
                   margin: "5px 0",
                   width: "100%",
-                  "&:hover": { backgroundColor: "#5e24a6" },
+                  "&:hover": { backgroundColor: "#837fcb" },
                 }}
                 startIcon={<AddIcon fontSize="small" />}
               >
@@ -577,7 +577,7 @@ const Home = () => {
                 size="small"
                 onClick={() => navigate("/project")}
                 sx={{
-                  backgroundColor: "#7731d8",
+                  backgroundColor: "#837fcb",
                   color: "white",
                   borderRadius: 2,
                   padding: "8px 30px",
@@ -585,7 +585,7 @@ const Home = () => {
                   lineHeight: 1.2,
                   margin: "5px 0",
                   width: "100%",
-                  "&:hover": { backgroundColor: "#5e24a6" },
+                  "&:hover": { backgroundColor: "#837fcb" },
                 }}
                 startIcon={<AddIcon fontSize="small" />}
               >
@@ -783,12 +783,13 @@ const Home = () => {
           <Box
             sx={{
               width: "100%",
-              background: `
-                radial-gradient(100.99% 100.73% at 0% 0%, rgba(0, 196, 204, .726) 0%, #00c4cc 0.01%, rgba(0, 196, 204, 0) 100%),
-                radial-gradient(68.47% 129.02% at 22.82% 97.71%, #6420ff 0%, rgba(100, 32, 255, 0) 100%),
-                radial-gradient(106.1% 249.18% at 0% 0%, #00c4cc 0%, rgba(0, 196, 204, 0) 100%),
-                radial-gradient(64.14% 115.13% at 5.49% 50%, #6420ff 0%, rgba(100, 32, 255, 0) 100%),
-                #7d2ae7`,
+              background:"#837fcb",
+              // background: `
+              //   radial-gradient(100.99% 100.73% at 0% 0%, rgba(0, 196, 204, .726) 0%, #00c4cc 0.01%, rgba(0, 196, 204, 0) 100%),
+              //   radial-gradient(68.47% 129.02% at 22.82% 97.71%, #6420ff 0%, rgba(100, 32, 255, 0) 100%),
+              //   radial-gradient(106.1% 249.18% at 0% 0%, #00c4cc 0%, rgba(0, 196, 204, 0) 100%),
+              //   radial-gradient(64.14% 115.13% at 5.49% 50%, #6420ff 0%, rgba(100, 32, 255, 0) 100%),
+              //   #7d2ae7`,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -833,12 +834,12 @@ const Home = () => {
             <Button
               variant="contained"
               sx={{
-                backgroundColor: "#7731d8",
+                backgroundColor: "#837fcb",
                 color: "white",
                 display: isMobileView ? "flex" : "none",
                 borderRadius: 2,
                 "&:hover": {
-                  backgroundColor: "#5e24a6",
+                  backgroundColor: "#837fcb",
                 },
               }}
               startIcon={<AddIcon />}

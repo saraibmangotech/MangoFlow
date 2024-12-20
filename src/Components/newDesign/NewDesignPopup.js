@@ -177,7 +177,7 @@ const NewDesignPopup = ({ open, onClose, data }) => {
                     type="submit"
                     variant="contained"
                     sx={{
-                      backgroundColor: "#7731d8",
+                      backgroundColor: "#837fcb",
                       color: "white",
                       borderRadius: 2,
                       "&:hover": {
