@@ -107,7 +107,7 @@ function ProfileAvatar() {
     <ConfirmationDialog
         open={openLogoutDialog}
         onClose={() => setOpenLogoutDialog(false)}
-        message={"Are you sure you want to delete?"}
+        message={"Are you sure you want to Logout?"}
         action={() => {
           console.log("asdasda");
           handleLogout();

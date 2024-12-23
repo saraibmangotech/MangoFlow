@@ -83,10 +83,9 @@ function downloadImage(dataUrl) {
 
 const DownloadButton = () => {
   const { getNodes,fitView } = useReactFlow();
-
   const handleDownload = () => {
     fitView({
-      padding:"0.5"
+      padding:"0.5",   
     })
     const imageWidth = 1500;
     const imageHeight = 768;

@@ -519,7 +519,7 @@ const Home = () => {
                 alignItems: "flex-start",
                 marginRight: 2,
                 width: "100%",
-                paddingTop: 1,
+                padding: 1,
               }}
             >
               <Box
