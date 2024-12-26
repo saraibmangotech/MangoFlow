@@ -11,6 +11,7 @@ import {
   useReactFlow,
   getNodesBounds,
   getViewportForBounds,
+  applyNodeChanges
 } from "@xyflow/react"; // Ensure the correct ReactFlow package is installed
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import AnnotationNode from "./AnnotationNode"; // Custom node components
@@ -209,7 +210,7 @@ const OverviewFlow = () => {
 
     const selected = rolesAndColors?.find((item) => item.role === role);
     if (selected) {
-      setBackgroundColor(selected.color);
+      setBackgroundColor(selected?.color);
     }
   };
 
@@ -304,6 +305,7 @@ const OverviewFlow = () => {
 
     // Add custom logic for edge click here
   };
+  
 
   const onEdgesDelete = (edgesToDelete) => {
     setEdges((eds) => eds.filter((edge) => !edgesToDelete.includes(edge)));
@@ -329,17 +331,10 @@ const OverviewFlow = () => {
   const [confirmationDialog, setConfirmationDialog] = useState(false);
   const [confirmationDialog2, setConfirmationDialog2] = useState(false);
 
-  // const handleClickOpen = () => {
-  //   setValue("name", selectedNode?.data?.label);
-  //   setColor(selectedNode?.style.backgroundColor);
-  //   setTextColor(selectedNode?.style.color);
-  //   if(editNode)
-  //   setOpen(true);
-  // };
   const handleClickOpen = () => {
     setValue("name", selectedNode?.data?.label);
-    setColor(selectedNode?.style.backgroundColor);
-    setTextColor(selectedNode?.style.color);
+    setColor(selectedNode?.style?.backgroundColor);
+    setTextColor(selectedNode?.style?.color);
 
     if (editNode) {
       const roleColorMapping = JSON.parse(
@@ -349,53 +344,93 @@ const OverviewFlow = () => {
       const matchedRole = roleColorMapping?.find(
         (item) =>
           item.color.toLowerCase() ===
-          selectedNode?.style.backgroundColor?.toLowerCase()
+          selectedNode?.style?.backgroundColor?.toLowerCase()
       );
 
       if (matchedRole) {
         setSelectedRole(matchedRole.role);
-        setBackgroundColor(matchedRole.color);
+        setBackgroundColor(matchedRole?.color);
       }
 
       // Open the drawer
       setOpen(true);
     }
   };
-  //  useEffect(()=>{
-  //   if (editNode) {
-  //     const roleColorMapping = JSON.parse(localStorage.getItem("rolesAndColors"));
-
-  //     const matchedRole = roleColorMapping?.find(
-  //       (item) => item.color.toLowerCase() === selectedNode?.style.backgroundColor?.toLowerCase()
-  //     );
-
-  //     if (matchedRole) {
-  //       setSelectedRole(matchedRole.role);
-  //     }
-
-  //   }
-  // },[drawerOpen])
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleMaxWidthChange = (event) => {
-    setMaxWidth(
-      // @ts-expect-error autofill of arbitrary value is not handled.
-      event.target.value
-    );
-  };
 
-  const handleFullWidthChange = (event) => {
-    setFullWidth(event.target.checked);
-  };
-
+  const initialNodes = [
+    {
+      id: 'A',
+      type: 'group',
+      data: { label: null },
+      position: { x: 0, y: 0 },
+      style: {
+        width: 170,
+        height: 140,
+      },
+    },
+    {
+      id: 'B',
+      type: 'input',
+      data: { label: 'child node 1' },
+      position: { x: 10, y: 10 },
+      parentId: 'A',
+      extent: 'parent',
+    },
+    {
+      id: 'C',
+      type: 'input',
+      data: { label: 'child node 2' },
+      position: { x: 10, y: 90 },
+      parentId: 'A',
+      extent: 'parent',
+    },
+  ];
   // Node and edge state management using ReactFlow hooks
-  const [nodes, setNodes, onNodesChange] = useNodesState();
+  const [nodes, setNodes,onNodesChange] = useNodesState();
   const [edges, setEdges, onEdgesChange] = useEdgesState();
   const [pendingParams, setPendingParams] = useState(null);
+  const [groups, setGroups] = useState([]);
+  const [color, setColor] = React.useState("#ffffff");
+  const [textColor, setTextColor] = React.useState("#ffffff");
+  const [edgeColor, setEdgeColor] = React.useState("#000000");
+  
+  const createGroupNode = (position) => {
+    const newGroupNode = {
+      id: "A",
+      type: 'group',
+      data: { label: null },
+      position,
+      style: {
+        width: 170,
+        height: 140,
+        backgroundColor: 'rgba(240, 240, 240, 0.5)',
+      },
+    };
+    setNodes((nds) => [...nds, newGroupNode]);
+  };
 
+  useEffect(() => {
+    if (!Array.isArray(nodes)) return; // Ensure nodes is an array
+  
+    const sortedNodes = [...nodes].sort((a, b) => {
+      if (a.type === "group" && b.type !== "group") return -1;
+      if (a.type !== "group" && b.type === "group") return 1;
+      return 0;
+    });
+  
+    // Check if nodes are already sorted before updating
+    if (JSON.stringify(nodes) !== JSON.stringify(sortedNodes)) {
+      setNodes(sortedNodes);
+    }
+  }, [nodes, setNodes]);
+  
+  
+  
   // Handle creating new edges by connecting nodes
   const onConnect = useCallback(
     async (params) => {
@@ -423,27 +458,6 @@ const OverviewFlow = () => {
     },
     [nodes, id, getValues3]
   );
-
-  const [color, setColor] = React.useState("#ffffff");
-  const [textColor, setTextColor] = React.useState("#ffffff");
-  const [edgeColor, setEdgeColor] = React.useState("#000000");
-
-  const handleChange = (e) => {
-    console.log(e.target.value);
-
-    setColor(e.target.value);
-  };
-  const handleChange2 = (e) => {
-    console.log(e.target.value);
-
-    setTextColor(e.target.value);
-  };
-  const handleChange3 = (e) => {
-    console.log(e.target.value);
-
-    setEdgeColor(e.target.value);
-  };
-
   // *For Get Nodes
   const getNodes = async (page, limit, filter) => {
     try {
@@ -501,31 +515,7 @@ const OverviewFlow = () => {
       console.log("asdasdad");
     }
   };
-  // const CreateEdge = (data) => {
-  //   console.log(edges, "pendingParams");
-  //   console.log(pendingParams, "pendingParams");
-  //   let currentEdge = edges.find((item) => item?.id == pendingParams?.id);
-  //   console.log(edges.find((item) => item?.id == pendingParams?.id));
-  //   const edge = edges.find((edge) => edge.id === pendingParams?.id);
-  //   const sourceNode = nodes.find((node) => node.id === pendingParams.source);
-
-  //   if (edge) {
-
-  //     edge.label = data?.name;
-  //     edge.style = { stroke: sourceNode?.style?.backgroundColor };
-
-  //     console.log("Edge updated successfully:", edge);
-  //     setOpen3(false);
-  //     UpdateArtBoard()
-  //     reset()
-  //   } else {
-  //     console.log("Edge not found.");
-  //   }
-
-  //   console.log("Updated edges array:", edges);
-
-  // };
-
+  
   const UpdateEdge = async (data) => {
     let obj = selectedEdge;
     const sourceNode = nodes?.find((node) => node.id === selectedEdge.source);
@@ -540,28 +530,6 @@ const OverviewFlow = () => {
       if (responseCode == 200) {
         setOpen4(false);
         getEdges();
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      console.log("asdasdad");
-    }
-  };
-
-  const updateNode = async (page, limit, filter) => {
-    console.log(selectedNode);
-    selectedNode.data.label = getValues("name");
-    selectedNode.style.color = textColor;
-    selectedNode.style.backgroundColor = backgroundColor;
-    try {
-      console.log(selectedNode);
-
-      const { responseCode } = await GraphServices.updateNode(selectedNode);
-      console.log(responseCode);
-
-      if (responseCode == 200) {
-        setOpen(false);
-        setDrawerOpen(false);
       }
     } catch (error) {
       console.log(error);
@@ -594,28 +562,92 @@ const OverviewFlow = () => {
       });
   };
 
-  const handleNodesChange = useCallback(
-    (changes) => {
-      changes.forEach((change) => {
-        if (change.type === "position") {
-          console.log(change);
+  const updateNode = async () => {
+    console.log(selectedNode);
+    selectedNode.data.label = getValues("name");
+    selectedNode.style.color = textColor;
+    selectedNode.style.backgroundColor = backgroundColor;
+   
+   
+    try {
+     
+      const { responseCode } = await GraphServices.updateNode(selectedNode);
+      console.log(responseCode);
 
-          console.log(`Node ${change.id} moved to: `, change.position);
+      if (responseCode == 200) {
+        setOpen(false);
+        setDrawerOpen(false);
+        getNodes()
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("asdasdad");
+    }
+  };
+
+ 
+
+const handleNodesChange = useCallback(
+  (changes) => {
+    changes.forEach((change) => {
+      if (change.type === "position") {
+        // Get the position of the changed node
+        const nodePosition = change.position;
+
+        // Check if the node is inside a group
+        const isInGroup = nodes.some((groupNode) => {
+          if (groupNode.type === 'group') {
+            const { x, y } = groupNode.position;
+            const groupWidth = groupNode.style.width;
+            const groupHeight = groupNode.style.height;
+
+            // Check if the node's position is within the bounds of the group
+            return (
+              nodePosition.x >= x &&
+              nodePosition.x <= x + groupWidth &&
+              nodePosition.y >= y &&
+              nodePosition.y <= y + groupHeight
+            );
+          }
+          return false;
+        });
+
+        if (isInGroup) {
+          console.log('Node is inside of  group');
+
+          const updatedNodes = nodes.map((item) => {
+            if (item.id === selectedNode?.id) {
+              console.log("Node ID:", item?.id);
+              console.log("Selected Node ID:", selectedNode?.id);
+              return { ...item, extent: "parent", parentId: "A" };
+            }
+            return item;
+          });
+          
+          setNodes(updatedNodes); 
+          // console.log('Node is inside a group');
+          // selectedNode.data.label = getValues("name");
+          // selectedNode.style.color = textColor;
+          // selectedNode.style.backgroundColor = backgroundColor;
+          // selectedNode.parentId = "A";
+          // selectedNode.extent = "parent" ;
+          
+          // updateNode()
+          
+        } else {
+          console.log('Node is outside of any group');
         }
-      });
-      console.log(
-        nodes?.find((item) => item?.id == changes[0].id),
-        "nodes"
-      );
-      console.log(edges, "edges");
+      }
+    });
 
-      console.log(changes, "changes");
+    onNodesChange(changes);
+  },
+  [onNodesChange, nodes]  // Ensure to include `nodes` in the dependency array
+);
 
-      onNodesChange(changes);
-    },
-    [onNodesChange]
-  );
-
+console.log("selectedNode" ,selectedNode)
+console.log("selectedNode" ,nodes)
   useEffect(() => {
     handleClickOpen();
   }, [drawerOpen]);
@@ -684,11 +716,6 @@ const OverviewFlow = () => {
     setSelectedEdge(edge);
     setSelectedNode(null);
     contextMenu?.current?.show(event);
-  };
-
-  const onSubmit = (data) => {
-    console.log(data);
-    handleClose();
   };
   const CreateNode = async (formData) => {
     console.log(formData);
@@ -791,17 +818,6 @@ const OverviewFlow = () => {
     getNodes();
     getEdges();
   }, []);
-  const handleContextMenu = useCallback(
-    (event, data) => {
-      const { actionType } = data;
-      if (actionType === "editNode" && selectedNode) {
-        // Implement your edit node logic here
-      } else if (actionType === "editEdge" && selectedEdge) {
-        // Implement your edit edge logic here
-      }
-    },
-    [selectedNode, selectedEdge]
-  );
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -1317,6 +1333,35 @@ const OverviewFlow = () => {
             </Button>
           </ButtonGroup>
         </Panel>
+        {/* <Panel position="bottom-left">
+        <button
+          onClick={addNode}
+          style={{
+            backgroundColor: "#5a67d8",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            padding: "10px",
+            cursor: "pointer",
+            marginRight: "10px",
+          }}
+        >
+          Add Node
+        </button>
+        <button
+          onClick={addGroup}
+          style={{
+            backgroundColor: "#68d391",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            padding: "10px",
+            cursor: "pointer",
+          }}
+        >
+          Add Group
+        </button>
+      </Panel> */}
         {user?.token && (
           <Panel position="top-left">
             <Box sx={{ m: 2 }}>
@@ -1340,6 +1385,12 @@ const OverviewFlow = () => {
             <Box sx={{ m: 2 }}>
               <DownloadButton />
             </Box>
+            <Box sx={{ m: 2 }}>
+            <CircleButton onClick={() =>createGroupNode({ x: 100, y: 100 })}>
+               Create Group
+              </CircleButton>
+            </Box>
+            
           </Panel>
         )}
       </ReactFlow>

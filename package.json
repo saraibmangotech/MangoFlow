@@ -7,7 +7,7 @@
     "@mui/material": "^6.1.4",
     "@reactflow/core": "^11.11.4",
     "@reactflow/minimap": "^11.7.14",
-    "@xyflow/react": "12.2.1",
+    "@xyflow/react": "^12.2.1",
     "axios": "^1.7.7",
     "dagre": "^0.8.5",
     "html-to-image": "^1.11.11",
