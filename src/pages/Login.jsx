@@ -44,14 +44,16 @@ const Login = () => {
     
     try {
       const response = await AuthServices.login(obj);
-      if (response?.data?.token != "") {
-        userLogin(response?.data);
+    
+      if (response?.data?.token) {
         navigate("/home");
+        userLogin(response?.data);
+      toast.success(response?.message);
+
       }else {
         console.log("first")
       }
 
-      toast.success(response?.message);
       console.log(response)
    
     } catch (error) {
@@ -169,7 +171,7 @@ const Login = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     edge="end"
                   >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -227,7 +229,7 @@ const Login = () => {
             sx={{ color: "#6b7280", fontSize: { xs: "0.9rem", sm: "1rem" } }} // Responsive font size
           >
             Don’t have an account?{" "}
-            <Box component={"span"}  onClick={()=>navigate("/signup")} style={{ color: "#837fcb",textDecoration:'underline' }}>
+            <Box component={"span"}  onClick={()=>navigate("/signup")} style={{ color: "#837fcb",textDecoration:'underline' ,cursor:"pointer"}}>
               Sign up
             </Box>
           </Typography>

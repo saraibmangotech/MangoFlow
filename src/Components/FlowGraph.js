@@ -11,10 +11,14 @@ import {
   useReactFlow,
   getNodesBounds,
   getViewportForBounds,
-  applyNodeChanges
+  applyNodeChanges,
+  NodeResizer,
+  Handle,
+  Position,
 } from "@xyflow/react"; // Ensure the correct ReactFlow package is installed
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import AnnotationNode from "./AnnotationNode"; // Custom node components
+import WorkspacesIcon from "@mui/icons-material/Workspaces";
+// import AnnotationNode from "./AnnotationNode";
 import ToolbarNode from "./ToolbarNode";
 import ResizerNode from "./ResizerNode";
 import CircleNode from "./CircleNode";
@@ -24,6 +28,7 @@ import "@xyflow/react/dist/style.css"; // Make sure to import styles for ReactFl
 import "./overview.css"; // Custom CSS for the layout and nodes
 import dagre from "dagre"; // Layout algorithm library
 import Box from "@mui/material/Box";
+import InfoIcon from '@mui/icons-material/Info';
 import ShareIcon from "@mui/icons-material/Share";
 import {
   Facebook,
@@ -71,7 +76,7 @@ import { useParams } from "react-router-dom";
 import SaveIcon from "@mui/icons-material/Save";
 import ArtBoardServices from "../services/ArtBoardServices";
 import toast from "react-hot-toast";
-import useAuth from "../hooks/useProvideAuth"
+import useAuth from "../hooks/useProvideAuth";
 import { Drawer } from "@mui/material";
 import { toPng } from "html-to-image";
 
@@ -83,11 +88,11 @@ function downloadImage(dataUrl) {
 }
 
 const DownloadButton = () => {
-  const { getNodes,fitView } = useReactFlow();
+  const { getNodes, fitView } = useReactFlow();
   const handleDownload = () => {
     fitView({
-      padding:"0.5",   
-    })
+      padding: "0.5",
+    });
     const imageWidth = 1500;
     const imageHeight = 768;
 
@@ -158,7 +163,25 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
 
   return { nodes: newNodes, edges };
 };
+const ResizableNode = ({ data }) => {
+  return (
+    <>
+      <NodeResizer minWidth={100} minHeight={30} />
+      <Handle type="target" position={Position.Left} />
+      <div style={{ padding: 10 }}>{data.label}</div>
+      <Handle type="source" position={Position.Right} />
+    </>
+  );
+};
 
+const AnnotationNode = ({ data }) => {
+  return (
+    <div style={{ padding: 10, borderRadius: 5 }}>
+      <div>{data.label}</div>
+      {/* Add more custom content here */}
+    </div>
+  );
+};
 // Custom node types
 const nodeTypes = {
   annotation: AnnotationNode,
@@ -166,6 +189,7 @@ const nodeTypes = {
   resizer: ResizerNode,
   circle: CircleNode,
   textinput: TextNode,
+  ResizableNode: ResizerNode,
 };
 
 // Custom edge types
@@ -286,6 +310,20 @@ const OverviewFlow = () => {
     getValues: getValues4,
     formState: { errors: errors4 },
   } = useForm();
+  const {
+    register: register5,
+    handleSubmit: handleSubmit5,
+    setValue: setValue5,
+    getValues: getValues5,
+    formState: { errors: errors5 },
+  } = useForm();
+  const {
+    register: register6,
+    handleSubmit: handleSubmit6,
+    setValue: setValue6,
+    getValues: getValues6,
+    formState: { errors: errors6 },
+  } = useForm();
   console.log(watch());
   const { id } = useParams();
 
@@ -305,7 +343,6 @@ const OverviewFlow = () => {
 
     // Add custom logic for edge click here
   };
-  
 
   const onEdgesDelete = (edgesToDelete) => {
     setEdges((eds) => eds.filter((edge) => !edgesToDelete.includes(edge)));
@@ -315,21 +352,23 @@ const OverviewFlow = () => {
     setNodes((nds) => nds.filter((node) => !nodesToDelete.includes(node)));
   };
 
-  const [selectedNode, setSelectedNode] = React.useState(null);
+  const [selectedNode, setSelectedNode] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [open, setOpen] = React.useState(false);
-  const [open2, setOpen2] = React.useState(false);
-  const [open3, setOpen3] = React.useState(false);
-  const [open4, setOpen4] = React.useState(false);
-  const [openShareModal, setOpenShareModal] = React.useState(false);
-  const [state, setState] = React.useState({
+  const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [open3, setOpen3] = useState(false);
+  const [open4, setOpen4] = useState(false);
+  const [openShareModal, setOpenShareModal] = useState(false);
+  const [state, setState] = useState({
     left: false,
   });
-  const [fullWidth, setFullWidth] = React.useState(true);
-  const [maxWidth, setMaxWidth] = React.useState("sm");
+  const [fullWidth, setFullWidth] = useState(true);
+  const [maxWidth, setMaxWidth] = useState("sm");
   const [updatedEdges, setUpdatedEdges] = useState([]);
   const [confirmationDialog, setConfirmationDialog] = useState(false);
   const [confirmationDialog2, setConfirmationDialog2] = useState(false);
+  const [openDescModal, setOpenDescModal] = useState(false);
+  const [openEditDesc, setOpenEditDesc] = useState(false);
 
   const handleClickOpen = () => {
     setValue("name", selectedNode?.data?.label);
@@ -361,11 +400,10 @@ const OverviewFlow = () => {
     setOpen(false);
   };
 
-
   const initialNodes = [
     {
-      id: 'A',
-      type: 'group',
+      id: "A",
+      type: "group",
       data: { label: null },
       position: { x: 0, y: 0 },
       style: {
@@ -374,63 +412,95 @@ const OverviewFlow = () => {
       },
     },
     {
-      id: 'B',
-      type: 'input',
-      data: { label: 'child node 1' },
+      id: "B",
+      type: "input",
+      data: { label: "child node 1" },
       position: { x: 10, y: 10 },
-      parentId: 'A',
-      extent: 'parent',
+      parentId: "A",
+      extent: "parent",
     },
     {
-      id: 'C',
-      type: 'input',
-      data: { label: 'child node 2' },
+      id: "C",
+      type: "input",
+      data: { label: "child node 2" },
       position: { x: 10, y: 90 },
-      parentId: 'A',
-      extent: 'parent',
+      parentId: "A",
+      extent: "parent",
     },
   ];
   // Node and edge state management using ReactFlow hooks
-  const [nodes, setNodes,onNodesChange] = useNodesState();
+  const [nodes, setNodes, onNodesChange] = useNodesState();
   const [edges, setEdges, onEdgesChange] = useEdgesState();
   const [pendingParams, setPendingParams] = useState(null);
   const [groups, setGroups] = useState([]);
   const [color, setColor] = React.useState("#ffffff");
   const [textColor, setTextColor] = React.useState("#ffffff");
   const [edgeColor, setEdgeColor] = React.useState("#000000");
+
+  // const createGroupNode = (position) => {
+  //   const newGroupNode = {
+  //     id: "A",
+  //     type: "ResizableNode",
+  //     data: { label: null },
+  //     position,
+  //     style: {
+  //       width: 170,
+  //       height: 140,
+  //       backgroundColor: "rgba(240, 240, 240, 0.5)",
+  //     },
+  //   };
+
+  //   setNodes((nds) => [...nds, newGroupNode]);
+  // };
+  const createGroupNode = async (position) => {
+    try {
+      let obj = {
+        data: { label: null },   
+        type: "ResizableNode",
+        position,
+        measured: {
+          width: 200,
+          height: 200, 
+        },
+        style: {
+          width: 200,
+          height: 200,
+          backgroundColor: "rgba(240, 240, 240, 0.5)",
+          border: "2px dotted #000", 
+        },
+        artboard_id: id,
+      };
   
-  const createGroupNode = (position) => {
-    const newGroupNode = {
-      id: "A",
-      type: 'group',
-      data: { label: null },
-      position,
-      style: {
-        width: 170,
-        height: 140,
-        backgroundColor: 'rgba(240, 240, 240, 0.5)',
-      },
-    };
-    setNodes((nds) => [...nds, newGroupNode]);
+      const { data } = await GraphServices.CreateNode(obj);
+      console.log(data);
+  
+      if (data) {
+        setNodes((nds) => [...nds, data?.node]);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("asdasdad");
+    }
+    handleClose();
   };
+  
 
   useEffect(() => {
     if (!Array.isArray(nodes)) return; // Ensure nodes is an array
-  
+
     const sortedNodes = [...nodes].sort((a, b) => {
-      if (a.type === "group" && b.type !== "group") return -1;
-      if (a.type !== "group" && b.type === "group") return 1;
+      if (a.type === "ResizableNode" && b.type !== "ResizableNode") return -1;
+      if (a.type !== "ResizableNode" && b.type === "ResizableNode") return 1;
       return 0;
     });
-  
+
     // Check if nodes are already sorted before updating
     if (JSON.stringify(nodes) !== JSON.stringify(sortedNodes)) {
       setNodes(sortedNodes);
     }
   }, [nodes, setNodes]);
-  
-  
-  
+
   // Handle creating new edges by connecting nodes
   const onConnect = useCallback(
     async (params) => {
@@ -515,7 +585,7 @@ const OverviewFlow = () => {
       console.log("asdasdad");
     }
   };
-  
+
   const UpdateEdge = async (data) => {
     let obj = selectedEdge;
     const sourceNode = nodes?.find((node) => node.id === selectedEdge.source);
@@ -553,6 +623,7 @@ const OverviewFlow = () => {
       })
       .then((response) => {
         console.log(response.responseCode);
+        getNodes()
       })
       .catch((error) => {
         console.error(error);
@@ -567,17 +638,15 @@ const OverviewFlow = () => {
     selectedNode.data.label = getValues("name");
     selectedNode.style.color = textColor;
     selectedNode.style.backgroundColor = backgroundColor;
-   
-   
+
     try {
-     
       const { responseCode } = await GraphServices.updateNode(selectedNode);
       console.log(responseCode);
 
       if (responseCode == 200) {
         setOpen(false);
         setDrawerOpen(false);
-        getNodes()
+        getNodes();
       }
     } catch (error) {
       console.log(error);
@@ -586,68 +655,65 @@ const OverviewFlow = () => {
     }
   };
 
- 
+  const handleNodesChange = useCallback(
+    (changes) => {
+      changes.forEach((change) => {
+        if (change.type === "position") {
+          // Get the position of the changed node
+          const nodePosition = change.position;
 
-const handleNodesChange = useCallback(
-  (changes) => {
-    changes.forEach((change) => {
-      if (change.type === "position") {
-        // Get the position of the changed node
-        const nodePosition = change.position;
+          // Check if the node is inside a group
+          const isInGroup = nodes.find((groupNode) => {
+            if (groupNode.type === "ResizableNode") {
+            
+              const { x, y } = groupNode.position;
+              const groupWidth = groupNode.measured.width;
+              const groupHeight = groupNode.measured.height;
 
-        // Check if the node is inside a group
-        const isInGroup = nodes.some((groupNode) => {
-          if (groupNode.type === 'group') {
-            const { x, y } = groupNode.position;
-            const groupWidth = groupNode.style.width;
-            const groupHeight = groupNode.style.height;
-
-            // Check if the node's position is within the bounds of the group
-            return (
-              nodePosition.x >= x &&
-              nodePosition.x <= x + groupWidth &&
-              nodePosition.y >= y &&
-              nodePosition.y <= y + groupHeight
-            );
-          }
-          return false;
-        });
-
-        if (isInGroup) {
-          console.log('Node is inside of  group');
-
-          const updatedNodes = nodes.map((item) => {
-            if (item.id === selectedNode?.id) {
-              console.log("Node ID:", item?.id);
-              console.log("Selected Node ID:", selectedNode?.id);
-              return { ...item, extent: "parent", parentId: "A" };
+              return (
+                nodePosition.x >= x &&
+                nodePosition.x <= x + groupWidth &&
+                nodePosition.y >= y &&
+                nodePosition.y <= y + groupHeight
+              );
             }
-            return item;
+            return false;
           });
-          
-          setNodes(updatedNodes); 
-          // console.log('Node is inside a group');
-          // selectedNode.data.label = getValues("name");
-          // selectedNode.style.color = textColor;
-          // selectedNode.style.backgroundColor = backgroundColor;
-          // selectedNode.parentId = "A";
-          // selectedNode.extent = "parent" ;
-          
-          // updateNode()
-          
-        } else {
-          console.log('Node is outside of any group');
+
+          if (isInGroup) {
+            console.log("Node is inside of  group" ,isInGroup);
+
+            const updatedNodes = nodes.map((item) => {
+              if (item.id === selectedNode?.id) {
+                console.log("Node ID:", item?.id);
+                console.log("Selected Node ID:", selectedNode?.id);
+                return { ...item, extent: "parent", parentId: isInGroup?.id };
+              }
+              return item;
+            });
+
+            setNodes(updatedNodes);
+            // console.log('Node is inside a group');
+            // selectedNode.data.label = getValues("name");
+            // selectedNode.style.color = textColor;
+            // selectedNode.style.backgroundColor = backgroundColor;
+            // selectedNode.parentId = "A";
+            // selectedNode.extent = "parent" ;
+
+            // updateNode()
+          } else {
+            console.log("Node is outside of any group");
+          }
         }
-      }
-    });
+      });
 
-    onNodesChange(changes);
-  },
-  [onNodesChange, nodes]  // Ensure to include `nodes` in the dependency array
-);
+      onNodesChange(changes);
+    },
+    [onNodesChange, nodes] // Ensure to include `nodes` in the dependency array
+  );
 
-console.log("selectedNode" ,selectedNode)
-console.log("selectedNode" ,nodes)
+  console.log("selectedNode", selectedNode);
+  console.log("selectedNode", nodes);
   useEffect(() => {
     handleClickOpen();
   }, [drawerOpen]);
@@ -664,7 +730,11 @@ console.log("selectedNode" ,nodes)
         />
       ),
       command: () => {
-        if (selectedNode) {
+        if (selectedNode.type == "annotation") {
+          console.log(selectedNode.type);
+          setOpenEditDesc(true);
+        } 
+        else if (selectedNode) {
           // Add your edit node logic here
 
           console.log("Editing node", selectedNode);
@@ -757,7 +827,66 @@ console.log("selectedNode" ,nodes)
     }
     handleClose();
   };
+  const CreateDescription = async (formData) => {
+    console.log(formData);
 
+    try {
+      let obj = {
+        data: {
+          label: formData?.name, // Dynamic label from form data
+        },
+        position: {
+          x: 100,
+          y: 100, // Default position
+        },
+        type: "annotation",
+        style: {
+          padding: 10,
+          borderRadius: 5,
+          color: formData?.color || "#000000",
+          backgroundColor: "transprent",
+          background: "transprent",
+        },
+        artboard_id: id, // Associated artboard ID
+      };
+
+      const { data } = await GraphServices.CreateNode(obj);
+      console.log(data);
+
+      if (data) {
+        setNodes((nds) => [...nds, data?.node]);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("asdasdad");
+    }
+    handleClose();
+  };
+  const EditDescription = async () => {
+    console.log(selectedNode);
+    selectedNode.data.label = getValues6("name");
+    selectedNode.style.color = getValues6("color");
+
+    try {
+      const { responseCode } = await GraphServices.updateNode(selectedNode);
+      console.log(responseCode);
+
+      if (responseCode == 200) {
+        setOpenEditDesc(false);
+        getNodes();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("asdasdad");
+    }
+  };
+
+  useEffect(() => {
+    setValue6("name", selectedNode?.data?.label);
+    setValue6("color", selectedNode?.style?.color);
+  }, [openEditDesc]);
   const handleDeleteNode = async (data) => {
     setConfirmationDialog(false);
     console.log(data);
@@ -953,6 +1082,158 @@ console.log("selectedNode" ,nodes)
                 }}
                 size="small"
                 {...register4("name")}
+              />
+            </Grid>
+          </Grid>
+
+          <Button
+            variant="standard"
+            type="submit"
+            sx={{
+              mt: 2,
+              backgroundColor: "#837fcb",
+              color: "white",
+              textTransform: "capitalize",
+              "&:hover": {
+                backgroundColor: "#837fcb", // Optional: maintain the same color on hover
+              },
+            }}
+          >
+            Update
+          </Button>
+        </Box>
+      </Drawer>
+      <Drawer
+        anchor="left"
+        open={openDescModal}
+        onClose={() => setOpenDescModal(false)}
+        sx={{
+          width: "400px", // You can adjust the width as needed
+          ".MuiPaper-elevation": { padding: "16px !important" },
+        }}
+      >
+        <Box
+          sx={{
+            textAlign: "center",
+            fontSize: "25px",
+            color: "#837fcb",
+            fontWeight: "bold",
+          }}
+        >
+          Create Description
+        </Box>
+
+        <Divider />
+
+        <Box
+          component="form"
+          onSubmit={handleSubmit5(CreateDescription)}
+          sx={{ display: "flex", flexDirection: "column", mt: 3 }}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <InputLabel sx={{ color: "black", mb: 0.5 }}>Input</InputLabel>
+              <TextField
+                fullWidth
+                InputProps={{
+                  sx: {
+                    borderRadius: "3px", // Adjust the value as needed
+                    border: "1px solid black",
+                  },
+                }}
+                size="small"
+                {...register5("name")}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <InputLabel sx={{ color: "black", mb: 0.5 }}>
+                Select Color
+              </InputLabel>
+              <input
+                type="color"
+                {...register5("color")}
+                style={{
+                  width: "100%",
+                  height: "40px",
+                  border: "1px solid black",
+                  borderRadius: "3px",
+                }}
+              />
+            </Grid>
+          </Grid>
+
+          <Button
+            variant="standard"
+            type="submit"
+            sx={{
+              mt: 2,
+              backgroundColor: "#837fcb",
+              color: "white",
+              textTransform: "capitalize",
+              "&:hover": {
+                backgroundColor: "#837fcb", // Optional: maintain the same color on hover
+              },
+            }}
+          >
+            Create
+          </Button>
+        </Box>
+      </Drawer>
+      <Drawer
+        anchor="left"
+        open={openEditDesc}
+        onClose={() => setOpenEditDesc(false)}
+        sx={{
+          width: "400px", // You can adjust the width as needed
+          ".MuiPaper-elevation": { padding: "16px !important" },
+        }}
+      >
+        <Box
+          sx={{
+            textAlign: "center",
+            fontSize: "25px",
+            color: "#837fcb",
+            fontWeight: "bold",
+          }}
+        >
+          Update Description
+        </Box>
+
+        <Divider />
+
+        <Box
+          component="form"
+          onSubmit={handleSubmit6(EditDescription)}
+          sx={{ display: "flex", flexDirection: "column", mt: 3 }}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <InputLabel sx={{ color: "black", mb: 0.5 }}>Input</InputLabel>
+              <TextField
+                fullWidth
+                InputProps={{
+                  sx: {
+                    borderRadius: "3px", // Adjust the value as needed
+                    border: "1px solid black",
+                  },
+                }}
+                size="small"
+                {...register6("name")}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <InputLabel sx={{ color: "black", mb: 0.5 }}>
+                Select Color
+              </InputLabel>
+              <input
+                type="color"
+                {...register6("color")}
+                style={{
+                  width: "100%",
+                  height: "40px",
+                  border: "1px solid black",
+                  borderRadius: "3px",
+                }}
               />
             </Grid>
           </Grid>
@@ -1276,22 +1557,22 @@ console.log("selectedNode" ,nodes)
       </Dialog>
 
       <ReactFlow
-        nodes={nodes} 
-        edges={edges} 
+        nodes={nodes}
+        edges={edges}
         onNodesChange={user?.token ? handleNodesChange : undefined}
         onEdgesChange={user?.token ? onEdgesChange : undefined}
         onConnect={user?.token ? onConnect : undefined}
-        fitView 
+        fitView
         attributionPosition="top-right"
-        onNodeClick={onNodeClick} 
-        nodeTypes={nodeTypes} 
-        edgeTypes={edgeTypes} 
-        onEdgesDelete={onEdgesDelete} 
-        onNodesDelete={onNodesDelete} 
-        onEdgeClick={onEdgeClick} 
+        onNodeClick={onNodeClick}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        onEdgesDelete={onEdgesDelete}
+        onNodesDelete={onNodesDelete}
+        onEdgeClick={onEdgeClick}
         onNodeContextMenu={onNodeContextMenu}
         onEdgeContextMenu={onEdgeContextMenu}
-        className="overview" 
+        className="overview"
       >
         <MiniMap zoomable pannable nodeClassName={nodeClassName} />
 
@@ -1365,10 +1646,7 @@ console.log("selectedNode" ,nodes)
         {user?.token && (
           <Panel position="top-left">
             <Box sx={{ m: 2 }}>
-              <CircleButton
-                
-                onClick={toggleDrawer("left", true)}
-              >
+              <CircleButton onClick={toggleDrawer("left", true)}>
                 <AddIcon sx={{ fontSize: "27px" }} />
               </CircleButton>
             </Box>
@@ -1386,11 +1664,15 @@ console.log("selectedNode" ,nodes)
               <DownloadButton />
             </Box>
             <Box sx={{ m: 2 }}>
-            <CircleButton onClick={() =>createGroupNode({ x: 100, y: 100 })}>
-               Create Group
+              <CircleButton onClick={() => createGroupNode({ x: 100, y: 100 })}>
+                <WorkspacesIcon />
               </CircleButton>
             </Box>
-            
+            <Box sx={{ m: 2 }}>
+              <CircleButton onClick={() => setOpenDescModal(true)}>
+                <InfoIcon />
+              </CircleButton>
+            </Box>
           </Panel>
         )}
       </ReactFlow>

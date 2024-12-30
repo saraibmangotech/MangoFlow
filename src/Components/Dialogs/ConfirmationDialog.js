@@ -10,7 +10,7 @@ function ConfirmationDialog({ open, onClose, message, action, warning }) {
     return (
         <Dialog
             open={open}
-            sx={{ '& .MuiDialog-paper': { width: warning ? '50%' : '30%', height: "auto", borderRadius: 2, py: { xs: 2, md: 4 }, px: { xs: 3, md: 6 } } }}
+            sx={{ '& .MuiDialog-paper': { width: warning ? '50%' : '90%', height: "auto", borderRadius: 2, py: { xs: 2, md: 4 }, px: { xs: 3, md: 6 } } }}
         >
             <IconButton onClick={() => onClose()} sx={{ position: 'absolute', right: 13, top: 13 }}>
                 <CancelOutlined />
