@@ -28,7 +28,7 @@ import "@xyflow/react/dist/style.css"; // Make sure to import styles for ReactFl
 import "./overview.css"; // Custom CSS for the layout and nodes
 import dagre from "dagre"; // Layout algorithm library
 import Box from "@mui/material/Box";
-import InfoIcon from '@mui/icons-material/Info';
+import InfoIcon from "@mui/icons-material/Info";
 import ShareIcon from "@mui/icons-material/Share";
 import {
   Facebook,
@@ -57,6 +57,7 @@ import {
   Grid,
   Grid2,
   InputAdornment,
+  Slider,
   SwipeableDrawer,
   TextField,
   Typography,
@@ -163,7 +164,8 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
 
   return { nodes: newNodes, edges };
 };
-const ResizableNode = ({ data }) => {
+const ResizableNode = (data ) => {
+  console.log(data)
   return (
     <>
       <NodeResizer minWidth={100} minHeight={30} />
@@ -171,7 +173,7 @@ const ResizableNode = ({ data }) => {
       <div style={{ padding: 10 }}>{data.label}</div>
       <Handle type="source" position={Position.Right} />
     </>
-  );
+  );  
 };
 
 const AnnotationNode = ({ data }) => {
@@ -189,7 +191,7 @@ const nodeTypes = {
   resizer: ResizerNode,
   circle: CircleNode,
   textinput: TextNode,
-  ResizableNode: ResizerNode,
+  ResizableNode: ResizableNode,
 };
 
 // Custom edge types
@@ -216,7 +218,11 @@ const OverviewFlow = () => {
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   const [selectedRole, setSelectedRole] = useState("");
   const [editNode, setEditNode] = useState("");
+  const [fontSize, setFontSize] = useState(16);
 
+  const handleFontSizeChange = (event, newValue) => {
+    setFontSize(newValue);
+  };
   console.log(backgroundColor);
   useEffect(() => {
     const savedRoles = JSON.parse(localStorage.getItem("rolesAndColors")) || [
@@ -455,25 +461,28 @@ const OverviewFlow = () => {
   const createGroupNode = async (position) => {
     try {
       let obj = {
-        data: { label: null },   
+        data: { label: null },
         type: "ResizableNode",
         position,
         measured: {
-          width: 200,
-          height: 200, 
+          width: 170,
+          height: 140,
         },
         style: {
-          width: 200,
-          height: 200,
+          width: "170px",
+          height: "140px",
+          // width: "170px",
+          // height: "140px",
+
           backgroundColor: "rgba(240, 240, 240, 0.5)",
-          border: "2px dotted #000", 
+          border: "3px dotted #837fcb",
         },
         artboard_id: id,
       };
-  
+
       const { data } = await GraphServices.CreateNode(obj);
       console.log(data);
-  
+
       if (data) {
         setNodes((nds) => [...nds, data?.node]);
       }
@@ -484,7 +493,6 @@ const OverviewFlow = () => {
     }
     handleClose();
   };
-  
 
   useEffect(() => {
     if (!Array.isArray(nodes)) return; // Ensure nodes is an array
@@ -536,13 +544,28 @@ const OverviewFlow = () => {
       };
       const { data } = await GraphServices.getNodes(params);
 
-      setNodes(data?.nodes);
+      const processedNodes = data?.nodes.map((node) => {
+        const measured = node.measured || {};
+        return {
+          ...node,
+          width:Number(measured.width),
+          height: Number(measured.height),
+          measured: {
+            ...measured,
+            width: Number(measured.width) || 0, 
+            height: Number(measured.height) || 0, 
+          },
+        };
+      });
+  console.log(processedNodes,'processedNodes');
+      setNodes(processedNodes); 
     } catch (error) {
       console.log(error);
     } finally {
-      console.log("asdasdad");
+      console.log("Node retrieval and processing completed.");
     }
   };
+  console.log(nodes)
 
   // *For Get Nodes
   const getEdges = async (page, limit, filter) => {
@@ -607,11 +630,29 @@ const OverviewFlow = () => {
       console.log("asdasdad");
     }
   };
+  const updateNodesStyle = (nodes) => {
+    return nodes.map((node) => {
+      if (node.type === "ResizableNode") {
+        return {
+          ...node,
+          style: {
+            ...node.style,
+            width: `${node.measured.width}px !important`,
+            height: `${node.measured.height}px !important`,
+          },
+        };
+      }
+      return node;
+    });
+  };
 
   const UpdateArtBoard = async (page, limit, filter) => {
+    console.log(nodes,'nodes');
+    const updatedNodes = updateNodesStyle(nodes);
+console.log(updatedNodes,'nodes');
     const obj = {
       id: id,
-      nodes: nodes,
+      nodes: updatedNodes,
       edges: edges,
     };
 
@@ -622,8 +663,8 @@ const OverviewFlow = () => {
         error: <b>Could not save.</b>,
       })
       .then((response) => {
-        console.log(response.responseCode);
-        getNodes()
+        console.log(response);
+        getNodes();
       })
       .catch((error) => {
         console.error(error);
@@ -659,29 +700,38 @@ const OverviewFlow = () => {
     (changes) => {
       changes.forEach((change) => {
         if (change.type === "position") {
-          // Get the position of the changed node
+          const draggedNode = nodes.find((node) => node.id === change.id);
+
+          // If the dragged node is a ResizableNode (parent node), skip grouping logic
+          if (draggedNode?.type === "ResizableNode") {
+            console.log(
+              "ResizableNode is being moved, skipping grouping logic."
+            );
+            return;
+          }
           const nodePosition = change.position;
 
           // Check if the node is inside a group
           const isInGroup = nodes.find((groupNode) => {
             if (groupNode.type === "ResizableNode") {
-            
               const { x, y } = groupNode.position;
-              const groupWidth = groupNode.measured.width;
-              const groupHeight = groupNode.measured.height;
-
+              const groupWidth =
+               (groupNode.measured.width);
+              const groupHeight =
+                 groupNode.measured.height;
+console.log(groupWidth , groupHeight)
               return (
                 nodePosition.x >= x &&
-                nodePosition.x <= x + groupWidth &&
+                nodePosition.x <= x + Number(groupWidth) &&
                 nodePosition.y >= y &&
-                nodePosition.y <= y + groupHeight
+                nodePosition.y <= y + Number(groupHeight)
               );
             }
             return false;
           });
 
           if (isInGroup) {
-            console.log("Node is inside of  group" ,isInGroup);
+            console.log("Node is inside of  group", isInGroup);
 
             const updatedNodes = nodes.map((item) => {
               if (item.id === selectedNode?.id) {
@@ -693,14 +743,6 @@ const OverviewFlow = () => {
             });
 
             setNodes(updatedNodes);
-            // console.log('Node is inside a group');
-            // selectedNode.data.label = getValues("name");
-            // selectedNode.style.color = textColor;
-            // selectedNode.style.backgroundColor = backgroundColor;
-            // selectedNode.parentId = "A";
-            // selectedNode.extent = "parent" ;
-
-            // updateNode()
           } else {
             console.log("Node is outside of any group");
           }
@@ -730,13 +772,11 @@ const OverviewFlow = () => {
         />
       ),
       command: () => {
-        if (selectedNode.type == "annotation") {
+        if (selectedNode.type === "annotation") {
           console.log(selectedNode.type);
           setOpenEditDesc(true);
-        } 
-        else if (selectedNode) {
+        } else if (selectedNode) {
           // Add your edit node logic here
-
           console.log("Editing node", selectedNode);
           setEditNode(selectedNode?.style?.backgroundColor);
           setDrawerOpen(true); // Open drawer on click
@@ -745,8 +785,6 @@ const OverviewFlow = () => {
           console.log("Editing edge", selectedEdge);
           setValue4("name", selectedEdge?.label);
           setEditNode(selectedEdge?.style?.backgroundColor);
-          // UpdateArtBoard()
-          // setEdgeColor(selectedEdge?.style?.stroke);
           setOpen4(true);
         }
       },
@@ -772,6 +810,24 @@ const OverviewFlow = () => {
         }
       },
     },
+    ...(selectedNode?.type != "ResizableNode"
+      ? [
+          {
+            label: "Ungroup",
+            icon: (
+              <i
+                className="pi pi-users"
+                style={{ color: "green", fontSize: "0.9em" }}
+              />
+            ),
+            command: () => {
+              console.log("Ungrouping node", selectedNode);
+              // Add your ungroup logic here
+              ungroupNode();
+            },
+          },
+        ]
+      : []),
   ];
 
   const onNodeContextMenu = (event, node) => {
@@ -799,7 +855,7 @@ const OverviewFlow = () => {
           x: 100,
           y: 100,
         },
-        type: nodes.length > 0 ? null : "input",
+        type: "input",
         style: {
           backgroundColor: backgroundColor,
           padding: 10,
@@ -844,6 +900,7 @@ const OverviewFlow = () => {
           padding: 10,
           borderRadius: 5,
           color: formData?.color || "#000000",
+          fontSize:`${fontSize}px`,
           backgroundColor: "transprent",
           background: "transprent",
         },
@@ -867,6 +924,8 @@ const OverviewFlow = () => {
     console.log(selectedNode);
     selectedNode.data.label = getValues6("name");
     selectedNode.style.color = getValues6("color");
+    selectedNode.style.fontSize = fontSize;
+  
 
     try {
       const { responseCode } = await GraphServices.updateNode(selectedNode);
@@ -874,6 +933,24 @@ const OverviewFlow = () => {
 
       if (responseCode == 200) {
         setOpenEditDesc(false);
+        getNodes();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("asdasdad");
+    }
+  };
+  const ungroupNode = async () => {
+    selectedNode.extent = null;
+    selectedNode.parentId = null;
+    selectedNode.position = { x: 100, y: 100 };
+
+    try {
+      const { responseCode } = await GraphServices.updateNode(selectedNode);
+      console.log(responseCode);
+
+      if (responseCode == 200) {
         getNodes();
       }
     } catch (error) {
@@ -1160,6 +1237,22 @@ const OverviewFlow = () => {
                 }}
               />
             </Grid>
+            <Grid item xs={12}>
+            <InputLabel sx={{ color: "black", mb: 0.5 }}>
+              Adjust Font Size
+            </InputLabel>
+            <Slider
+              value={fontSize}
+              min={16}
+              max={64}
+              step={1}
+              onChange={handleFontSizeChange}
+              valueLabelDisplay="auto"
+              sx={{
+                color: "#837fcb",
+              }}
+            />
+          </Grid>
           </Grid>
 
           <Button
@@ -1236,6 +1329,22 @@ const OverviewFlow = () => {
                 }}
               />
             </Grid>
+            <Grid item xs={12}>
+            <InputLabel sx={{ color: "black", mb: 0.5 }}>
+              Adjust Font Size
+            </InputLabel>
+            <Slider
+              value={fontSize}
+              min={16}
+              max={64}
+              step={1}
+              onChange={handleFontSizeChange}
+              valueLabelDisplay="auto"
+              sx={{
+                color: "#837fcb",
+              }}
+            />
+          </Grid>
           </Grid>
 
           <Button
