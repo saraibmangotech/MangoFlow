@@ -24,7 +24,7 @@ import {
   AutoAwesomeMosaicOutlined as AutoAwesomeMosaicOutlinedIcon,
   AutoAwesomeMosaic as AutoAwesomeMosaicIcon,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import IosShareSharpIcon from "@mui/icons-material/IosShareSharp";
 import MoreHorizSharpIcon from "@mui/icons-material/MoreHorizSharp";
 import ArrowDropDownTwoToneIcon from "@mui/icons-material/ArrowDropDownTwoTone";
@@ -51,16 +51,23 @@ const SideBar = (data) => {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const isMobileView = useMediaQuery("(max-width:600px)");
   const [artBoards, setArtBoards] = useState([])
+  const {state} = useLocation()
   const handleSelect = (index) => {
     setSelected(index);
     if (index == 0) {
       navigate("/home" ,{state:"0"});
     } else if (index == 1) {
-     
+       setSelected("1")
+
     } else if (index == 2) {
       navigate("/home" ,{state:2});
     }
   };
+ useEffect(()=>{
+ if(state){
+  setSelected(state)
+ }
+ },[state])
   const handleOpenPopup = () => setIsPopupOpen(true);
   const handleClosePopup = () => setIsPopupOpen(false);
 

@@ -110,7 +110,7 @@ const Home = () => {
       if (index == 0) {
         navigate("/home");
       } else if (index == 1) {
-        navigate("/project");
+        navigate("/project",{state :"1"});
       } else if (index == 2) {
         // Add navigation logic for index 2 if needed
       }
