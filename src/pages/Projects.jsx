@@ -126,7 +126,7 @@ const Projects = () => {
         backgroundColor: "rgba(139, 61, 255, 0.1)",
       }}
     >
-      <Box sx={{ display: { xs: "none", sm: "block" }, width: "200px" }}>
+      <Box sx={{ display: { xs: "none", sm: "block" }, width: "60px" }}>
         <SideBar />
       </Box>
 
@@ -150,7 +150,7 @@ const Projects = () => {
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
             backgroundColor: "#fff",
             boxSizing: "border-box",
-            width: { xs: "100%", sm: "85%", md: "84%", lg: "88%", xl: "90%" },
+            width:"100%",
             minHeight: {
               xs: "800px",
               sm: "1000px",

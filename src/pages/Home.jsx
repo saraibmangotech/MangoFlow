@@ -20,7 +20,7 @@ import SideBar from "../Components/sideBar";
 import ProfileAvatar from "../Components/profileAvatar/ProfileAvatar";
 import CircleIcons from "../Components/iconCircle/IconCircle";
 import ArtBoardServices from "../services/ArtBoardServices";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CardMembershipIcon from "@mui/icons-material/CardMembership";
 import DeleteOutlineTwoToneIcon from "@mui/icons-material/DeleteOutlineTwoTone";
 import logo from "../Images/logo.png";
@@ -38,6 +38,9 @@ import ArrowDropDownTwoToneIcon from "@mui/icons-material/ArrowDropDownTwoTone";
 import thumb from "../Images/thumb.png";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import UndoIcon from '@mui/icons-material/Undo';
 
 const Home = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -45,11 +48,17 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const [roleModal, setRoleModal] = useState(false);
   const [value, setValue] = useState(0);
+  const {state} = useLocation()
 
   const popupRef = useRef(null); 
   const { register, handleSubmit, setValue: setValues } = useForm();
   const [open2, setOpen2] = useState(false);
 
+  useEffect(()=>{
+    if(state){
+      setSelected(state)
+    }
+  },[state])
   const {
     register: register2,
     handleSubmit: handleSubmit2,
@@ -67,13 +76,14 @@ const Home = () => {
         description: data?.description,
       };
 
-      const { responseCode } = await ArtBoardServices.CreateArtBoard(obj);
+      const { responseCode ,message} = await ArtBoardServices.CreateArtBoard(obj);
       console.log(responseCode);
       if (responseCode == 200) {
         getArtBoards();
         setValues("artBoardName", "");
         setValues("description", "");
         setOpen(false);
+        toast.success(message)
       }
     } catch (error) {
       console.log(error);
@@ -91,15 +101,22 @@ const Home = () => {
   const navigate = useNavigate();
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const handleSelect = (index) => {
-    setSelected(index);
-    if (index === 0) {
-      navigate("/home");
-    } else if (index === 1) {
-      navigate("/project");
-    } else if (index === 2) {
-      navigate("/templates");
+    if (selected == index) {
+      // If the same menu is clicked, deselect it (close menu)
+      setSelected(null);
+    } else {
+      // Otherwise, set the new selection
+      setSelected(index);
+      if (index == 0) {
+        navigate("/home");
+      } else if (index == 1) {
+        navigate("/project");
+      } else if (index == 2) {
+        // Add navigation logic for index 2 if needed
+      }
     }
   };
+  
   const handleOpenPopup = () => setIsPopupOpen(true);
   const handleClosePopup = () => setIsPopupOpen(false);
 
@@ -111,45 +128,45 @@ const Home = () => {
   const getIcon = (index) => {
     const icons = [
       [
-        <CottageIcon
+        <AddCircleIcon
           sx={{
-            color: selected === index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
-            fontSize: "1.5rem",
+            color: selected == index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
+            fontSize: "2rem",
           }}
         />,
-        <CottageOutlinedIcon
-          sx={{ color: "rgba(119, 49, 216, 0.7)", fontSize: "1.5rem" }}
+        <AddCircleIcon
+          sx={{ color: "rgba(119, 49, 216, 0.7)", fontSize: "2rem" }}
         />,
       ],
       [
-        <FolderIcon
+        <AccountCircleIcon
           sx={{
-            color: selected === index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
-            fontSize: "1.5rem",
+            color: selected == index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
+            fontSize: "2rem",
           }}
         />,
-        <FolderOpenOutlinedIcon
-          sx={{ color: "rgba(119, 49, 216, 0.7)", fontSize: "1.5rem" }}
+        <AccountCircleIcon
+          sx={{ color: "rgba(119, 49, 216, 0.7)", fontSize: "2rem" }}
         />,
       ],
       [
-        <AutoAwesomeMosaicIcon
+        <UndoIcon
           sx={{
-            color: selected === index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
+            color: selected == index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
             fontSize: "1.5rem",
           }}
         />,
-        <AutoAwesomeMosaicOutlinedIcon
+        <UndoIcon
           sx={{ color: "rgba(119, 49, 216, 0.7)", fontSize: "1.5rem" }}
         />,
       ],
     ];
     const [activeIcon, inactiveIcon] = icons[index];
-    return selected === index ? activeIcon : inactiveIcon;
+    return selected == index ? activeIcon : inactiveIcon;
   };
 
   const menuItems = [
-    { label: "Home", index: 0 },
+    { label: "Create Artboard", index: 0 },
     { label: "Projects", index: 1 },
     { label: "Templates", index: 2 },
   ];
@@ -304,133 +321,17 @@ const Home = () => {
         </Box>
       </Dialog>
 
-      {/* <Dialog
-  open={roleModal}
-  onClose={() => setRoleModal(false)}
-  fullWidth
-  maxWidth="sm"
-  sx={{
-    "& .MuiDialog-paper": {
-      width: "95%",
-      borderRadius: "20px",
-    },
-  }}
->
-  <Box
-    ref={popupRef}
-    sx={{
-      overflowY: "auto",
-      overflowX: "hidden",
-    }}
-  >
-    <Box sx={{ padding: 3 }}>
-      <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-        Create Role
-      </Typography>
-    </Box>
-
-    <Box sx={{ display: "flex", padding: "0 16px", gap: 2 }}>
-      <Box
-        sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}
-      >
-        <form onSubmit={handleSubmit3(onSubmit3)}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12}>
-            <InputLabel>Select Role</InputLabel>
-              <TextField
-                size="small"
-                variant="outlined"
-                placeholder="Enter Role"
-                {...register3("role", { required: "Role is required" })}
-                fullWidth
-                error={!!errors3.role}
-                helperText={errors3.role?.message}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": { borderRadius: 2 },
-                  },
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-            <InputLabel>Select Background Color</InputLabel>
-           <Box
-                    sx={{
-                      display: "flex",
-                      gap: 2,
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    {[
-                      "#000000", // Black (Default)
-                      "#FF5733", // Red-Orange
-                      "#33FF57", // Green
-                      "#3357FF", // Blue
-                      "#FFD700", // Yellow
-                      "#8A2BE2", // Violet
-                      "#FF1493", // Deep Pink
-                      "#FFA500", // Orange
-                      "#00CED1", // Dark Turquoise
-                    ].map((color) => (
-                      <Box
-                        key={color}
-                        sx={{
-                          width: 40,
-                          height: 40,
-                          backgroundColor: color,
-                          borderRadius: "50%",
-                          cursor: "pointer",
-                          border: selectedColor === color ? "3px solid black" : "none",
-                        }}
-                        onClick={() => setSelectedColor(color)}
-                      />
-                    ))}
-                  </Box>
-              <Typography variant="body2" sx={{ mt: 1, color: "gray" }}>
-                Selected Color: {selectedColor || "None"}
-              </Typography>
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              display={"flex"}
-              justifyContent={"flex-end"}
-              pb={2}
-            >
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{
-                  backgroundColor: "#837fcb",
-                  color: "white",
-                  borderRadius: 2,
-                  "&:hover": {
-                    backgroundColor: "#837fcb",
-                  },
-                }}
-                startIcon={<AddIcon />}
-              >
-                Create
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </Box>
-    </Box>
-  </Box>
-</Dialog> */}
-
-
+     
       {/* Sidebar on the left side */}
-      <Box sx={{ display: { xs: "none", sm: "block" }, width: "200px" }}>
+      <Box sx={{ display: { xs: "none", sm: "block" }, width: selected == 0 || selected == 1 || selected == 2 ?"320px" :"60px" ,  transition: "width 0.3s ease",}}>
         <Box
           sx={{
-            width: { xs: "100%", sm: 270, md: 320, lg: 320, xl: 350 },
+            // width: { xs: "100%", sm: 270, md: 320, lg: 320, xl: 350 },
             height: { xs: 70, sm: "100vh" },
             position: "sticky",
             top: "0px",
+            width:selected == 0 || selected == 1 ||  selected == 2? "320px" :"60px",
+            transition: "width 0.3s ease",
             // position: { xs: "fixed", sm: "relative" },
             bottom: { xs: 0, sm: "auto" },
             display: "flex",
@@ -443,7 +344,8 @@ const Home = () => {
           <List
             sx={{
               paddingTop: 2,
-              width: isMobileView ? "100%" : "20%",
+              // width: isMobileView ? "100%" : "20%",
+              width:"60px",
               display: "flex",
               flexDirection: isMobileView ? "row" : "column",
               justifyContent: isMobileView ? "center" : "flex-start",
@@ -460,12 +362,13 @@ const Home = () => {
                 sx={{
                   flexDirection: "column",
                   alignItems: "center",
-                  color: selected === item.index ? "#837fcb" : "inherit",
+                  color: selected == item.index ? "#837fcb" : "inherit",
                   padding: "8px 16px",
                   position: "relative",
                   cursor: "pointer",
+                  mb:3,
                   backgroundColor:
-                    selected === item.index
+                    selected == item.index
                       ? "rgba(119, 49, 216, 0.1)"
                       : "transparent",
                 }}
@@ -474,7 +377,7 @@ const Home = () => {
                   sx={{
                     justifyContent: "center",
                     color:
-                      selected === item.index
+                      selected == item.index
                         ? "#837fcb"
                         : "rgba(119, 49, 216, 0.7)",
                     minWidth: "24px",
@@ -482,19 +385,7 @@ const Home = () => {
                 >
                   {getIcon(item.index)}
                 </ListItemIcon>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    marginTop: 1,
-                    color: "rgba(119, 49, 216, 1)",
-                    textAlign: "center",
-                    display: { xs: "none", sm: "block" },
-                    marginLeft: 0.5,
-                    fontSize: "0.7rem",
-                  }}
-                >
-                  {item.label}
-                </Typography>
+                  
               </ListItem>
             ))}
           </List>
@@ -510,8 +401,8 @@ const Home = () => {
             }}
           />
 
-          {/* Canva Heading and Buttons */}
-          {!isSmallScreen && (
+        
+           {!isSmallScreen && selected == 0  && (
             <Box
               sx={{
                 display: "flex",
@@ -520,6 +411,8 @@ const Home = () => {
                 marginRight: 2,
                 width: "100%",
                 padding: 1,
+                transition: "opacity 0.3s ease", 
+                opacity: selected == 0 ? 1 : 0,
               }}
             >
               <Box
@@ -529,116 +422,147 @@ const Home = () => {
               >
                 <img width="100px" src={logo} />
               </Box>
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => setOpen(true)}
-                sx={{
-                  backgroundColor: "#837fcb",
-                  color: "white",
-                  borderRadius: 2,
-                  padding: "8px 30px",
-                  fontSize: "clamp(0.5rem, 1vw, 0.65rem)",
-                  lineHeight: 1.2,
-                  margin: "5px 0",
-                  width: "100%",
-                  "&:hover": { backgroundColor: "#837fcb" },
-                }}
-                startIcon={<AddIcon fontSize="small" />}
-              >
-                Create a Design
-              </Button>
+                
 
-              {/* <Button
-                variant="contained"
-                size="small"
-                sx={{
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  borderRadius: 2,
-                  padding: "8px 18px",
-                  fontSize: "clamp(0.5rem, 1vw, 0.65rem)",
-                  lineHeight: 1.2,
-                  margin: "5px 0",
-                  width: "100%",
-                  fontWeight: "bold",
-                }}
-                startIcon={
-                  <CardMembershipIcon
-                    fontSize="small"
-                    sx={{ color: "#fdbc68" }}
-                  />
-                }
-              >
-                Try Pro for 30 days
-              </Button> */}
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => navigate("/project")}
-                sx={{
-                  backgroundColor: "#837fcb",
-                  color: "white",
-                  borderRadius: 2,
-                  padding: "8px 30px",
-                  fontSize: "clamp(0.5rem, 1vw, 0.65rem)",
-                  lineHeight: 1.2,
-                  margin: "5px 0",
-                  width: "100%",
-                  "&:hover": { backgroundColor: "#837fcb" },
-                }}
-                startIcon={<AddIcon fontSize="small" />}
-              >
-                Create Role Structure
-              </Button>
+              <Box sx={{ display: "flex", gap: 2 }}>
+            <Box
+              sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}
+            >
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      size="small"
+                      variant="outlined"
+                      placeholder="ArtBoard Name"
+                      {...register("artBoardName")}
+                      fullWidth
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": { borderRadius: 2 },
+                        },
+                      }}
+                    />
+                  </Grid>
 
-              {/* Recent Designs with Toggle */}
-              {/* <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              marginTop: 3,
-              backgroundColor: "transparent",
-              padding: "4px", // Add padding for better hover effect
-              borderRadius: "4px", // Optional: Add slight rounding
-              transition: "background-color 0.3s", // Smooth transition
-              "&:hover": {
-                backgroundColor: "rgba(139, 61, 255, 0.1)", // Change the hover background color
-                cursor: "pointer", // Change cursor on hover
-                color: "rgba(64, 87, 109, 1)", // Change text color on hover
-              },
-            }}
-            onClick={() => toggleDesigns()}
-          >
-            <Typography
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      size="small"
+                      variant="outlined"
+                      placeholder="Description"
+                      {...register("description")}
+                      multiline
+                      rows={5}
+                      fullWidth
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": { borderRadius: 2 },
+                        },
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs={12}
+                    display={"flex"}
+                    justifyContent={"flex-end"}
+                    pb={2}
+                  >
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "#837fcb",
+                        color: "white",
+                        borderRadius: 2,
+                        width:"100%",
+                        "&:hover": {
+                          backgroundColor: "#837fcb",
+                        },
+                      }}
+                      startIcon={<AddIcon />}
+                    >
+                      Create
+                    </Button>
+                  </Grid>
+                </Grid>
+              </form>
+
+              {/* <Box sx={{ flex: 1 }}>
+                {value === 0 && (
+                  <Box>
+                    <RecentDesign data={artboards} height="100%" top="40%" left="32%" />
+                  </Box>
+                )}
+                {value === 1 && (
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    Document
+                  </Typography>
+                )}
+              </Box> */}
+            </Box>
+          </Box>
+          <Box
+                sx={{
+                  marginTop: "auto",
+                  padding: "10px 0",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  width: "100%",
+                  height: "20px",
+                  marginBottom: "10px",
+
+                  borderRadius: "10px",
+                  transition: "background-color 0.3s",
+                  "&:hover": {
+                    backgroundColor: "rgba(119, 49, 216, 0.1)",
+                    cursor: "pointer",
+                  },
+                }}
+              >
+                <IconButton>
+                  <DeleteOutlineTwoToneIcon />
+                </IconButton>
+
+                <Typography
+                  variant="body1"
+                  sx={{ color: "rgba(64, 87, 109, 0.8)", fontSize: "0.9rem" }}
+                >
+                  Trash
+                </Typography>
+              </Box>
+              
+            </Box>
+          )}
+           {!isSmallScreen && selected == 2  && (
+            <Box
               sx={{
-                fontSize: "0.7rem",
-                mr: 1,
-                color: "rgba(64, 87, 109, 0.8)",
-                transition: "color 0.3s", // Smooth text color transition
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                marginRight: 2,
+                width: "100%",
+                padding: 1,
+                transition: "opacity 0.3s ease", 
+                opacity: selected == 2 ? 1 : 0,
               }}
             >
-              Recent Designs
-            </Typography>
-            <IconButton
-              sx={{
-                padding: 0,
-                transition: "color 0.3s", // Smooth icon color transition
-                color: "rgba(64, 87, 109, 0.7)",
-                "&:hover": {
-                  color: "rgba(64, 87, 109, 0.7)",
-                },
-              }}
-            >
-              <ArrowDropDownTwoToneIcon />
-            </IconButton>
-          </Box> */}
+              <Box
+                sx={{
+                  marginTop: "12px",
+                }}
+              >
+                <img width="100px" src={logo} />
+              </Box>
+                
 
               {showDesigns && (
                 <Box sx={{ marginTop: 1, width: "100%" }}>
                   {artboards?.map((design, index) => (
                     <Box
-                      key={design.id || index} // Use unique ID if available, else fallback to index
+                      key={design.id || index} 
                       sx={{
                         display: "flex",
                         alignItems: "center",
@@ -653,9 +577,8 @@ const Home = () => {
                       onMouseEnter={() => setHoveredIndex(index)}
                       onMouseLeave={() => setHoveredIndex(null)}
                     >
-                      {/* Design Image */}
                       <img
-                        src={thumb} // Replace with a real URL or placeholder
+                        src={thumb}   
                         alt={design?.title || "Design"}
                         style={{
                           width: 20,
@@ -665,7 +588,6 @@ const Home = () => {
                         }}
                       />
 
-                      {/* Design Title */}
                       <Typography
                         variant="body2"
                         sx={{ flex: 1, color: "rgba(64, 87, 109, 0.8)" }}
@@ -673,7 +595,6 @@ const Home = () => {
                         {design.title}
                       </Typography>
 
-                      {/* Hover Icons */}
                       {hoveredIndex === index && (
                         <Box sx={{ display: "flex", gap: 1 }}>
                           <Box
@@ -748,15 +669,15 @@ const Home = () => {
       {/* Main Scrollable Container */}
       <Box
         sx={{
-          flexGrow: 1,
+          // flexGrow: 1,
           overflowY: "auto",
           padding: "5px",
           boxSizing: "border-box",
           display: "flex",
-          justifyContent: "flex-end", // Align to the right
+          justifyContent: "flex-end", 
         }}
       >
-        {/* Bordered Box with */}
+        
         <Box
           sx={{
             display: "flex",
@@ -767,7 +688,7 @@ const Home = () => {
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
             backgroundColor: "#fff",
             boxSizing: "border-box",
-            width: { xs: "100%", sm: "85%", md: "84%", lg: "88%", xl: "90%" },
+            // width: { xs: "100%", sm: "85%", md: "84%", lg: "88%", xl: "90%" },
             minHeight: {
               xs: "800px",
               sm: "1000px",
@@ -779,17 +700,11 @@ const Home = () => {
         >
           <ProfileAvatar />
 
-          {/* Square Box with Gradient Background */}
           <Box
             sx={{
               width: "100%",
               background:"#837fcb",
-              // background: `
-              //   radial-gradient(100.99% 100.73% at 0% 0%, rgba(0, 196, 204, .726) 0%, #00c4cc 0.01%, rgba(0, 196, 204, 0) 100%),
-              //   radial-gradient(68.47% 129.02% at 22.82% 97.71%, #6420ff 0%, rgba(100, 32, 255, 0) 100%),
-              //   radial-gradient(106.1% 249.18% at 0% 0%, #00c4cc 0%, rgba(0, 196, 204, 0) 100%),
-              //   radial-gradient(64.14% 115.13% at 5.49% 50%, #6420ff 0%, rgba(100, 32, 255, 0) 100%),
-              //   #7d2ae7`,
+             
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -817,12 +732,12 @@ const Home = () => {
             </Typography>
           </Box>
 
-          {/* IconCircle Component */}
+    
           <Box>
             <CircleIcons itemsToShow={itemsToShow} />
           </Box>
 
-          {/* Create New Button */}
+       
           <Box
             sx={{
               display: "flex",
@@ -849,7 +764,7 @@ const Home = () => {
             </Button>
           </Box>
 
-          {/* Recent Designs Section */}
+     
           <Box
             sx={{
               overflowY: "hidden",
@@ -859,7 +774,6 @@ const Home = () => {
             <RecentDesign data={artboards} height="100%" top="40%" left="32%" />
           </Box>
 
-          {/* Design Popup */}
           <NewDesignPopup
             data={artboards}
             open={isPopupOpen}

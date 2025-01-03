@@ -53,6 +53,7 @@ import Switch from "@mui/material/Switch";
 import {
   Button,
   ButtonGroup,
+  Chip,
   Divider,
   Grid,
   Grid2,
@@ -164,16 +165,16 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
 
   return { nodes: newNodes, edges };
 };
-const ResizableNode = (data ) => {
-  console.log(data)
+const ResizableNode = ({ data }) => {
+  console.log(data);
   return (
     <>
       <NodeResizer minWidth={100} minHeight={30} />
       <Handle type="target" position={Position.Left} />
-      <div style={{ padding: 10 }}>{data.label}</div>
+      <div style={{ padding: 10 }}>{data?.label}</div>
       <Handle type="source" position={Position.Right} />
     </>
-  );  
+  );
 };
 
 const AnnotationNode = ({ data }) => {
@@ -219,11 +220,18 @@ const OverviewFlow = () => {
   const [selectedRole, setSelectedRole] = useState("");
   const [editNode, setEditNode] = useState("");
   const [fontSize, setFontSize] = useState(16);
+  const [selectedType, setSelectedType] = useState("Node");
+  const [editGroupDrawer, setEditGroupDrawer] = useState(false);
+  const [toggleDrawer, setToggleDrawer] = useState(false);
 
   const handleFontSizeChange = (event, newValue) => {
     setFontSize(newValue);
   };
-  console.log(backgroundColor);
+
+  const handleTypeChange = (type) => {
+    setSelectedType(type);
+  };
+  console.log(selectedType);
   useEffect(() => {
     const savedRoles = JSON.parse(localStorage.getItem("rolesAndColors")) || [
       {
@@ -329,6 +337,20 @@ const OverviewFlow = () => {
     setValue: setValue6,
     getValues: getValues6,
     formState: { errors: errors6 },
+  } = useForm();
+  const {
+    register: register7,
+    handleSubmit: handleSubmit7,
+    setValue: setValue7,
+    getValues: getValues7,
+    formState: { errors: errors7 },
+  } = useForm();
+  const {
+    register: register8,
+    handleSubmit: handleSubmit8,
+    setValue: setValue8,
+    getValues: getValues8,
+    formState: { errors: errors8 },
   } = useForm();
   console.log(watch());
   const { id } = useParams();
@@ -458,41 +480,6 @@ const OverviewFlow = () => {
 
   //   setNodes((nds) => [...nds, newGroupNode]);
   // };
-  const createGroupNode = async (position) => {
-    try {
-      let obj = {
-        data: { label: null },
-        type: "ResizableNode",
-        position,
-        measured: {
-          width: 170,
-          height: 140,
-        },
-        style: {
-          width: "170px",
-          height: "140px",
-          // width: "170px",
-          // height: "140px",
-
-          backgroundColor: "rgba(240, 240, 240, 0.5)",
-          border: "3px dotted #837fcb",
-        },
-        artboard_id: id,
-      };
-
-      const { data } = await GraphServices.CreateNode(obj);
-      console.log(data);
-
-      if (data) {
-        setNodes((nds) => [...nds, data?.node]);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      console.log("asdasdad");
-    }
-    handleClose();
-  };
 
   useEffect(() => {
     if (!Array.isArray(nodes)) return; // Ensure nodes is an array
@@ -548,24 +535,24 @@ const OverviewFlow = () => {
         const measured = node.measured || {};
         return {
           ...node,
-          width:Number(measured.width),
+          width: Number(measured.width),
           height: Number(measured.height),
           measured: {
             ...measured,
-            width: Number(measured.width) || 0, 
-            height: Number(measured.height) || 0, 
+            width: Number(measured.width) || 0,
+            height: Number(measured.height) || 0,
           },
         };
       });
-  console.log(processedNodes,'processedNodes');
-      setNodes(processedNodes); 
+      console.log(processedNodes, "processedNodes");
+      setNodes(processedNodes);
     } catch (error) {
       console.log(error);
     } finally {
       console.log("Node retrieval and processing completed.");
     }
   };
-  console.log(nodes)
+  console.log(nodes);
 
   // *For Get Nodes
   const getEdges = async (page, limit, filter) => {
@@ -647,9 +634,9 @@ const OverviewFlow = () => {
   };
 
   const UpdateArtBoard = async (page, limit, filter) => {
-    console.log(nodes,'nodes');
+    console.log(nodes, "nodes");
     const updatedNodes = updateNodesStyle(nodes);
-console.log(updatedNodes,'nodes');
+    console.log(updatedNodes, "nodes");
     const obj = {
       id: id,
       nodes: updatedNodes,
@@ -674,28 +661,6 @@ console.log(updatedNodes,'nodes');
       });
   };
 
-  const updateNode = async () => {
-    console.log(selectedNode);
-    selectedNode.data.label = getValues("name");
-    selectedNode.style.color = textColor;
-    selectedNode.style.backgroundColor = backgroundColor;
-
-    try {
-      const { responseCode } = await GraphServices.updateNode(selectedNode);
-      console.log(responseCode);
-
-      if (responseCode == 200) {
-        setOpen(false);
-        setDrawerOpen(false);
-        getNodes();
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      console.log("asdasdad");
-    }
-  };
-
   const handleNodesChange = useCallback(
     (changes) => {
       changes.forEach((change) => {
@@ -715,11 +680,9 @@ console.log(updatedNodes,'nodes');
           const isInGroup = nodes.find((groupNode) => {
             if (groupNode.type === "ResizableNode") {
               const { x, y } = groupNode.position;
-              const groupWidth =
-               (groupNode.measured.width);
-              const groupHeight =
-                 groupNode.measured.height;
-console.log(groupWidth , groupHeight)
+              const groupWidth = groupNode.measured.width;
+              const groupHeight = groupNode.measured.height;
+              console.log(groupWidth, groupHeight);
               return (
                 nodePosition.x >= x &&
                 nodePosition.x <= x + Number(groupWidth) &&
@@ -758,7 +721,8 @@ console.log(groupWidth , groupHeight)
   console.log("selectedNode", nodes);
   useEffect(() => {
     handleClickOpen();
-  }, [drawerOpen]);
+    // setBackgroundColor("#ffffff")
+  }, [drawerOpen, editGroupDrawer]);
 
   const contextMenu = useRef(null);
 
@@ -775,6 +739,10 @@ console.log(groupWidth , groupHeight)
         if (selectedNode.type === "annotation") {
           console.log(selectedNode.type);
           setOpenEditDesc(true);
+        } else if (selectedNode.type === "ResizableNode") {
+          setEditNode(selectedNode?.style?.backgroundColor);
+          setEditGroupDrawer(true);
+          setValue8("name", selectedNode?.data?.label);
         } else if (selectedNode) {
           // Add your edit node logic here
           console.log("Editing node", selectedNode);
@@ -810,7 +778,7 @@ console.log(groupWidth , groupHeight)
         }
       },
     },
-    ...(selectedNode?.type != "ResizableNode"
+    ...(selectedNode?.type != "ResizableNode"   && selectedNode?.parentId
       ? [
           {
             label: "Ungroup",
@@ -855,7 +823,7 @@ console.log(groupWidth , groupHeight)
           x: 100,
           y: 100,
         },
-        type: "input",
+        type: "",
         style: {
           backgroundColor: backgroundColor,
           padding: 10,
@@ -870,11 +838,12 @@ console.log(groupWidth , groupHeight)
 
       if (data) {
         setNodes((nds) => [...nds, data?.node]);
-        setOpen2(false);
+        setToggleDrawer(false);
         setValue2("inputField", "");
         setColor("#ffffff");
         setTextColor("#ffffff");
         setSelectedRole("");
+        setBackgroundColor("#ffffff")
       }
     } catch (error) {
       console.log(error);
@@ -882,6 +851,29 @@ console.log(groupWidth , groupHeight)
       console.log("asdasdad");
     }
     handleClose();
+  };
+  const updateNode = async () => {
+    console.log(selectedNode);
+    selectedNode.data.label = getValues("name");
+    selectedNode.style.color = textColor;
+    selectedNode.style.backgroundColor = backgroundColor;
+
+    try {
+      const { responseCode } = await GraphServices.updateNode(selectedNode);
+      console.log(responseCode);
+
+      if (responseCode == 200) {
+        setOpen(false);
+        setDrawerOpen(false);
+        getNodes();
+        setBackgroundColor("#ffffff")
+
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("asdasdad");
+    }
   };
   const CreateDescription = async (formData) => {
     console.log(formData);
@@ -900,7 +892,7 @@ console.log(groupWidth , groupHeight)
           padding: 10,
           borderRadius: 5,
           color: formData?.color || "#000000",
-          fontSize:`${fontSize}px`,
+          fontSize: `${fontSize}px`,
           backgroundColor: "transprent",
           background: "transprent",
         },
@@ -912,6 +904,10 @@ console.log(groupWidth , groupHeight)
 
       if (data) {
         setNodes((nds) => [...nds, data?.node]);
+        setToggleDrawer(false);
+        setValue5("name", "");
+        setFontSize(16);
+        setColor("#ffffff");
       }
     } catch (error) {
       console.log(error);
@@ -925,7 +921,6 @@ console.log(groupWidth , groupHeight)
     selectedNode.data.label = getValues6("name");
     selectedNode.style.color = getValues6("color");
     selectedNode.style.fontSize = fontSize;
-  
 
     try {
       const { responseCode } = await GraphServices.updateNode(selectedNode);
@@ -941,6 +936,69 @@ console.log(groupWidth , groupHeight)
       console.log("asdasdad");
     }
   };
+  const createGroupNode = async (formData) => {
+    try {
+      let obj = {
+        data: { label: formData.name },
+        type: "ResizableNode",
+        position: { x: 100, y: 100 },
+        measured: {
+          width: 170,
+          height: 140,
+        },
+        style: {
+          width: "170px",
+          height: "140px",
+          color: "#fff",
+
+          backgroundColor: backgroundColor,
+          border: `3px dotted ${backgroundColor}`,
+        },
+        artboard_id: id,
+      };
+
+      const { data } = await GraphServices.CreateNode(obj);
+      console.log(data);
+
+      if (data) {
+        setNodes((nds) => [...nds, data?.node]);
+        setToggleDrawer(false);
+        setValue7("name", "");
+        setSelectedRole("");
+        setBackgroundColor("#ffffff")
+
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("asdasdad");
+    }
+    handleClose();
+  };
+  console.log(backgroundColor , ' sacascasc')
+  const EditGroupNode = async (formData) => {
+    console.log(getValues8("name") ,"qcDCc");
+    selectedNode.data.label =  getValues8("name") ;
+    selectedNode.style.backgroundColor = backgroundColor;
+
+     
+    try {
+      const { responseCode } = await GraphServices.updateNode(selectedNode);
+      console.log(responseCode);
+
+      if (responseCode == 200) {
+        setEditGroupDrawer(false);
+        setBackgroundColor("#ffffff")
+
+        getNodes();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("asdasdad");
+    }
+  };
+
   const ungroupNode = async () => {
     selectedNode.extent = null;
     selectedNode.parentId = null;
@@ -1025,17 +1083,17 @@ console.log(groupWidth , groupHeight)
     getEdges();
   }, []);
 
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (
-      event &&
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
+  // const toggleDrawer = (anchor, open) => (event) => {
+  //   if (
+  //     event &&
+  //     event.type === "keydown" &&
+  //     (event.key === "Tab" || event.key === "Shift")
+  //   ) {
+  //     return;
+  //   }
 
-    setState({ ...state, [anchor]: open });
-  };
+  //   setState({ ...state, [anchor]: open });
+  // };
   return (
     <div style={{ width: "100%", height: "100vh" }}>
       <ConfirmationDialog
@@ -1216,6 +1274,7 @@ console.log(groupWidth , groupHeight)
                   sx: {
                     borderRadius: "3px", // Adjust the value as needed
                     border: "1px solid black",
+                    width: "70%",
                   },
                 }}
                 size="small"
@@ -1230,7 +1289,8 @@ console.log(groupWidth , groupHeight)
                 type="color"
                 {...register5("color")}
                 style={{
-                  width: "100%",
+                  width: "70%",
+
                   height: "40px",
                   border: "1px solid black",
                   borderRadius: "3px",
@@ -1238,21 +1298,22 @@ console.log(groupWidth , groupHeight)
               />
             </Grid>
             <Grid item xs={12}>
-            <InputLabel sx={{ color: "black", mb: 0.5 }}>
-              Adjust Font Size
-            </InputLabel>
-            <Slider
-              value={fontSize}
-              min={16}
-              max={64}
-              step={1}
-              onChange={handleFontSizeChange}
-              valueLabelDisplay="auto"
-              sx={{
-                color: "#837fcb",
-              }}
-            />
-          </Grid>
+              <InputLabel sx={{ color: "black", mb: 0.5 }}>
+                Adjust Font Size
+              </InputLabel>
+              <Slider
+                value={fontSize}
+                min={16}
+                max={64}
+                step={1}
+                onChange={handleFontSizeChange}
+                valueLabelDisplay="auto"
+                sx={{
+                  color: "#837fcb",
+                  width: "70%",
+                }}
+              />
+            </Grid>
           </Grid>
 
           <Button
@@ -1277,8 +1338,8 @@ console.log(groupWidth , groupHeight)
         open={openEditDesc}
         onClose={() => setOpenEditDesc(false)}
         sx={{
-          width: "400px", // You can adjust the width as needed
-          ".MuiPaper-elevation": { padding: "16px !important" },
+          // You can adjust the width as needed
+          ".MuiPaper-elevation": { padding: "16px !important", width: "400px !important", },
         }}
       >
         <Box
@@ -1301,9 +1362,11 @@ console.log(groupWidth , groupHeight)
         >
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <InputLabel sx={{ color: "black", mb: 0.5 }}>Input</InputLabel>
+              <InputLabel sx={{ color: "black", mb: 0.5 }}>Name</InputLabel>
               <TextField
                 fullWidth
+                multiline
+                rows={5}
                 InputProps={{
                   sx: {
                     borderRadius: "3px", // Adjust the value as needed
@@ -1330,21 +1393,21 @@ console.log(groupWidth , groupHeight)
               />
             </Grid>
             <Grid item xs={12}>
-            <InputLabel sx={{ color: "black", mb: 0.5 }}>
-              Adjust Font Size
-            </InputLabel>
-            <Slider
-              value={fontSize}
-              min={16}
-              max={64}
-              step={1}
-              onChange={handleFontSizeChange}
-              valueLabelDisplay="auto"
-              sx={{
-                color: "#837fcb",
-              }}
-            />
-          </Grid>
+              <InputLabel sx={{ color: "black", mb: 0.5 }}>
+                Adjust Font Size
+              </InputLabel>
+              <Slider
+                value={fontSize}
+                min={16}
+                max={64}
+                step={1}
+                onChange={handleFontSizeChange}
+                valueLabelDisplay="auto"
+                sx={{
+                  color: "#837fcb",
+                }}
+              />
+            </Grid>
           </Grid>
 
           <Button
@@ -1365,12 +1428,14 @@ console.log(groupWidth , groupHeight)
         </Box>
       </Drawer>
 
-      <SwipeableDrawer
-        anchor={"left"}
-        open={state["left"]}
-        onClose={toggleDrawer("left", false)}
-        onOpen={toggleDrawer("left", true)}
-        sx={{ ".MuiPaper-elevation ": { padding: "16px !important" } }}
+      <Drawer
+        anchor="left"
+        open={toggleDrawer}
+        onClose={() => setToggleDrawer(false)}
+        sx={{
+          // You can adjust the width as needed
+          ".MuiPaper-elevation": { padding: "16px !important", width: "400px !important" },
+        }}
       >
         <Box
           sx={{
@@ -1380,75 +1445,257 @@ console.log(groupWidth , groupHeight)
             fontWeight: "bold",
           }}
         >
-          Create Node
+          {selectedType == "Node"
+            ? "Create Node"
+            : selectedType == "Text"
+            ? "Create Descripton"
+            : selectedType == "Group"
+            ? "Create Group"
+            : ""}
         </Box>
 
         <Divider />
-        <Box
-          component="form"
-          onSubmit={handleSubmit2(CreateNode)}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            mt: 3,
-            alignItems: "space-between",
-          }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <InputLabel sx={{ color: "black" }}>Name</InputLabel>
-              <TextField
-                fullWidth
-                multiline
-                rows={5}
-                sx={{ mt: 0.5 }}
-                size="small"
-                {...register2("inputField")}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <InputLabel sx={{ color: "black" }}>Select Role</InputLabel>
-              <Select
-                fullWidth
-                value={selectedRole}
-                onChange={handleRoleChange}
-                displayEmpty
-                sx={{ mt: 0.5 }}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {rolesAndColors.map((item, index) => (
-                  <MenuItem key={index} value={item.role}>
-                    {item.role}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-          </Grid>
-
-          <Grid2 container justifyContent={"center"}>
-            <Grid2 item display={"flex"} justifyContent={"center"} size={12}>
-              <Button
-                fullWidth
-                variant="standard"
-                type="submit"
+        <Box sx={{ mt: 1 }}>
+          <InputLabel sx={{ color: "black" }}>Select Type</InputLabel>
+          <Box sx={{ display: "flex", gap: 1, mt: 0.5 }}>
+            {["Node", "Text", "Group"].map((type) => (
+              <Chip
+                key={type}
+                label={type}
+                clickable
+                onClick={() => handleTypeChange(type)}
                 sx={{
-                  mt: 2,
-                  backgroundColor: "#837fcb",
-                  color: "white",
-                  textTransform: "capitalize",
-                  "&:hover": {
-                    backgroundColor: "#837fcb", // Optional: maintain the same color on hover
+                  padding: "8px 16px",
+                  border: `2px solid ${
+                    selectedType === type ? "#837fcb" : "transparent"
+                  }`,
+                  backgroundColor:
+                    selectedType === type ? "#837fcb" : "transparent",
+                  color: selectedType === type ? "white" : "black",
+                  "&.MuiChip-clickable:hover": {
+                    backgroundColor:
+                      selectedType === type ? "#837fcb" : "#f5f5f5",
                   },
+                  cursor: "pointer",
                 }}
-              >
-                Create
-              </Button>
-            </Grid2>
-          </Grid2>
+              />
+            ))}
+          </Box>
         </Box>
-      </SwipeableDrawer>
+
+        {selectedType == "Node" && (
+          <Box
+            component="form"
+            onSubmit={handleSubmit2(CreateNode)}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              mt: 3,
+              alignItems: "space-between",
+            }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <InputLabel sx={{ color: "black" }}>Name</InputLabel>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={5}
+                  sx={{ mt: 0.5 }}
+                  size="small"
+                  {...register2("inputField")}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel sx={{ color: "black" }}>Select Role</InputLabel>
+                <Select
+                  fullWidth
+                  value={selectedRole}
+                  onChange={handleRoleChange}
+                  displayEmpty
+                  sx={{ mt: 0.5 }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {rolesAndColors.map((item, index) => (
+                    <MenuItem key={index} value={item.role}>
+                      {item.role}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Grid>
+            </Grid>
+
+            <Grid2 container justifyContent={"center"}>
+              <Grid2 item display={"flex"} justifyContent={"center"} size={12}>
+                <Button
+                  fullWidth
+                  variant="standard"
+                  type="submit"
+                  sx={{
+                    mt: 2,
+                    backgroundColor: "#837fcb",
+                    color: "white",
+                    textTransform: "capitalize",
+                    "&:hover": {
+                      backgroundColor: "#837fcb", // Optional: maintain the same color on hover
+                    },
+                  }}
+                >
+                  Create
+                </Button>
+              </Grid2>
+            </Grid2>
+          </Box>
+        )}
+        {selectedType == "Text" && (
+          <Box
+            component="form"
+            onSubmit={handleSubmit5(CreateDescription)}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              mt: 3,
+              alignItems: "space-between",
+            }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <InputLabel sx={{ color: "black" }}>Name</InputLabel>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={5}
+                  sx={{ mt: 0.5 }}
+                  size="small"
+                  {...register5("name")}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel sx={{ color: "black", mb: 0.5 }}>
+                  Select Color
+                </InputLabel>
+                <input
+                  type="color"
+                  {...register5("color")}
+                  style={{
+                    width:"100%",
+                    height: "40px",
+                    border: "1px solid black",
+                    borderRadius: "3px",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel sx={{ color: "black", mb: 0.5 }}>
+                  Adjust Font Size
+                </InputLabel>
+                  <Slider
+                    value={fontSize}
+                    min={16}
+                    max={64}
+                    step={1}
+                    onChange={handleFontSizeChange}
+                    valueLabelDisplay="auto"
+                    sx={{
+                      color: "#837fcb",
+                      
+
+                    }}
+                  />
+              </Grid>
+            </Grid>
+
+            <Grid container justifyContent={"center"}>
+              <Grid item display={"flex"} justifyContent={"center"} xs={12}>
+                <Button
+                  fullWidth
+                  variant="standard"
+                  type="submit"
+                  sx={{
+                    mt: 2,
+                    backgroundColor: "#837fcb",
+                    color: "white",
+                    textTransform: "capitalize",
+                    "&:hover": {
+                      backgroundColor: "#837fcb", // Optional: maintain the same color on hover
+                    },
+                  }}
+                >
+                  Create
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        )}
+        {selectedType == "Group" && (
+          <Box
+            component="form"
+            onSubmit={handleSubmit7(createGroupNode)}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              mt: 3,
+              alignItems: "space-between",
+            }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <InputLabel sx={{ color: "black" }}>Name</InputLabel>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={5}
+                  sx={{ mt: 0.5 }}
+                  size="small"
+                  {...register7("name")}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel sx={{ color: "black" }}>Select Role</InputLabel>
+                <Select
+                  fullWidth
+                  value={selectedRole}
+                  onChange={handleRoleChange}
+                  displayEmpty
+                  sx={{ mt: 0.5 }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {rolesAndColors.map((item, index) => (
+                    <MenuItem key={index} value={item.role}>
+                      {item.role}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Grid>
+            </Grid>
+
+            <Grid2 container justifyContent={"center"}>
+              <Grid2 item display={"flex"} justifyContent={"center"} size={12}>
+                <Button
+                  fullWidth
+                  variant="standard"
+                  type="submit"
+                  sx={{
+                    mt: 2,
+                    backgroundColor: "#837fcb",
+                    color: "white",
+                    textTransform: "capitalize",
+                    "&:hover": {
+                      backgroundColor: "#837fcb", // Optional: maintain the same color on hover
+                    },
+                  }}
+                >
+                  Create
+                </Button>
+              </Grid2>
+            </Grid2>
+          </Box>
+        )}
+      </Drawer>
 
       <Drawer
         anchor="left"
@@ -1519,6 +1766,92 @@ console.log(groupWidth , groupHeight)
           >
             Update
           </Button>
+        </Box>
+      </Drawer>
+      <Drawer
+        anchor="left"
+        open={editGroupDrawer}
+        onClose={() => setEditGroupDrawer(false)}
+        sx={{
+          width: "400px",
+          ".MuiPaper-elevation": { padding: "16px !important" },
+        }}
+      >
+        <Box
+          sx={{
+            textAlign: "center",
+            fontSize: "25px",
+            color: "#837fcb",
+            fontWeight: "bold",
+          }}
+        >
+          Update Group
+        </Box>
+
+        <Divider />
+        <Box
+          component="form"
+          onSubmit={handleSubmit8(EditGroupNode)}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            mt: 3,
+            alignItems: "space-between",
+          }}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <InputLabel sx={{ color: "black" }}>Name</InputLabel>
+              <TextField
+                fullWidth
+                multiline
+                rows={5}
+                sx={{ mt: 0.5 }}
+                size="small"
+                {...register8("name")}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <InputLabel sx={{ color: "black" }}>Select Role</InputLabel>
+              <Select
+                fullWidth
+                value={selectedRole}
+                onChange={handleRoleChange}
+                displayEmpty
+                sx={{ mt: 0.5 }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {rolesAndColors.map((item, index) => (
+                  <MenuItem key={index} value={item.role}>
+                    {item.role}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Grid>
+          </Grid>
+
+          <Grid2 container justifyContent={"center"}>
+            <Grid2 item display={"flex"} justifyContent={"center"} size={12}>
+              <Button
+                fullWidth
+                variant="standard"
+                type="submit"
+                sx={{
+                  mt: 2,
+                  backgroundColor: "#837fcb",
+                  color: "white",
+                  textTransform: "capitalize",
+                  "&:hover": {
+                    backgroundColor: "#837fcb", // Optional: maintain the same color on hover
+                  },
+                }}
+              >
+                Update
+              </Button>
+            </Grid2>
+          </Grid2>
         </Box>
       </Drawer>
 
@@ -1755,7 +2088,14 @@ console.log(groupWidth , groupHeight)
         {user?.token && (
           <Panel position="top-left">
             <Box sx={{ m: 2 }}>
-              <CircleButton onClick={toggleDrawer("left", true)}>
+              <CircleButton
+                onClick={() => {
+                  setToggleDrawer(true);
+                  setSelectedType("Node");
+                  setFontSize(16);
+                  setSelectedRole("");
+                }}
+              >
                 <AddIcon sx={{ fontSize: "27px" }} />
               </CircleButton>
             </Box>
@@ -1772,16 +2112,16 @@ console.log(groupWidth , groupHeight)
             <Box sx={{ m: 2 }}>
               <DownloadButton />
             </Box>
-            <Box sx={{ m: 2 }}>
+            {/* <Box sx={{ m: 2 }}>
               <CircleButton onClick={() => createGroupNode({ x: 100, y: 100 })}>
                 <WorkspacesIcon />
               </CircleButton>
-            </Box>
-            <Box sx={{ m: 2 }}>
+            </Box> */}
+            {/* <Box sx={{ m: 2 }}>
               <CircleButton onClick={() => setOpenDescModal(true)}>
                 <InfoIcon />
               </CircleButton>
-            </Box>
+            </Box> */}
           </Panel>
         )}
       </ReactFlow>
