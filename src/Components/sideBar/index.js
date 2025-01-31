@@ -116,11 +116,11 @@ const SideBar = (data) => {
         <UndoIcon
           sx={{
             color: selected == index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
-            fontSize: "1.5rem",
+            fontSize: "2rem",
           }}
         />,
         <UndoIcon
-          sx={{ color: "rgba(119, 49, 216, 0.7)", fontSize: "1.5rem" }}
+          sx={{ color: "rgba(119, 49, 216, 0.7)", fontSize: "2rem" }}
         />,
       ],
     ];
@@ -140,7 +140,7 @@ const SideBar = (data) => {
   }, [data])
 
   const onSubmit =()=>{
-    
+
   }
   return (
     <Box
@@ -433,7 +433,7 @@ const SideBar = (data) => {
                             }}
                           >
                             <IconButton size="small" sx={{ color: "#000" }}>
-                              <IosShareSharpIcon fontSize="small" />
+                              <IosShareSharpIcon   />
                             </IconButton>
                           </Box>
 

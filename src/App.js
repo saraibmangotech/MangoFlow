@@ -31,15 +31,13 @@ function App() {
             <Route path="/graph/:id" element={<FlowGraph />} />
             <Route path="/" element={<Demo />} />
 
-            {/* Protected Routes */}
-            {user && user?.token ? (
+           
+            {user?.token && (
               <>
                 <Route path="/home" element={<Home />} />
                 <Route path="/role" element={<Role />} />
                 <Route path="/templates" element={<Templates />} />
               </>
-            ) : (
-              <Route path="*" element={<Navigate to="/" />} />
             )}
           </Routes>
         </BrowserRouter>

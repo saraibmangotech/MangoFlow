@@ -48,7 +48,7 @@ const Login = () => {
       if (response?.data?.token) {
         navigate("/home");
         userLogin(response?.data);
-      toast.success(response?.message);
+         toast.success(response?.message);
 
       }else {
         console.log("first")

@@ -8,7 +8,8 @@ import img1 from "../../Images/img1.png";
 import img2 from "../../Images/img2.png";
 import img3 from "../../Images/img3.png";
 import ArtBoardServices from "../../services/ArtBoardServices";
-import thumb from '../../Images/thumb.png'
+import thumb from '../../Images/thumb.png';
+import artboardImg from '../../Images/img.jpeg';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ConfirmationDialog from "../Dialogs/ConfirmationDialog";
 import { useNavigate } from "react-router-dom";
@@ -360,7 +361,7 @@ const RecentDesign = ({ height, data, }) => {
               >
                 <Box
                   component="img"
-                  src={thumb}
+                  src={artboardImg}
                   alt={doc.title}
                   onClick={() => navigate(`/graph/${doc?._id}`)}
                   width={{ xs: "60px", sm: "80px" }}
@@ -434,17 +435,18 @@ const RecentDesign = ({ height, data, }) => {
               >
                 <Box
                   component="img"
-                  src={thumb}
+                  src={artboardImg}
                   alt={doc.title}
                   onClick={() => navigate(`/graph/${doc?._id}`)}
                   sx={{
-                    cursor: "pointer",
+                    cursor:"pointer",
                     width: "100%",
-                    height: "100%",
+                    height: "70%",
                     objectFit: "cover",
                     transition: "transform 0.3s ease",
                     transform:
                       hoveredIndex === index ? "scale(1.1)" : "scale(1)",
+                      borderRadius:"15px"
                   }}
                 />
                 {/* Title and Description below the image */}

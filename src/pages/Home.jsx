@@ -24,6 +24,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CardMembershipIcon from "@mui/icons-material/CardMembership";
 import DeleteOutlineTwoToneIcon from "@mui/icons-material/DeleteOutlineTwoTone";
 import logo from "../Images/logo.png";
+import artboardImg from "../Images/img.jpeg";
 import {
   CottageOutlined as CottageOutlinedIcon,
   Cottage as CottageIcon,
@@ -150,11 +151,11 @@ const Home = () => {
         <UndoIcon
           sx={{
             color: selected == index ? "#837fcb" : "rgba(119, 49, 216, 0.7)",
-            fontSize: "1.5rem",
+            fontSize: "2rem",
           }}
         />,
         <UndoIcon
-          sx={{ color: "rgba(119, 49, 216, 0.7)", fontSize: "1.5rem" }}
+          sx={{ color: "rgba(119, 49, 216, 0.7)", fontSize: "2rem" }}
         />,
       ],
     ];
@@ -575,7 +576,7 @@ const Home = () => {
                       onMouseLeave={() => setHoveredIndex(null)}
                     >
                       <img
-                        src={thumb}   
+                        src={artboardImg}   
                         alt={design?.title || "Design"}
                         
                         style={{
@@ -606,7 +607,7 @@ const Home = () => {
                             onClick={() => navigate(`/graph/${design?._id}`)}
                           >
                             <IconButton size="small" sx={{ color: "#000" }}>
-                              <IosShareSharpIcon fontSize="small" />
+                              <IosShareSharpIcon  />
                             </IconButton>
                           </Box>
 {/* 
@@ -730,7 +731,7 @@ const Home = () => {
                 textAlign: "center",
               }}
             >
-              Droptober is coming
+             Visualize, Organize, Optimize
             </Typography>
           </Box>
 

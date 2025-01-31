@@ -11,7 +11,10 @@ import {
   Grid,
   TextField,
   Container,
-  Drawer, List, ListItem, ListItemText
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import logo from "../Images/logo.png";
@@ -43,21 +46,25 @@ import { LiaWalletSolid } from "react-icons/lia";
 import { HiOutlineCreditCard } from "react-icons/hi2";
 import { MdOndemandVideo } from "react-icons/md";
 import { MdApartment } from "react-icons/md";
-import SwipeableViews from 'react-swipeable-views'
+import SwipeableViews from "react-swipeable-views";
 import { Avatar, Slider, CircularProgress } from "@mui/material";
 import useAuth from "../hooks/useProvideAuth";
-
-
 
 const Demo = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const handleMenuOpen = (event) => { setMenuAnchor(event.currentTarget); };
-  const handleMenuClose = () => { setMenuAnchor(null); };
-  const handleDrawerToggle = () => { setDrawerOpen(!drawerOpen); };
-  const {user} = useAuth()
-  console.log(user)
-  const navigate = useNavigate()
+  const handleMenuOpen = (event) => {
+    setMenuAnchor(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setMenuAnchor(null);
+  };
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+  const { user } = useAuth();
+  console.log(user);
+  const navigate = useNavigate();
 
   const features = [
     {
@@ -129,25 +136,30 @@ const Demo = () => {
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);
-  
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % sliderData.length);
-    }, 3000);
-    return () => clearInterval(interval)
-  }, // Cleanup interval on component unmount }, 
-    [sliderData.length]);
 
+  useEffect(
+    () => {
+      const interval = setInterval(() => {
+        setActiveIndex((prevIndex) => (prevIndex + 1) % sliderData.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }, // Cleanup interval on component unmount },
+    [sliderData.length]
+  );
 
-  const handleChangeIndex = (index) => { setActiveIndex(index) }
+  const handleChangeIndex = (index) => {
+    setActiveIndex(index);
+  };
 
-  const handleNavigate = ()=>{
- if(user?.token){
-  navigate('/home')
- }else{
-  navigate("/login")
- }
-  }
+  const handleNavigate = () => {
+    console.log(user);
+    if (user?.token) {
+      console.log('asasddas')
+      navigate("/home");
+    } else {
+      navigate("/login");
+    }
+  };
   return (
     <>
       {/* Global styles to ensure no overflow */}
@@ -181,61 +193,92 @@ const Demo = () => {
             maxWidth: { lg: "1200px", md: "1000px" },
           }}
         >
-          <Box component="img" src={logo} alt="Logo" sx={{ flexGrow: 0, width: 100, height: 60 }} />
+          <Box
+            component="img"
+            src={logo}
+            alt="Logo"
+            sx={{ flexGrow: 0, width: 100, height: 60 }}
+          />
 
-          <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 1, ml: 2 }}>
-            <IconButton edge="start" sx={{ color: "#4a4a4a" }} aria-label="menu" onClick={handleMenuOpen}>
+          <Box
+            sx={{
+              display: { xs: "none", sm: "flex" },
+              alignItems: "center",
+              gap: 1,
+              ml: 2,
+            }}
+          >
+            <IconButton
+              edge="start"
+              sx={{ color: "#4a4a4a" }}
+              aria-label="menu"
+              onClick={handleMenuOpen}
+            >
               <MenuIcon />
             </IconButton>
-            <Menu anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={handleMenuClose}>
+            <Menu
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
               <MenuItem onClick={handleMenuClose}>Link 1</MenuItem>
               <MenuItem onClick={handleMenuClose}>Link 2</MenuItem>
               <MenuItem onClick={handleMenuClose}>Link 3</MenuItem>
             </Menu>
-            <Button sx={{ color: "#4a4a4a", textTransform: "none" }}>Features</Button>
-            <Button sx={{ color: "#4a4a4a", textTransform: "none" }}>Pricing</Button>
-            <Button sx={{ color: "#4a4a4a", textTransform: "none" }}>Login</Button>
-
-
-
+            <Button sx={{ color: "#4a4a4a", textTransform: "none" }}>
+              Features
+            </Button>
+            <Button sx={{ color: "#4a4a4a", textTransform: "none" }}>
+              Pricing
+            </Button>
+            <Button sx={{ color: "#4a4a4a", textTransform: "none" }}>
+              Login
+            </Button>
           </Box>
 
           <Box sx={{ flexGrow: 1 }} />
           {/* <Link to="/login" > */}
-            <Button
-              variant="contained"
-              sx={{
-                padding: "10px 40px",
-                backgroundColor: "transparent",
-                textDecoration: "none",
-                borderRadius: "40px",
-                boxShadow: "none",
-                border: "3px solid #837fcb",
-                color: "#837fcb",
-                fontWeight: "bold",
-                "@media (max-width: 600px)": { /* Media query for responsiveness */
-                  display: "none",
-                  padding: "8px 30px",
-                },
-                "&:hover": {
-                  backgroundColor: "#837fcb",
-                  color: "white",
-                },
-              }}
-
-              onClick={handleNavigate}
-
-            >
-              Demo
-            </Button>
+          <Button
+            variant="contained"
+            sx={{
+              padding: "10px 40px",
+              backgroundColor: "transparent",
+              textDecoration: "none",
+              borderRadius: "40px",
+              boxShadow: "none",
+              border: "3px solid #837fcb",
+              color: "#837fcb",
+              fontWeight: "bold",
+              "@media (max-width: 600px)": {
+                /* Media query for responsiveness */ display: "none",
+                padding: "8px 30px",
+              },
+              "&:hover": {
+                backgroundColor: "#837fcb",
+                color: "white",
+              },
+            }}
+            onClick={handleNavigate}
+          >
+            Demo
+          </Button>
           {/* </Link> */}
 
-
-          <Box sx={{ display: { xs: 'flex', sm: 'none' } }}>
-            <IconButton edge="start" sx={{ color: "#4a4a4a" }} aria-label="menu" onClick={handleDrawerToggle}>
+          <Box sx={{ display: { xs: "flex", sm: "none" } }}>
+            <IconButton
+              edge="start"
+              sx={{ color: "#4a4a4a" }}
+              aria-label="menu"
+              onClick={handleDrawerToggle}
+            >
               <MenuIcon />
             </IconButton>
-            <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle} sx={{ width: '80%' }}>
+            <Drawer
+              anchor="right"
+              open={drawerOpen}
+              onClose={handleDrawerToggle}
+              sx={{ width: "80%" }}
+            >
               <List>
                 <ListItem button onClick={handleMenuClose}>
                   <ListItemText primary="Features" />
@@ -248,26 +291,25 @@ const Demo = () => {
                 </ListItem>
                 <ListItem button onClick={handleMenuClose}>
                   {/* <Link to="/login"> */}
-                    <Button
-                      variant="contained"
-                      sx={{
-                        padding: "10px 40px",
-                        backgroundColor: "transparent",
-                        borderRadius: "40px",
-                        boxShadow: "none",
-                        border: "2px solid #837fcb",
-                        color: "#837fcb",
-                        fontWeight: "bold",
-                        "&:hover": {
-                          backgroundColor: "#837fcb",
-                          color: "white",
-                        },
-                      }}
-                      onClick={handleNavigate}
-
-                    >
-                      Demo
-                    </Button>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      padding: "10px 40px",
+                      backgroundColor: "transparent",
+                      borderRadius: "40px",
+                      boxShadow: "none",
+                      border: "2px solid #837fcb",
+                      color: "#837fcb",
+                      fontWeight: "bold",
+                      "&:hover": {
+                        backgroundColor: "#837fcb",
+                        color: "white",
+                      },
+                    }}
+                    onClick={handleNavigate}
+                  >
+                    Demo
+                  </Button>
                   {/* </Link> */}
                 </ListItem>
               </List>
@@ -275,7 +317,6 @@ const Demo = () => {
           </Box>
         </Toolbar>
       </AppBar>
-
 
       <Box
         sx={{
@@ -308,7 +349,7 @@ const Demo = () => {
                   gap: 1,
                   width: "95",
 
-                  margin: { xs: "0 auto 20px auto" }
+                  margin: { xs: "0 auto 20px auto" },
                 }}
               >
                 <Box
@@ -353,7 +394,7 @@ const Demo = () => {
                   fontSize: "0.9rem",
                   color: "#8E9BAF",
                   lineHeight: 1.3,
-                  fontWeight: "none"
+                  fontWeight: "none",
                 }}
               >
                 Take control over your business by deploying an all-in-one
@@ -370,8 +411,7 @@ const Demo = () => {
                   gap: 1,
                   width: "95%",
 
-                  margin: { xs: "20px auto 20px auto" }
-
+                  margin: { xs: "20px auto 20px auto" },
                 }}
               >
                 <input
@@ -417,8 +457,7 @@ const Demo = () => {
                   fontSize: "13px",
                   fontWeight: "bold",
                   ml: "2px",
-                  margin: { xs: "20px auto 20px auto" }
-
+                  margin: { xs: "20px auto 20px auto" },
                 }}
               >
                 Sign Up
@@ -487,7 +526,6 @@ const Demo = () => {
           flexDirection: "column", // Ensure stacking of sections
         }}
       >
-
         <Box
           sx={{
             display: "flex",
@@ -551,7 +589,7 @@ const Demo = () => {
           </Typography>
 
           {/* Row 2: "Some New Tools" Content */}
-          <Grid container spacing={6} sx={{ py: 15, px:"10px" }}>
+          <Grid container spacing={6} sx={{ py: 15, px: "10px" }}>
             {/* Column Content for "Some New Tools" */}
             <Grid
               item
@@ -602,8 +640,8 @@ const Demo = () => {
                 }}
               >
                 Timeam adipisci mei ei, vis ut nulla urbanitas, mel ex tota
-                laudem. Quo ne regione tritani placerat, labitur neglegentur
-                ex vis, sale verterem perfecto an eum.
+                laudem. Quo ne regione tritani placerat, labitur neglegentur ex
+                vis, sale verterem perfecto an eum.
               </Typography>
             </Grid>
 
@@ -661,7 +699,6 @@ const Demo = () => {
             </Grid>
           </Grid>
         </Box>
-
       </Container>
 
       <Box
@@ -672,7 +709,6 @@ const Demo = () => {
           alignItems: "center",
           flexDirection: "column", // Ensure stacking of sections
           backgroundColor: "#fbfbfb",
-
         }}
       >
         {/* Row 1: "PM Made Simple" */}
@@ -699,8 +735,7 @@ const Demo = () => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "flex-start",
-                  px: { xs: "20px" }
-
+                  px: { xs: "20px" },
                 }}
               >
                 {/* Background Text */}
@@ -803,8 +838,10 @@ const Demo = () => {
                   backgroundPosition: "center",
                   height: { xs: "250px", sm: "350px", md: "110%" },
                   width: "80%",
-                  "@media (max-width: 300px)": { /* Media query for extra-small screens */
-                    width: "100%", /* Adjust width for screens smaller than 300px */
+                  "@media (max-width: 300px)": {
+                    /* Media query for extra-small screens */
+                    width:
+                      "100%" /* Adjust width for screens smaller than 300px */,
                   },
                 }}
               />
@@ -820,8 +857,6 @@ const Demo = () => {
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column", // Ensure stacking of sections
-
-
         }}
       >
         {/* Row 1: "PM Made Simple" */}
@@ -848,7 +883,7 @@ const Demo = () => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "flex-start",
-                  px: { xs: "20px" }
+                  px: { xs: "20px" },
                 }}
               >
                 {/* Background Text */}
@@ -892,7 +927,6 @@ const Demo = () => {
                 >
                   <Typography
                     className="main-text"
-
                     variant="h6"
                     sx={{
                       fontWeight: "800",
@@ -951,8 +985,10 @@ const Demo = () => {
                   backgroundPosition: "center",
                   height: { xs: "250px", sm: "350px", md: "110%" },
                   width: { md: "80%", sm: "70%", xs: "70%" },
-                  "@media (max-width: 300px)": { /* Media query for extra-small screens */
-                    width: "100%", /* Adjust width for screens smaller than 300px */
+                  "@media (max-width: 300px)": {
+                    /* Media query for extra-small screens */
+                    width:
+                      "100%" /* Adjust width for screens smaller than 300px */,
                   },
                 }}
               />
@@ -969,7 +1005,6 @@ const Demo = () => {
           alignItems: "center",
           flexDirection: "column", // Ensure stacking of sections
           backgroundColor: "#fbfbfb",
-
         }}
       >
         {/* Row 1: "PM Made Simple" */}
@@ -996,8 +1031,7 @@ const Demo = () => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "flex-start",
-                  px: { xs: "20px" }
-
+                  px: { xs: "20px" },
                 }}
               >
                 {/* Background Text */}
@@ -1099,8 +1133,10 @@ const Demo = () => {
                   backgroundPosition: "center",
                   height: { xs: "250px", sm: "350px", md: "110%" },
                   width: "80%",
-                  "@media (max-width: 300px)": { /* Media query for extra-small screens */
-                    width: "100%", /* Adjust width for screens smaller than 300px */
+                  "@media (max-width: 300px)": {
+                    /* Media query for extra-small screens */
+                    width:
+                      "100%" /* Adjust width for screens smaller than 300px */,
                   },
                 }}
               />
@@ -1120,7 +1156,6 @@ const Demo = () => {
           flexDirection: "column", // Ensure stacking of sections
         }}
       >
-
         <Box
           sx={{
             display: "flex",
@@ -1467,7 +1502,6 @@ const Demo = () => {
             </Typography>
           </Box>
         </Box>
-
       </Container>
 
       <Box
@@ -1546,7 +1580,6 @@ const Demo = () => {
               }}
             >
               More than 900 Teams use our product.
-
             </Typography>
           </Box>
         </Box>
@@ -1622,7 +1655,6 @@ const Demo = () => {
           ))}
         </Box>
 
-
         {/* Button */}
         <Box sx={{ marginTop: 4 }}>
           <button
@@ -1660,7 +1692,7 @@ const Demo = () => {
             alignItems: "center",
             flexDirection: "column",
             position: "relative",
-            maxWidth: { xs: "60%" }
+            maxWidth: { xs: "60%" },
           }}
         >
           {/* Background Text */}
@@ -1726,16 +1758,20 @@ const Demo = () => {
                   padding: 2,
                   borderRadius: 1,
                   marginBottom: 2,
-                  width: { xs: "95%", sm: "95%", md: "55%" }, /* Use media queries */
+                  width: {
+                    xs: "95%",
+                    sm: "95%",
+                    md: "55%",
+                  } /* Use media queries */,
                   zIndex: 1,
                   transition: "opacity 5s all ease-out",
-                  "@media (max-width: 360px)": { /* Media query for extra-small screens */
-                    width: "70%", /* Adjust width for screens smaller than 300px */
+                  "@media (max-width: 360px)": {
+                    /* Media query for extra-small screens */
+                    width:
+                      "70%" /* Adjust width for screens smaller than 300px */,
                   },
                 }}
               >
-
-
                 {" "}
                 <Avatar
                   src={item.avatar}
@@ -1765,7 +1801,6 @@ const Demo = () => {
                     textAlign: "left",
                     pt: "18px",
                     color: "#4A4A4A",
-
                   }}
                 >
                   {" "}
@@ -1960,10 +1995,11 @@ const Demo = () => {
         </Box>
       </Box>
 
-      <Box sx={{
-        backgroundColor: "#444f60", // Default background color
-
-      }}>
+      <Box
+        sx={{
+          backgroundColor: "#444f60", // Default background color
+        }}
+      >
         <Container
           sx={{
             width: "100%",
@@ -1975,8 +2011,9 @@ const Demo = () => {
             flexDirection: "column",
             backgroundColor: "#444f60", // Default background color
             position: "relative",
-            "@media (max-width: 600px)": { /* Media query for extra-small screens */
-              flexDirection: "column", /* Switch to column layout */
+            "@media (max-width: 600px)": {
+              /* Media query for extra-small screens */
+              flexDirection: "column" /* Switch to column layout */,
             },
           }}
         >
@@ -1985,7 +2022,10 @@ const Demo = () => {
             sx={{
               width: "100%",
               display: "flex",
-              flexDirection: { xs: "column", sm: "row" }, /* Responsive layout */
+              flexDirection: {
+                xs: "column",
+                sm: "row",
+              } /* Responsive layout */,
             }}
           >
             {/* First Grid: Logo and Social Media Icons */}
@@ -1994,7 +2034,7 @@ const Demo = () => {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                width: "100%", /* Adjust width */
+                width: "100%" /* Adjust width */,
 
                 backgroundColor: "#444f60",
               }}
@@ -2017,7 +2057,7 @@ const Demo = () => {
         </IconContext.Provider> */}
               </Box>
 
-              {/* Text */} 
+              {/* Text */}
               <Typography
                 sx={{
                   marginTop: 2,
@@ -2038,10 +2078,9 @@ const Demo = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 marginTop: 4,
-                width: "100%", /* Adjust width */
+                width: "100%" /* Adjust width */,
               }}
               onClick={handleNavigate}
-
             >
               <button
                 style={{
@@ -2059,10 +2098,8 @@ const Demo = () => {
               </button>
             </Box>
           </Box>
-
         </Container>
       </Box>
-
     </>
   );
 };
