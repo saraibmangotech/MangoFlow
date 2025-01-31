@@ -81,6 +81,7 @@ import toast from "react-hot-toast";
 import useAuth from "../hooks/useProvideAuth";
 import { Drawer } from "@mui/material";
 import { toPng } from "html-to-image";
+import RoleServices from "../services/RolesServices";
 
 function downloadImage(dataUrl) {
   const a = document.createElement("a");
@@ -232,15 +233,29 @@ const OverviewFlow = () => {
     setSelectedType(type);
   };
   console.log(selectedType);
-  useEffect(() => {
-    const savedRoles = JSON.parse(localStorage.getItem("rolesAndColors")) || [
-      {
-        role: "Admin",
-        color: "#FF5733",
-      },
-    ];
-    setRolesAndColors(savedRoles);
-  }, []);
+  // useEffect(() => {
+  //   const savedRoles = JSON.parse(localStorage.getItem("rolesAndColors")) || [
+  //     {
+  //       role: "Admin",
+  //       color: "#FF5733",
+  //     },
+  //   ];
+  //   setRolesAndColors(savedRoles);
+  // }, []);
+
+  const getRole = async()=>{
+    try{
+      const result = await RoleServices.GetRoles()
+      setRolesAndColors(result?.data?.roles)
+      
+    }catch(error){
+     console.log(error)
+   
+    }
+  }
+  useEffect(()=>{
+    getRole()
+  },[])
 
   const handleRoleChange = (event) => {
     const role = event.target.value;
@@ -404,9 +419,7 @@ const OverviewFlow = () => {
     setTextColor(selectedNode?.style?.color);
 
     if (editNode) {
-      const roleColorMapping = JSON.parse(
-        localStorage.getItem("rolesAndColors")
-      );
+      const roleColorMapping = rolesAndColors
 
       const matchedRole = roleColorMapping?.find(
         (item) =>
@@ -428,34 +441,7 @@ const OverviewFlow = () => {
     setOpen(false);
   };
 
-  const initialNodes = [
-    {
-      id: "A",
-      type: "group",
-      data: { label: null },
-      position: { x: 0, y: 0 },
-      style: {
-        width: 170,
-        height: 140,
-      },
-    },
-    {
-      id: "B",
-      type: "input",
-      data: { label: "child node 1" },
-      position: { x: 10, y: 10 },
-      parentId: "A",
-      extent: "parent",
-    },
-    {
-      id: "C",
-      type: "input",
-      data: { label: "child node 2" },
-      position: { x: 10, y: 90 },
-      parentId: "A",
-      extent: "parent",
-    },
-  ];
+
   // Node and edge state management using ReactFlow hooks
   const [nodes, setNodes, onNodesChange] = useNodesState();
   const [edges, setEdges, onEdgesChange] = useEdgesState();

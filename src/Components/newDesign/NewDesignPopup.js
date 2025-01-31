@@ -52,7 +52,7 @@ const NewDesignPopup = ({ open, onClose, data }) => {
         getArtBoards()
         setValues('artBoardName','')
         setValues('description','')
-        handleClose()
+        // handleClose()
       }
 
 

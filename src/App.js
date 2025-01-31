@@ -7,7 +7,7 @@ import { ThemeProvider } from "@emotion/react";
 import FlowGraph from "./Components/FlowGraph";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import Projects from "./pages/Projects";
+import Role from "./pages/Role";
 import Templates from "./pages/Templates";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
@@ -18,7 +18,7 @@ import Demo from "./pages/Demo";
 function App() {
   const { user } = useAuth();
   console.log("user==>", user);
- 
+
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
@@ -35,7 +35,7 @@ function App() {
             {user && user?.token ? (
               <>
                 <Route path="/home" element={<Home />} />
-                <Route path="/project" element={<Projects />} />
+                <Route path="/role" element={<Role />} />
                 <Route path="/templates" element={<Templates />} />
               </>
             ) : (

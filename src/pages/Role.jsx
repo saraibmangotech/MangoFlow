@@ -15,17 +15,19 @@ import {
 } from "@mui/material";
 import SideBar from "../Components/sideBar";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import toast from "react-hot-toast";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import RoleServices from "../services/RolesServices";
 
-const Projects = () => {
+ const Projects = () => {
   const [rolesAndColors, setRolesAndColors] = useState([]);
   const [selectedColor, setSelectedColor] = useState("#000000");
   const [selectedRole, setSelectedRole] = useState(null);
-  const [changeText, setChangeText] = useState(null);
+  const [roles, setRoles] = useState([]);
+  const [changeText, setChangeText] = useState(false);
   const savedData = JSON.parse(localStorage.getItem("rolesAndColors")) || [];
 
   const {
@@ -55,67 +57,71 @@ const Projects = () => {
     "#DC143C",
     "#FF69B4",
   ];
-
-  const onSubmit3 = (data) => {
-    const isColorDuplicate = savedData.some(
-      (item) => item.color === selectedColor && item.role !== selectedRole
-    );
-
-    if (isColorDuplicate) {
-      toast.error("Color Already Selected ");
-      return;
+   const createRole = async (formData)=>{
+    const obj ={
+      role:formData?.role,
+      color: selectedColor,
+      id:selectedRole
     }
-
-    if (selectedRole) {
-      const updatedRolesAndColors = savedData.map((item) =>
-        item.role === selectedRole
-          ? { ...item, role: data.role, color: selectedColor }
-          : item
-      );
-
-      setRolesAndColors(updatedRolesAndColors);
-      localStorage.setItem(
-        "rolesAndColors",
-        JSON.stringify(updatedRolesAndColors)
-      );
-      setChangeText(false);
-      toast.success("Role and color updated successfully");
-    } else {
-      const newEntry = { role: data.role, color: selectedColor };
-      const updatedRolesAndColors = [...savedData, newEntry];
-
-      setRolesAndColors(updatedRolesAndColors);
-      localStorage.setItem(
-        "rolesAndColors",
-        JSON.stringify(updatedRolesAndColors)
-      );
-      toast.success("Role and color added successfully");
+    try{
+      const result = await RoleServices.CreateRole(obj)
+      toast.success(result?.message)
+      reset()
+      setSelectedColor("#000000")
+      getRole()
+    }catch(error){
+     toast.error(error)
+   
     }
-
-    reset();
-    setSelectedColor("#000000");
-    setSelectedRole(null);
-  };
+  }
+   const updateRole = async (formData)=>{
+    const obj ={
+      role:formData?.role,
+      color: selectedColor,
+      _id:selectedRole
+    }
+    try{
+      const result = await RoleServices.UpdateRole(obj)
+      toast.success(result?.message)
+      reset()
+      setSelectedColor("#000000")
+      getRole()
+      setChangeText(false)
+    }catch(error){
+     toast.error(error)
+   
+    }
+  }
 
   const handleEdit = (role) => {
-    setSelectedRole(role.role);
+    setSelectedRole(role?._id);
     setSelectedColor(role.color);
     setValue3("role", role.role);
     setChangeText(true);
   };
-  const handleDelete = (role) => {
-    const updatedRolesAndColors = savedData.filter(
-      (item) => item.role !== role
-    );
-
-    setRolesAndColors(updatedRolesAndColors);
-    localStorage.setItem(
-      "rolesAndColors",
-      JSON.stringify(updatedRolesAndColors)
-    );
-
-    toast.success("Role deleted successfully");
+  const handleDelete = async (id) => {
+    try{
+      const result = await RoleServices.DeleteRole(id)
+      toast.success(result?.message)
+      getRole()
+    }catch(error){
+     toast.error(error)
+   
+    }
   };
+  const getRole = async()=>{
+    try{
+      const result = await RoleServices.GetRoles()
+      setRoles(result?.data?.roles)
+      
+    }catch(error){
+     console.log(error)
+   
+    }
+  }
+  useEffect(()=>{
+    getRole()
+  },[])
   return (
     <Box
       sx={{
@@ -181,7 +187,7 @@ const Projects = () => {
                   gap: 2,
                 }}
               >
-                <form onSubmit={handleSubmit3(onSubmit3)}>
+                <form onSubmit={handleSubmit3(changeText ? updateRole : createRole)}>
                   <Grid container spacing={2} alignItems="center">
                     <Grid item xs={12}>
                       <InputLabel>Select Role</InputLabel>
@@ -277,7 +283,7 @@ const Projects = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {savedData?.map((item, index) => (
+                  {roles?.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell>{item.role}</TableCell>
                       <TableCell>
@@ -303,7 +309,7 @@ const Projects = () => {
                           <Button
                             variant="outlined"
                             color="error"
-                            onClick={() => handleDelete(item.role)}
+                            onClick={() => handleDelete(item?._id)}
                             startIcon={<DeleteIcon />}
                           >
                             Delete

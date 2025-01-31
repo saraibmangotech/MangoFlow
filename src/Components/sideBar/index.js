@@ -8,6 +8,8 @@ import {
   Button,
   IconButton,
   useMediaQuery,
+  TextField,
+  Grid,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CardMembershipIcon from "@mui/icons-material/CardMembership";
@@ -33,6 +35,7 @@ import Img2 from "../../Images/img3.png";
 import Img3 from "../../Images/img2.png";
 import NewDesignPopup from "../newDesign/NewDesignPopup";
 import ProfileAvatar from "../profileAvatar/ProfileAvatar";
+import { useForm } from "react-hook-form";
 
 const recentDesigns = [
   { title: "Design 1", imgSrc: Img1 },
@@ -52,6 +55,14 @@ const SideBar = (data) => {
   const isMobileView = useMediaQuery("(max-width:600px)");
   const [artBoards, setArtBoards] = useState([])
   const {state} = useLocation()
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    formState: { errors },
+  } = useForm();
+
   const handleSelect = (index) => {
     setSelected(index);
     if (index == 0) {
@@ -128,6 +139,9 @@ const SideBar = (data) => {
     setArtBoards(data?.data)
   }, [data])
 
+  const onSubmit =()=>{
+    
+  }
   return (
     <Box
       sx={{
@@ -372,7 +386,7 @@ const SideBar = (data) => {
 
               {showDesigns && (
                 <Box sx={{ marginTop: 1, width: "100%" }}>
-                  {artboards?.map((design, index) => (
+                  {artBoards?.map((design, index) => (
                     <Box
                       key={design.id || index} 
                       sx={{
@@ -390,7 +404,7 @@ const SideBar = (data) => {
                       onMouseLeave={() => setHoveredIndex(null)}
                     >
                       <img
-                        src={thumb}   
+                        // src={Images}   
                         alt={design?.title || "Design"}
                         style={{
                           width: 20,

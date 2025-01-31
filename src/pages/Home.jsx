@@ -42,6 +42,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import UndoIcon from '@mui/icons-material/Undo';
 
+
 const Home = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [itemsToShow, setItemsToShow] = useState(5);
@@ -49,7 +50,7 @@ const Home = () => {
   const [roleModal, setRoleModal] = useState(false);
   const [value, setValue] = useState(0);
   const {state} = useLocation()
-
+  
   const popupRef = useRef(null); 
   const { register, handleSubmit, setValue: setValues } = useForm();
   const [open2, setOpen2] = useState(false);
@@ -110,7 +111,7 @@ const Home = () => {
       if (index == 0) {
         navigate("/home");
       } else if (index == 1) {
-        navigate("/project",{state :"1"});
+        navigate("/role",{state :"1"});
       } else if (index == 2) {
         // Add navigation logic for index 2 if needed
       }
@@ -120,10 +121,6 @@ const Home = () => {
   const handleOpenPopup = () => setIsPopupOpen(true);
   const handleClosePopup = () => setIsPopupOpen(false);
 
-  const toggleDesigns = () => {
-    setShowDesigns(!showDesigns); 
-    console.log(data);
-  };
 
   const getIcon = (index) => {
     const icons = [
@@ -580,6 +577,7 @@ const Home = () => {
                       <img
                         src={thumb}   
                         alt={design?.title || "Design"}
+                        
                         style={{
                           width: 20,
                           height: 20,
@@ -605,12 +603,13 @@ const Home = () => {
                                 backgroundColor: "rgba(255, 255, 255, 0.1)",
                               },
                             }}
+                            onClick={() => navigate(`/graph/${design?._id}`)}
                           >
                             <IconButton size="small" sx={{ color: "#000" }}>
                               <IosShareSharpIcon fontSize="small" />
                             </IconButton>
                           </Box>
-
+{/* 
                           <Box
                             sx={{
                               padding: "1px",
@@ -623,7 +622,7 @@ const Home = () => {
                             <IconButton size="small" sx={{ color: "#000" }}>
                               <MoreHorizSharpIcon fontSize="small" />
                             </IconButton>
-                          </Box>
+                          </Box> */}
                         </Box>
                       )}
                     </Box>
@@ -675,6 +674,8 @@ const Home = () => {
           boxSizing: "border-box",
           display: "flex",
           justifyContent: "flex-end", 
+          width:"100%",
+
         }}
       >
         
@@ -688,6 +689,7 @@ const Home = () => {
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
             backgroundColor: "#fff",
             boxSizing: "border-box",
+            width:"100%",
             // width: { xs: "100%", sm: "85%", md: "84%", lg: "88%", xl: "90%" },
             minHeight: {
               xs: "800px",

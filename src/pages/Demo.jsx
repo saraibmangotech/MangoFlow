@@ -31,7 +31,7 @@ import phaseKit from "../Images/phasekit.png";
 import grubspot from "../Images/grubspot.png";
 import taskbot from "../Images/taskbot.png";
 import systek from "../Images/systek.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LuNotepadText } from "react-icons/lu";
 import { CiChat1 } from "react-icons/ci";
 import { MdOutlineAttachEmail } from "react-icons/md";
@@ -45,6 +45,7 @@ import { MdOndemandVideo } from "react-icons/md";
 import { MdApartment } from "react-icons/md";
 import SwipeableViews from 'react-swipeable-views'
 import { Avatar, Slider, CircularProgress } from "@mui/material";
+import useAuth from "../hooks/useProvideAuth";
 
 
 
@@ -54,6 +55,9 @@ const Demo = () => {
   const handleMenuOpen = (event) => { setMenuAnchor(event.currentTarget); };
   const handleMenuClose = () => { setMenuAnchor(null); };
   const handleDrawerToggle = () => { setDrawerOpen(!drawerOpen); };
+  const {user} = useAuth()
+  console.log(user)
+  const navigate = useNavigate()
 
   const features = [
     {
@@ -137,6 +141,13 @@ const Demo = () => {
 
   const handleChangeIndex = (index) => { setActiveIndex(index) }
 
+  const handleNavigate = ()=>{
+ if(user?.token){
+  navigate('/home')
+ }else{
+  navigate("/login")
+ }
+  }
   return (
     <>
       {/* Global styles to ensure no overflow */}
@@ -190,7 +201,7 @@ const Demo = () => {
           </Box>
 
           <Box sx={{ flexGrow: 1 }} />
-          <Link to="/login" >
+          {/* <Link to="/login" > */}
             <Button
               variant="contained"
               sx={{
@@ -211,10 +222,13 @@ const Demo = () => {
                   color: "white",
                 },
               }}
+
+              onClick={handleNavigate}
+
             >
               Demo
             </Button>
-          </Link>
+          {/* </Link> */}
 
 
           <Box sx={{ display: { xs: 'flex', sm: 'none' } }}>
@@ -233,7 +247,7 @@ const Demo = () => {
                   <ListItemText primary="Login" />
                 </ListItem>
                 <ListItem button onClick={handleMenuClose}>
-                  <Link to="/login">
+                  {/* <Link to="/login"> */}
                     <Button
                       variant="contained"
                       sx={{
@@ -249,10 +263,12 @@ const Demo = () => {
                           color: "white",
                         },
                       }}
+                      onClick={handleNavigate}
+
                     >
                       Demo
                     </Button>
-                  </Link>
+                  {/* </Link> */}
                 </ListItem>
               </List>
             </Drawer>
@@ -2001,7 +2017,7 @@ const Demo = () => {
         </IconContext.Provider> */}
               </Box>
 
-              {/* Text */}
+              {/* Text */} 
               <Typography
                 sx={{
                   marginTop: 2,
@@ -2024,6 +2040,8 @@ const Demo = () => {
                 marginTop: 4,
                 width: "100%", /* Adjust width */
               }}
+              onClick={handleNavigate}
+
             >
               <button
                 style={{
