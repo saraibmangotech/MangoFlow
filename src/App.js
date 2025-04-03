@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import theme from "./Components/customTheme/CustomTheme";
 import "./styles.css";
 import "@fontsource/noto-sans";
@@ -14,15 +14,20 @@ import { Toaster } from "react-hot-toast";
 import useAuth from "./hooks/useProvideAuth";
 import SignUp from "./pages/Signup";
 import Demo from "./pages/Demo";
+import {AuthContext} from './context/createContext';
+
 
 function App() {
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const [user ,setUser] = useState("")
+
   console.log("user==>", user);
 
   return (
-    <div className="App">
-      <ThemeProvider theme={theme}>
+   
+    <ThemeProvider theme={theme}>
         <Toaster position="top-center" reverseOrder={false} />
+        <AuthContext.Provider value={{user , setUser}}>
         <BrowserRouter>
           <Routes>
             {/* Login Route */}
@@ -41,8 +46,9 @@ function App() {
             )}
           </Routes>
         </BrowserRouter>
+      </AuthContext.Provider>
       </ThemeProvider>
-    </div>
+  
   );
 }
 

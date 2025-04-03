@@ -1,5 +1,5 @@
 // src/pages/Login.js
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   TextField,
@@ -18,12 +18,15 @@ import { useForm } from "react-hook-form";
 import useAuth from "../hooks/useProvideAuth";
 import AuthServices from "../services/AuthServices";
 import toast from "react-hot-toast";
+import { AuthContext } from "../context/createContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const navigate = useNavigate();
   const { userLogin } = useAuth();
+  const {user ,setUser} = useContext(AuthContext)
+
   const {
     register,
     handleSubmit,
@@ -48,6 +51,7 @@ const Login = () => {
       if (response?.data?.token) {
         navigate("/home");
         userLogin(response?.data);
+        setUser(response?.data);
          toast.success(response?.message);
 
       }else {
